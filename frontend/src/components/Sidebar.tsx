@@ -10,7 +10,6 @@ import {
     ListItemIcon,
 } from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-// import { AiOutlineHome } from 'react-icons/ai';
 import PeopleOutlineOutlinedIcon from "@mui/icons-material/PeopleOutlineOutlined";
 import PhoneAndroidOutlinedIcon from "@mui/icons-material/PhoneAndroidOutlined";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -48,31 +47,6 @@ export default function Sidebar() {
     };
     
     return (
-        // <div className='sidebar_wrapper'>
-        //     <button className='btn' onClick={setToggleCollapseHandler}>
-        //         <MdKeyboardArrowLeft />
-        //     </button>
-        //     <aside className="sidebar" data-collapse={toggleCollapse} > */}
-        //         <div className='sidebar_top'>
-        //             <img src="/logo.png" width={80} height={80} className="sidebar_logo" alt="logo"/>
-        //             <p className='sidebar_logo-name'> FEELIFY </p>
-        //         </div>
-        //         <ul className="sidebar_list">
-        //             {sidebarItemsAuth.map(({name, href, icon:Icon}) =>(
-        //                 <li className="sidebar_item" key={name}>
-        //                 <Link href={href} className="sidebar_link">
-        //                     <span className="sidebar_icon">
-        //                         <Icon />
-        //                     </span>
-        //                     <div className='sidebar_name'>
-        //                         {name}
-        //                     </div>
-        //                 </Link>
-        //             </li>
-        //             ))}
-        //         </ul>
-        //     </aside>
-        // </div>
         <div className="sidebar_wrapper">
             <IconButton
                 className="btn"
