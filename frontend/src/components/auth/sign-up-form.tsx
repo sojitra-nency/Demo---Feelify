@@ -27,12 +27,13 @@ const schema = zod.object({
   lastName: zod.string().min(1, { message: 'Last name is required' }),
   email: zod.string().min(1, { message: 'Email is required' }).email(),
   password: zod.string().min(6, { message: 'Password should be at least 6 characters' }),
+  password2: zod.string().min(6, { message: 'Password should be at least 6 characters' }),
   terms: zod.boolean().refine((value) => value, 'You must accept the terms and conditions'),
 });
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = { firstName: '', lastName: '', email: '', password: '', terms: false } satisfies Values;
+const defaultValues = { firstName: '', lastName: '', email: '', password: '', password2: '', terms: false } satisfies Values;
 
 export function SignUpForm(): React.JSX.Element {
   const router = useRouter();
@@ -71,8 +72,8 @@ export function SignUpForm(): React.JSX.Element {
   );
 
   return (
-    <Stack spacing={3}>
-      <Stack spacing={1}>
+    <Stack>
+      <Stack>
         <Typography variant="h4">Sign up</Typography>
         <Typography color="text.secondary" variant="body2">
           Already have an account?{' '}
@@ -123,6 +124,17 @@ export function SignUpForm(): React.JSX.Element {
               <FormControl error={Boolean(errors.password)}>
                 <InputLabel>Password</InputLabel>
                 <OutlinedInput {...field} label="Password" type="password" />
+                {errors.password ? <FormHelperText>{errors.password.message}</FormHelperText> : null}
+              </FormControl>
+            )}
+          />
+          <Controller
+            control={control}
+            name="password2"
+            render={({ field }) => (
+              <FormControl error={Boolean(errors.password)}>
+                <InputLabel>Confirm Password</InputLabel>
+                <OutlinedInput {...field} label="Password2" type="password2" />
                 {errors.password ? <FormHelperText>{errors.password.message}</FormHelperText> : null}
               </FormControl>
             )}
