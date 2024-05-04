@@ -22,13 +22,13 @@ export function Layout({ children }: LayoutProps): React.JSX.Element {
       }}
     >
       <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column' }}>
-        <Box >
+        <Box sx={{ p: 3 }}>
           <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-block', fontSize: 0 }}>
-            <DynamicLogo colorDark="light" colorLight="dark" height={120} width={120} />
+            <DynamicLogo colorDark="light" colorLight="dark" height={132} width={122} />
           </Box>
         </Box>
-        <Box sx={{ alignItems: 'center', display: 'flex', flex: '1 1 auto', justifyContent: 'center', paddingBottom: '130px' }}>
-          <Box sx={{ maxWidth: '450px', width: '100%' }}>{children}</Box>
+        <Box sx={{ alignItems: 'center', display: 'flex', flex: '1 1 auto', justifyContent: 'center' }}>
+          <Box sx={{ maxWidth: '450px', width: '100%', paddingBottom: "100px" }}>{children}</Box>
         </Box>
       </Box>
       <Box
@@ -37,7 +37,9 @@ export function Layout({ children }: LayoutProps): React.JSX.Element {
           background: 'radial-gradient(50% 50% at 50% 50%, #122647 0%, #090E23 100%)',
           color: 'var(--mui-palette-common-white)',
           display: { xs: 'none', lg: 'flex' },
-          justifyContent: 'center'
+          justifyContent: 'center',
+          paddingBottom: "90px",
+          paddingTop: "80px"
         }}
       >
         <Stack spacing={3}>

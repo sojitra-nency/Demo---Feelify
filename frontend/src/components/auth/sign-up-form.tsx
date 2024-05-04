@@ -72,8 +72,8 @@ export function SignUpForm(): React.JSX.Element {
   );
 
   return (
-    <Stack>
-      <Stack>
+    <Stack spacing={2}>
+      <Stack spacing={2}>
         <Typography variant="h4">Sign up</Typography>
         <Typography color="text.secondary" variant="body2">
           Already have an account?{' '}
@@ -134,7 +134,7 @@ export function SignUpForm(): React.JSX.Element {
             render={({ field }) => (
               <FormControl error={Boolean(errors.password)}>
                 <InputLabel>Confirm Password</InputLabel>
-                <OutlinedInput {...field} label="Password2" type="password2" />
+                <OutlinedInput {...field} label="Confirm Password" type="password2" />
                 {errors.password ? <FormHelperText>{errors.password.message}</FormHelperText> : null}
               </FormControl>
             )}
@@ -148,7 +148,8 @@ export function SignUpForm(): React.JSX.Element {
                   control={<Checkbox {...field} />}
                   label={
                     <React.Fragment>
-                      I have read the <Link>terms and conditions</Link>
+                      I have read the <Link href="/auth/terms/">terms and conditions</Link>
+                      
                     </React.Fragment>
                   }
                 />

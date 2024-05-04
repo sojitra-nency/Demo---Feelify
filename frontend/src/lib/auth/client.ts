@@ -21,6 +21,7 @@ export interface SignUpParams {
   lastName: string;
   email: string;
   password: string;
+  password2: string;
 }
 
 export interface SignInWithOAuthParams {
