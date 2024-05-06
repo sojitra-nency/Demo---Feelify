@@ -1,11 +1,25 @@
-from django.urls import path
+from django.urls import path, re_path
 from .views import *
 
 urlpatterns = [
-    path('register/', UserRegistrationView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('profile/', UserProfileView.as_view(), name='profile'),
-    path('change-password/', UserChangePassword.as_view(), name='change-password'),
-    path('send-password-reset-mail/', SendPasswordResetEmail.as_view(), name='sent-password-reset-,ail'),
-    path('password-reset/<uid>/<token>/', PasswordResetView.as_view(), name='reset-password'),
+    re_path(r'^o/(?P<provider>\S+)/$',CustomProviderAuthView.as_view(), name="provider-auth"),
+    path('jwt/create/', CustomTokenObtainView.as_view()),
+    path('jwt/refresh/', CustomTokenRefreshView.as_view()),
+    path('jwt/verify/', CustomTokenVerifyView.as_view()),
+    path('logout/', LogoutView.as_view()),
+    
 ]
+
+# POST
+# register - http://127.0.0.1:8000/login/users/ - first_name, last_name, email, password, re_password (activation mail will be send)
+# activate account - http://127.0.0.1:8000/login/users/activation/ - uid, token (from mail)
+# login - http://127.0.0.1:8000/login/jwt/create/ - email, password
+# refresh token - http://127.0.0.1:8000/login/jwt/refresh/ 
+# verify token - http://127.0.0.1:8000/login/jwt/verify/ 
+# reset password - http://127.0.0.1:8000/login/users/reset_password/ - email (rest password mail will be send)
+# reset password confirm - http://127.0.0.1:8000/login/users/reset_password_confirm/ - uid, token, new_password, re_new_password (uid, token from mail)
+# logout - http://127.0.0.1:8000/login/logout/ - access token in bearer for authentication
+
+# GET
+# current user - http://127.0.0.1:8000/login/users/me/ - access token in auth bearer for authentication
+# google auth - http://127.0.0.1:8000/login/o/google-oauth2/?redirect_uri=http://localhost:3000/auth/google/

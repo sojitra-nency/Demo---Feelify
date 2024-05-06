@@ -1,74 +1,107 @@
-from rest_framework.response import Response
+from django.conf import settings
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserRegistrationSerializer, LoginSerializer, UserProfileSerializer, ChangePasswordSerializer, PasswordResetSerializer, UserPasswordResetSerializer
-from django.contrib.auth import authenticate
-from .renderers import UserRenderer 
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
-from .models import *
+from djoser.social.views import ProviderAuthView
 
 
-# Manually generate tokens for user
-def get_tokens_for_user(user):
-    refresh = RefreshToken.for_user(user)
+class CustomProviderAuthView(ProviderAuthView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
 
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-    }
+        if response.status_code == 201:
+            access_token = response.data.get("access")
+            refresh_token = response.data.get("refresh")
 
-class UserRegistrationView(APIView):
-    renderer_classes = [UserRenderer]
-    def post(self, request):
-        serializer = UserRegistrationSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        token = get_tokens_for_user(user)
-        return Response({'token':token, 'msg':'Registration successfull'}, status=status.HTTP_201_CREATED)
+            response.set_cookie(
+                'access',
+                access_token,
+                max_age = settings.AUTH_COOKIE_ACCESS_MAX_AGE,
+                path = settings.AUTH_COOKIE_PATH,
+                secure = settings.AUTH_COOKIE_SECURE,
+                httponly = settings.AUTH_COOKIE_HTTP_ONLY,
+                samesite = settings.AUTH_COOKIE_SAMESITE
+            )
+
+            response.set_cookie(
+                'refresh',
+                refresh_token,
+                max_age = settings.AUTH_COOKIE_REFRESH_MAX_AGE,
+                path = settings.AUTH_COOKIE_PATH,
+                secure = settings.AUTH_COOKIE_SECURE,
+                httponly = settings.AUTH_COOKIE_HTTP_ONLY,
+                samesite = settings.AUTH_COOKIE_SAMESITE
+            )
+        return response
+
+class CustomTokenObtainView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+
+        if response.status_code == 200:
+            access_token = response.data.get("access")
+            refresh_token = response.data.get("refresh")
+
+            response.set_cookie(
+                'access',
+                access_token,
+                max_age = settings.AUTH_COOKIE_ACCESS_MAX_AGE,
+                path = settings.AUTH_COOKIE_PATH,
+                secure = settings.AUTH_COOKIE_SECURE,
+                httponly = settings.AUTH_COOKIE_HTTP_ONLY,
+                samesite = settings.AUTH_COOKIE_SAMESITE
+            )
+
+            response.set_cookie(
+                'refresh',
+                refresh_token,
+                max_age = settings.AUTH_COOKIE_REFRESH_MAX_AGE,
+                path = settings.AUTH_COOKIE_PATH,
+                secure = settings.AUTH_COOKIE_SECURE,
+                httponly = settings.AUTH_COOKIE_HTTP_ONLY,
+                samesite = settings.AUTH_COOKIE_SAMESITE
+            )
+        return response
+    
+
+class CustomTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        refresh_token = request.COOKIES.get('refresh')
+
+        if refresh_token:
+            request.data['refresh'] = refresh_token
         
-class LoginView(APIView):
-    renderer_class = [UserRenderer]
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        email = serializer.data.get('email')
-        password = request.data.get('password')
-        user = authenticate(email=email, password=password)
-        if user is not None:
-            token = get_tokens_for_user(user)
-            return Response({'token':token, 'msg':'Login successfull'}, status=status.HTTP_200_OK)
-        else:
-            return Response({'msg':'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-        
-class UserProfileView(APIView):
-    renderer_classes = [UserRenderer]
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        serializer = UserProfileSerializer(request.user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response = super().post(request, *args, **kwargs)
 
-class UserChangePassword(APIView):
-    renderer_classes = [UserRenderer]
-    permission_classes = [IsAuthenticated]
-    def post(self, request):
-        serializer = ChangePasswordSerializer(data=request.data, context={'user':request.user})
-        serializer.is_valid(raise_exception=True)
-        return Response({'msg':'Password Changed Successfully'}, status=status.HTTP_200_OK)
-        
-class SendPasswordResetEmail(APIView):
-    renderer_classes = [UserRenderer]
-    def post(self, request):
-        serializer = PasswordResetSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        return Response({'msg':'Password Reset Email has been sent'}, status=status.HTTP_200_OK)
+        if response.status_code == 200:
+            access_token = response.data.get("access")
 
-class PasswordResetView(APIView):
-    renderer_classes = [UserRenderer]
-    def post(self, request, uid, token):
-        serializer = UserPasswordResetSerializer(data=request.data, context={'uid':uid, 'token':token})
-        serializer.is_valid(raise_exception=True)
-        return Response({'msg':'Password Reset Successfull'}, status=status.HTTP_200_OK)
+            response.set_cookie(
+                'access',
+                access_token,
+                max_age = settings.AUTH_COOKIE_ACCESS_MAX_AGE,
+                path = settings.AUTH_COOKIE_PATH,
+                secure = settings.AUTH_COOKIE_SECURE,
+                httponly = settings.AUTH_COOKIE_HTTP_ONLY,
+                samesite = settings.AUTH_COOKIE_SAMESITE
+            )
+        return response
+    
+
+class CustomTokenVerifyView(TokenVerifyView):
+    def post(self, request, *args, **kwargs):
+        access_token = request.COOKIES.get("access")
+
+        if access_token:
+            request.data['token'] = access_token
+
+        return super().post(request, *args, **kwargs)
 
 
-
+class LogoutView(APIView):
+    def post(self, request, *args, **kwargs):
+        response = Response(status=status.HTTP_204_NO_CONTENT)
+        response.delete_cookie('access')
+        response.delete_cookie('refresh')
+        return response
