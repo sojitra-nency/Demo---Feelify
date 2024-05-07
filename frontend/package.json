@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.16",
     "@mui/material": "^5.15.16",
+    "@mui/styles": "^5.15.16",
     "@mui/x-date-pickers": "^7.3.2",
     "@phosphor-icons/react": "^2.1.5",
     "@reduxjs/toolkit": "^2.2.3",
