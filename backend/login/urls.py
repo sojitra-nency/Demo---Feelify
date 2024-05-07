@@ -22,4 +22,4 @@ urlpatterns = [
 
 # GET
 # current user - http://127.0.0.1:8000/login/users/me/ - access token in auth bearer for authentication
-# google auth - http://127.0.0.1:8000/login/o/google-oauth2/?redirect_uri=http://localhost:3000/auth/google/
+# google auth - http://127.0.0.1:8000/login/o/google-oauth2/?redirect_uri=http://localhost:3000/auth/google
