@@ -19,8 +19,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
 import { paths } from '@/paths';
-import { authClient } from '@/lib/auth/client';
-import { useUser } from '@/hooks/use-user';
+
+
 
 const schema = zod.object({
   email: zod.string().min(1, { message: 'Email is required' }).email(),
@@ -34,8 +34,6 @@ const defaultValues = { email: '', password: '' } satisfies Values;
 export function SignInForm(): React.JSX.Element {
   const router = useRouter();
 
-  const { checkSession } = useUser();
-
   const [showPassword, setShowPassword] = React.useState<boolean>();
 
   const [isPending, setIsPending] = React.useState<boolean>(false);
@@ -47,27 +45,15 @@ export function SignInForm(): React.JSX.Element {
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  const onSubmit = React.useCallback(
-    async (values: Values): Promise<void> => {
-      setIsPending(true);
-
-      const { error } = await authClient.signInWithPassword(values);
-
-      if (error) {
-        setError('root', { type: 'server', message: error });
-        setIsPending(false);
-        return;
-      }
-
-      // Refresh the auth state
-      await checkSession?.();
-
-      // UserProvider, for this case, will not refresh the router
-      // After refresh, GuestGuard will handle the redirect
-      router.refresh();
-    },
-    [checkSession, router, setError]
-  );
+  const onSubmit = handleSubmit(async (values) => {
+    try {
+      // register(values);
+      // toast.success('Please check email to verify account.');
+      // router.push(paths.auth.signIn);
+    } catch (error) {
+      // toast.error('Failed to register the account.');
+    }
+  });
 
   return (
     <Stack spacing={4}>

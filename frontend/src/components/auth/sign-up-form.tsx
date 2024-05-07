@@ -19,58 +19,47 @@ import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
 import { paths } from '@/paths';
-import { authClient } from '@/lib/auth/client';
-import { useUser } from '@/hooks/use-user';
+import { useRegisterMutation } from '@/redux/features/authApiSlice';
+import { toast } from "react-toastify";
+import Spinner from '@/components/common/Spinner';
+
 
 const schema = zod.object({
-  firstName: zod.string().min(1, { message: 'First name is required' }),
-  lastName: zod.string().min(1, { message: 'Last name is required' }),
+  first_name: zod.string().min(1, { message: 'First name is required' }),
+  last_name: zod.string().min(1, { message: 'Last name is required' }),
   email: zod.string().min(1, { message: 'Email is required' }).email(),
-  password: zod.string().min(6, { message: 'Password should be at least 6 characters' }),
-  password2: zod.string().min(6, { message: 'Password should be at least 6 characters' }),
-  terms: zod.boolean().refine((value) => value, 'You must accept the terms and conditions'),
+  password: zod.string().min(8, { message: 'Password should be at least 8 characters' }).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {message: 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character (@$!%*?&)'}),
+  re_password: zod.string().min(8, { message: 'Password should be at least 8 characters' }).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {message: 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character (@$!%*?&)'}),
+  terms: zod.boolean().refine((value) => value, 'You must accept the terms and conditions')
 });
+
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = { firstName: '', lastName: '', email: '', password: '', password2: '', terms: false } satisfies Values;
+const defaultValues = { first_name: '', last_name: '', email: '', password: '', re_password: '', terms: false } satisfies Values;
 
 export function SignUpForm(): React.JSX.Element {
   const router = useRouter();
 
-  const { checkSession } = useUser();
-
-  const [isPending, setIsPending] = React.useState<boolean>(false);
-
   const {
     control,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  const onSubmit = React.useCallback(
-    async (values: Values): Promise<void> => {
-      setIsPending(true);
+  const [register, {isLoading}] = useRegisterMutation();
 
-      const { error } = await authClient.signUp(values);
-
-      if (error) {
-        setError('root', { type: 'server', message: error });
-        setIsPending(false);
-        return;
-      }
-
-      // Refresh the auth state
-      await checkSession?.();
-
-      // UserProvider, for this case, will not refresh the router
-      // After refresh, GuestGuard will handle the redirect
-      router.refresh();
-    },
-    [checkSession, router, setError]
-  );
-
+  const onSubmit = handleSubmit(async (value: Values) => {
+    try {
+      const { first_name, last_name, email, password, re_password } = value
+      register({ first_name, last_name, email, password, re_password });
+      toast.success('Please check email to verify account.');
+      router.push(paths.auth.signIn);
+    } catch (error) {
+      toast.error('Failed to register the account.');
+    }
+  });
+ 
   return (
     <Stack spacing={2}>
       <Stack spacing={2}>
@@ -86,23 +75,23 @@ export function SignUpForm(): React.JSX.Element {
         <Stack spacing={2}>
           <Controller
             control={control}
-            name="firstName"
+            name="first_name"
             render={({ field }) => (
-              <FormControl error={Boolean(errors.firstName)}>
+              <FormControl error={Boolean(errors.first_name)}>
                 <InputLabel>First name</InputLabel>
                 <OutlinedInput {...field} label="First name" />
-                {errors.firstName ? <FormHelperText>{errors.firstName.message}</FormHelperText> : null}
+                {errors.first_name ? <FormHelperText>{errors.first_name.message}</FormHelperText> : null}
               </FormControl>
             )}
           />
           <Controller
             control={control}
-            name="lastName"
+            name="last_name"
             render={({ field }) => (
-              <FormControl error={Boolean(errors.firstName)}>
+              <FormControl error={Boolean(errors.last_name)}>
                 <InputLabel>Last name</InputLabel>
                 <OutlinedInput {...field} label="Last name" />
-                {errors.firstName ? <FormHelperText>{errors.firstName.message}</FormHelperText> : null}
+                {errors.last_name ? <FormHelperText>{errors.last_name.message}</FormHelperText> : null}
               </FormControl>
             )}
           />
@@ -130,12 +119,12 @@ export function SignUpForm(): React.JSX.Element {
           />
           <Controller
             control={control}
-            name="password2"
+            name="re_password"
             render={({ field }) => (
-              <FormControl error={Boolean(errors.password)}>
+              <FormControl error={Boolean(errors.re_password)}>
                 <InputLabel>Confirm Password</InputLabel>
-                <OutlinedInput {...field} label="Confirm Password" type="password2" />
-                {errors.password ? <FormHelperText>{errors.password.message}</FormHelperText> : null}
+                <OutlinedInput {...field} label="Confirm Password" type="password" />
+                {errors.re_password ? <FormHelperText>{errors.re_password.message}</FormHelperText> : null}
               </FormControl>
             )}
           />
@@ -158,8 +147,8 @@ export function SignUpForm(): React.JSX.Element {
             )}
           />
           {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
-          <Button disabled={isPending} type="submit" variant="contained">
-            Sign up
+          <Button disabled={isLoading} type="submit" variant="contained">
+            {isLoading ? <Spinner sm />: 'Sign Up'}
           </Button>
         </Stack>
       </form>
