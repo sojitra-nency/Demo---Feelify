@@ -17,41 +17,54 @@ import { Eye as EyeIcon } from '@phosphor-icons/react/dist/ssr/Eye';
 import { EyeSlash as EyeSlashIcon } from '@phosphor-icons/react/dist/ssr/EyeSlash';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
-
+import { useLoginMutation } from '@/redux/features/authApiSlice';
 import { paths } from '@/paths';
-
+import { toast } from "react-toastify";
+import Spinner from '@/components/common/Spinner';
 
 
 const schema = zod.object({
   email: zod.string().min(1, { message: 'Email is required' }).email(),
-  password: zod.string().min(1, { message: 'Password is required' }),
+  password: zod.string().min(8, { message: 'Password should be at least 8 characters' }).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {message: 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character (@$!%*?&)'}),
 });
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = { email: '', password: '' } satisfies Values;
+const defaultValues = { email: 'snency16@gmail.com', password: 'Akshar@24' } satisfies Values;
 
 export function SignInForm(): React.JSX.Element {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = React.useState<boolean>();
 
-  const [isPending, setIsPending] = React.useState<boolean>(false);
-
   const {
     control,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  const onSubmit = handleSubmit(async (values) => {
+  const [login, {isLoading}] = useLoginMutation();
+  
+  const onSubmit = handleSubmit(async (value: Values) => {
     try {
-      // register(values);
-      // toast.success('Please check email to verify account.');
-      // router.push(paths.auth.signIn);
+      
+      const { email, password } = value
+      const loginResult = await login({ email, password });
+      // login({  email, password });
+      const temp = JSON.stringify(loginResult);
+      const temp2 = JSON.parse(temp)
+
+      if(temp2.error?.status == '401') {
+        console.log("Fail")
+        toast.error('Failed to login.');
+      }else{
+        toast.success('Logged In Successfully.');
+        router.push(paths.dashboard.overview);
+      }
+
     } catch (error) {
-      // toast.error('Failed to register the account.');
+      console.log(error)
+      toast.error('Failed to login.');
     }
   });
 
@@ -119,8 +132,8 @@ export function SignInForm(): React.JSX.Element {
             </Link>
           </div>
           {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
-          <Button disabled={isPending} type="submit" variant="contained">
-            Sign in
+          <Button disabled={isLoading} type="submit" variant="contained">
+          {isLoading ? <Spinner sm />: 'Sign In'}
           </Button>
         </Stack>
       </form>
