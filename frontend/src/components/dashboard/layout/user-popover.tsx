@@ -8,9 +8,9 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import { GearSix as GearSixIcon } from '@phosphor-icons/react/dist/ssr/GearSix';
-import { SignOut as SignOutIcon } from '@phosphor-icons/react/dist/ssr/SignOut';
-import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
+import SettingsIcon from '@mui/icons-material/Settings';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { toast } from "react-toastify";
 import { paths } from '@/paths';
 import { useLogoutMutation } from '@/redux/features/authApiSlice';
@@ -51,22 +51,16 @@ export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): Reac
       </Box>
       <Divider />
       <MenuList disablePadding sx={{ p: '8px', '& .MuiMenuItem-root': { borderRadius: 1 } }}>
-        <MenuItem component={RouterLink} href={paths.dashboard.settings} onClick={onClose}>
-          <ListItemIcon>
-            <GearSixIcon fontSize="var(--icon-fontSize-md)" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
         <MenuItem component={RouterLink} href={paths.dashboard.account} onClick={onClose}>
           <ListItemIcon>
-            <UserIcon fontSize="var(--icon-fontSize-md)" />
+            <AccountCircleIcon/>
           </ListItemIcon>
           Profile
         </MenuItem>
         {/* <MenuItem onClick={handleSignOut}> */}
         <MenuItem>
           <ListItemIcon>
-            <SignOutIcon fontSize="var(--icon-fontSize-md)" />
+            <LogoutIcon/>
           </ListItemIcon>
           Sign out
         </MenuItem>
