@@ -1,11 +1,14 @@
 export const paths = {
-    home: '/',
+    home: '/dashboard',
     auth: { signIn: '/auth/sign-in', signUp: '/auth/sign-up', resetPassword: '/auth/reset-password' },
     dashboard: {
       overview: '/dashboard',
+      emotions: '/dashboard/emotions',
+      vsearch: '/dashboard/vsearch',
+      bsearch: '/dashboard/bsearch',
+      vrecom: '/dashboard/vrecom',
+      brecom: '/dashboard/brecom',
       account: '/dashboard/account',
-      customers: '/dashboard/customers',
-      integrations: '/dashboard/integrations',
       settings: '/dashboard/settings',
     },
     errors: { notFound: '/errors/not-found' },
