@@ -12,19 +12,19 @@ import { useActivationMutation } from '@/redux/features/authApiSlice';
 import { paths } from '@/paths'
 
 interface Props {
-  params:{
-  uid: string; 
-  token: string;
+  params: {
+    uid: string;
+    token: string;
   }
 }
 
 export default function Page({ params }: Props): React.JSX.Element {
   const router = useRouter();
-    const [activation] = useActivationMutation();
+  const [activation] = useActivationMutation();
 
-    React.useEffect(() => {
-        const { uid, token } = params
-    
+  React.useEffect(() => {
+    const { uid, token } = params
+
 
     activation({ uid, token })
       .unwrap()
@@ -37,7 +37,7 @@ export default function Page({ params }: Props): React.JSX.Element {
       .finally(() => {
         router.push(paths.auth.signIn)
       })
-  },[])
+  }, [])
 
   return (
     <Layout>

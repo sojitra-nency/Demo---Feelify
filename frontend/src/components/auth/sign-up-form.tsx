@@ -50,11 +50,23 @@ export function SignUpForm(): React.JSX.Element {
   const [register, {isLoading}] = useRegisterMutation();
 
   const onSubmit = handleSubmit(async (value: Values) => {
+    
     try {
       const { first_name, last_name, email, password, re_password } = value
-      register({ first_name, last_name, email, password, re_password });
-      toast.success('Please check email to verify account.');
-      router.push(paths.auth.signIn);
+      if (password !== re_password) {
+        toast.error("Passwords don't match.");
+        return; 
+      }
+      const registerResult = await register({ first_name, last_name, email, password, re_password });;
+      const temp = JSON.stringify(registerResult);
+      const temp2 = JSON.parse(temp)
+      if(temp2.error?.status == '400') {
+        toast.error('Failed to register the account.');
+        toast.error('Email already exist or Invalid Email');
+      }else{
+        toast.success('Please check email to verify account.');
+        router.push(paths.auth.signIn);
+      }  
     } catch (error) {
       toast.error('Failed to register the account.');
     }

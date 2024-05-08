@@ -50,20 +50,17 @@ export function SignInForm(): React.JSX.Element {
       
       const { email, password } = value
       const loginResult = await login({ email, password });
-      // login({  email, password });
       const temp = JSON.stringify(loginResult);
       const temp2 = JSON.parse(temp)
 
       if(temp2.error?.status == '401') {
-        console.log("Fail")
         toast.error('Failed to login.');
       }else{
         toast.success('Logged In Successfully.');
-        router.push(paths.dashboard.overview);
+        router.push(paths.home);
       }
 
     } catch (error) {
-      console.log(error)
       toast.error('Failed to login.');
     }
   });

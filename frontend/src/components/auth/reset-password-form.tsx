@@ -14,13 +14,16 @@ import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 import { paths } from '@/paths';
 import { useRouter } from 'next/navigation';
-import { authClient } from '@/lib/auth/client';
+import { useResetPasswordMutation } from "@/redux/features/authApiSlice"
+import { toast } from "react-toastify";
+import Spinner from '@/components/common/Spinner';
+
 
 const schema = zod.object({ email: zod.string().min(1, { message: 'Email is required' }).email() });
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = { email: '' } satisfies Values;
+const defaultValues = {email: ''} satisfies Values;
 
 export function ResetPasswordForm(): React.JSX.Element {
   const router = useRouter();
@@ -29,33 +32,32 @@ export function ResetPasswordForm(): React.JSX.Element {
     router.push(paths.auth.signIn);
   };
 
-  const [isPending, setIsPending] = React.useState<boolean>(false);
-
   const {
     control,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  const onSubmit = React.useCallback(
-    async (values: Values): Promise<void> => {
-      setIsPending(true);
+  const [resetPassword, {isLoading}] = useResetPasswordMutation();
 
-      const { error } = await authClient.resetPassword(values);
-
-      if (error) {
-        setError('root', { type: 'server', message: error });
-        setIsPending(false);
-        return;
-      }
-
-      setIsPending(false);
-
-      // Redirect to confirm password reset
-    },
-    [setError]
-  );
+  const onSubmit = handleSubmit(async (value: Values) => {
+    try {
+      const {email} = value
+      const resetResult = await resetPassword( email );
+      const temp = JSON.stringify(resetResult);
+      const temp2 = JSON.parse(temp)
+      if(temp2.error?.status == '400') {
+        console.log("Fail")
+        toast.error('Invalid Email. Enter valid email address.');
+      }else{
+        console.log("Pass")
+        toast.success('Please check email to Reset Password.');
+        router.push(paths.auth.signIn);
+      }      
+    } catch (error) {
+      toast.error('Failed to send Reset Password email.');
+    }
+  });
 
   return (
     <Stack spacing={4}>
@@ -74,11 +76,11 @@ export function ResetPasswordForm(): React.JSX.Element {
             )}
           />
           {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
-          <Button disabled={isPending} type="submit" variant="contained">
-            Send recovery link
+          <Button disabled={isLoading} type="submit" variant="contained">
+            {isLoading ? <Spinner sm />: 'Send recovery link'}
           </Button>
           <Button variant="contained" onClick={handleSignInClick}>
-            Back to Sign In
+            Sign In
           </Button>
         </Stack>
       </form>

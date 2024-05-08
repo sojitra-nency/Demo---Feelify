@@ -27,12 +27,14 @@
     "react-dom": "^18",
     "react-icons": "^5.2.1",
     "react-redux": "^9.1.2",
-    "react-toastify": "^10.0.5"
+    "react-toastify": "^10.0.5",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/zxcvbn": "^4.4.4",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
