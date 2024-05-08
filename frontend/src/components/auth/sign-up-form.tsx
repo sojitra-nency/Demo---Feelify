@@ -22,6 +22,7 @@ import { paths } from '@/paths';
 import { useRegisterMutation } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
 import Spinner from '@/components/common/Spinner';
+import GoogleButton from './googleButton';
 
 
 const schema = zod.object({
@@ -164,6 +165,7 @@ export function SignUpForm(): React.JSX.Element {
           </Button>
         </Stack>
       </form>
+      <GoogleButton/>
     </Stack>
   );
 }

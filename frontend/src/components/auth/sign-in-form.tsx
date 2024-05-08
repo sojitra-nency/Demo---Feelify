@@ -21,6 +21,7 @@ import { useLoginMutation } from '@/redux/features/authApiSlice';
 import { paths } from '@/paths';
 import { toast } from "react-toastify";
 import Spinner from '@/components/common/Spinner';
+import GoogleButton from './googleButton';
 
 
 const schema = zod.object({
@@ -76,6 +77,7 @@ export function SignInForm(): React.JSX.Element {
           </Link>
         </Typography>
       </Stack>
+      
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           <Controller
@@ -134,6 +136,7 @@ export function SignInForm(): React.JSX.Element {
           </Button>
         </Stack>
       </form>
+      <GoogleButton/>
     </Stack>
   );
 }
