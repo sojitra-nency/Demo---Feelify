@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from os import getenv, path
 from pathlib import Path
-from datetime import timedelta
 import dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,6 +48,7 @@ INSTALLED_APPS = [
     'djoser',
     'social_django',
     'login',
+    'emotions'
 ]
 
 MIDDLEWARE = [
