@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from djoser.social.views import ProviderAuthView
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.permissions import AllowAny
 
 
 class CustomProviderAuthView(ProviderAuthView):
@@ -89,19 +91,17 @@ class CustomTokenRefreshView(TokenRefreshView):
         return response
     
 
-class CustomTokenVerifyView(TokenVerifyView):
-    def post(self, request, *args, **kwargs):
-        access_token = request.COOKIES.get("access")
-
-        if access_token:
-            request.data['token'] = access_token
-
-        return super().post(request, *args, **kwargs)
-
 
 class LogoutView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
-        response = Response(status=status.HTTP_204_NO_CONTENT)
+        access_token = request.COOKIES.get('access')
+        print("logout", access_token)  
+
+        if not access_token:
+            return Response("Already logged out.", status=status.HTTP_204_NO_CONTENT)
+
+        response = Response("Logout successful.", status=status.HTTP_204_NO_CONTENT)
         response.delete_cookie('access')
         response.delete_cookie('refresh')
         return response

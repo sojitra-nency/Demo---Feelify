@@ -22,7 +22,8 @@ import { paths } from '@/paths';
 import { toast } from "react-toastify";
 import Spinner from '@/components/common/Spinner';
 import GoogleButton from './googleButton';
-
+import { useAppDispatch } from '@/redux/hooks';
+import { setAuth } from '@/redux/features/authSlice';
 
 const schema = zod.object({
   email: zod.string().min(1, { message: 'Email is required' }).email(),
@@ -34,6 +35,7 @@ type Values = zod.infer<typeof schema>;
 const defaultValues = { email: 'snency16@gmail.com', password: 'Akshar@24' } satisfies Values;
 
 export function SignInForm(): React.JSX.Element {
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const [showPassword, setShowPassword] = React.useState<boolean>();
@@ -45,6 +47,7 @@ export function SignInForm(): React.JSX.Element {
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
   const [login, {isLoading}] = useLoginMutation();
+
   
   const onSubmit = handleSubmit(async (value: Values) => {
     try {
@@ -55,10 +58,11 @@ export function SignInForm(): React.JSX.Element {
       const temp2 = JSON.parse(temp)
 
       if(temp2.error?.status == '401') {
-        toast.error('Failed to login.');
+          toast.error('Failed to login.');
       }else{
-        toast.success('Logged In Successfully.');
-        router.push(paths.home);
+          dispatch(setAuth()); 
+          toast.success('Logged In Successfully.');
+          router.push(paths.home);
       }
 
     } catch (error) {

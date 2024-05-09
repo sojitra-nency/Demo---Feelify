@@ -8,12 +8,13 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { toast } from "react-toastify";
 import { paths } from '@/paths';
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { useLogoutMutation } from '@/redux/features/authApiSlice';
+import { logout as setLogout } from '@/redux/features/authSlice';
 
 export interface UserPopoverProps {
   anchorEl: Element | null;
@@ -22,19 +23,22 @@ export interface UserPopoverProps {
 }
 
 export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): React.JSX.Element {
-  // const router = useRouter();
-  // const [logout, { error, isLoading }] = useLogoutMutation(); 
+  const dispatch = useAppDispatch();
+  const [logout] = useLogoutMutation();
+  const { isAuthenticated } = useAppSelector(state => state.auth);
+  const router = useRouter(); 
 
-  // const handleSignOut = React.useCallback(async (): Promise<void> => {
-  //   try {
-  //     await logout().unwrap(); 
-  //     toast.success("Signed out successfully.");
-  //     router.push(paths.auth.signIn); 
-  //  } catch (err: any) {
-  //     console.error('Sign out error:', err);
-  //     toast.error("Failed to sign out. Please try again.");
-  //   }
-  // }, [logout, router]);
+  const handleLogout = async () => { 
+    try {
+      await logout(undefined).unwrap(); 
+      dispatch(setLogout());
+      router.push(paths.auth.signIn); 
+      toast.success('You have been logged out.');
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('An error occurred during logout.');
+    }
+  };
   return (
     <Popover
       anchorEl={anchorEl}
@@ -57,8 +61,8 @@ export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): Reac
           </ListItemIcon>
           Profile
         </MenuItem>
-        {/* <MenuItem onClick={handleSignOut}> */}
-        <MenuItem>
+        <MenuItem onClick={handleLogout}>
+        {/* <MenuItem> */}
           <ListItemIcon>
             <LogoutIcon/>
           </ListItemIcon>
