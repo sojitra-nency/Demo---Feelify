@@ -1,11 +1,14 @@
 from django.conf import settings
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from djoser.social.views import ProviderAuthView
-from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.permissions import AllowAny
+from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from login.models import User
+from login.serializers import UserProfileSerializer
 
 
 class CustomProviderAuthView(ProviderAuthView):
@@ -105,3 +108,28 @@ class LogoutView(APIView):
         response.delete_cookie('access')
         response.delete_cookie('refresh')
         return response
+    
+class UserProfile(RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get(self):
+        return self.request.user
+    
+    def perform_update(self, serializer):
+        if 'avatar' in self.request.FILES:
+            instance = serializer.save(avatar=self.request.FILES['avatar'])
+        else:
+            instance = serializer.save()
+
+        return super().perform_update(serializer)
+    
+    def post(self, request, *args, **kwargs):
+
+        if self.get_object():  
+            return self.patch(request, *args, **kwargs)  
+ 
+        serializer = self.get_serializer(data=request.data) 
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
