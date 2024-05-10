@@ -33,6 +33,9 @@ class UserManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
+    
+    # def get_queryset(self):
+    #     return super().get_queryset().filter(is_deleted=False)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -46,7 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-
+    is_deleted = models.BooleanField(default=False)
 
     objects = UserManager()
 

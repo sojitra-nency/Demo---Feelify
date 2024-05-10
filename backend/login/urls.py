@@ -7,7 +7,6 @@ urlpatterns = [
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('logout/', LogoutView.as_view()),
     path('profile/<int:pk>/', UserProfile.as_view()),
-    path('profile/', UserProfile.as_view()),
 ]
 
 # POST

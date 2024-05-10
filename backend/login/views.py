@@ -114,7 +114,7 @@ class UserProfile(RetrieveUpdateDestroyAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get(self):
+    def get_object(self):
         return self.request.user
     
     def perform_update(self, serializer):
@@ -133,3 +133,7 @@ class UserProfile(RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(data=request.data) 
         serializer.is_valid(raise_exception=True)
         instance = serializer.save()
+
+    def delete(self, instance):
+        instance.is_deleted = True
+        instance.save()
