@@ -124,15 +124,6 @@ class UserProfile(RetrieveUpdateDestroyAPIView):
             instance = serializer.save()
 
         return super().perform_update(serializer)
-    
-    def post(self, request, *args, **kwargs):
-
-        if self.get_object():  
-            return self.patch(request, *args, **kwargs)  
- 
-        serializer = self.get_serializer(data=request.data) 
-        serializer.is_valid(raise_exception=True)
-        instance = serializer.save()
 
     def delete(self, instance):
         instance.is_deleted = True
