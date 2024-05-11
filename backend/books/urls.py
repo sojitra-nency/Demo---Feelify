@@ -7,4 +7,4 @@ urlpatterns = [
 
 
 # GET
-# search books by query = http://127.0.0.1:8000/books/book-search/?q=<query>
+# search books by query = http://127.0.0.1:8000/books/book-search/?q=<query> -> access token in bearer for authentication

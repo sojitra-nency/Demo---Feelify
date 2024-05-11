@@ -22,7 +22,7 @@ import { paths } from '@/paths';
 import { useRegisterMutation } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
 import Spinner from '@/components/common/Spinner';
-import GoogleButton from './googleButton';
+import GoogleButton from './google-button';
 
 
 const schema = zod.object({
@@ -37,7 +37,7 @@ const schema = zod.object({
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = { first_name: '', last_name: '', email: '', password: '', re_password: '', terms: false } satisfies Values;
+const defaultValues = { first_name: 'Nency', last_name: 'Sojitra', email: 'snency16@gmail.com', password: 'Akshar@24', re_password: 'Akshar@24', terms: false } satisfies Values;
 
 export function SignUpForm(): React.JSX.Element {
   const router = useRouter();

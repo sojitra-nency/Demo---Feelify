@@ -21,7 +21,7 @@ import { useLoginMutation } from '@/redux/features/authApiSlice';
 import { paths } from '@/paths';
 import { toast } from "react-toastify";
 import Spinner from '@/components/common/Spinner';
-import GoogleButton from './googleButton';
+import GoogleButton from './google-button';
 import { useAppDispatch } from '@/redux/hooks';
 import { setAuth } from '@/redux/features/authSlice';
 
@@ -60,6 +60,7 @@ export function SignInForm(): React.JSX.Element {
       if(temp2.error?.status == '401') {
           toast.error('Failed to login.');
       }else{
+          localStorage.setItem('auth_token', temp2.data.access);
           dispatch(setAuth()); 
           toast.success('Logged In Successfully.');
           router.push(paths.home);
