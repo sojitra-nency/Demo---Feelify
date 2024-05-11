@@ -9,6 +9,8 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from login.models import User
 from login.serializers import UserProfileSerializer
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 
 
 class CustomProviderAuthView(ProviderAuthView):
@@ -118,10 +120,15 @@ class UserProfile(RetrieveUpdateDestroyAPIView):
         return self.request.user
     
     def perform_update(self, serializer):
-        if 'avatar' in self.request.FILES:
-            instance = serializer.save(avatar=self.request.FILES['avatar'])
+        avatar_file = self.request.FILES.get('avatar') 
+
+        if avatar_file:
+            fs = FileSystemStorage(location=settings.FRONTEND_ASSETS_DIR)
+            filename = fs.get_available_name(avatar_file.name)
+            fs.save(filename, avatar_file)
+            serializer.save(avatar=f'assets/{filename}')  
         else:
-            instance = serializer.save()
+            serializer.save()  
 
         return super().perform_update(serializer)
 

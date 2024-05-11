@@ -22,4 +22,5 @@ urlpatterns = [
     path('login/', include('djoser.urls')),
     path('login/',include('login.urls')),
     path('emotions/',include('emotions.urls')),
+    path('books/',include('books.urls')),
 ]
