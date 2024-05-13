@@ -42,8 +42,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     email = models.EmailField(unique=True, max_length=255)
-    avatar = models.ImageField(upload_to='assets', blank=True, null=True,
-                               validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg'])])
     phone_number = models.CharField(max_length=20, blank=True, null=True) 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

@@ -23,4 +23,5 @@ urlpatterns = [
     path('login/',include('login.urls')),
     path('emotions/',include('emotions.urls')),
     path('books/',include('books.urls')),
+    path('videos/',include('videos.urls')),
 ]

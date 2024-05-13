@@ -17,6 +17,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)
 
 dotenv_file = BASE_DIR / '.env.local'
 
@@ -50,7 +51,8 @@ INSTALLED_APPS = [
     'social_django',
     'login',
     'emotions',
-    'books'
+    'books',
+    'videos'
 ]
 
 MIDDLEWARE = [
@@ -149,6 +151,7 @@ STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
@@ -210,3 +213,5 @@ CORS_ALLOW_CREDENTIALS = True
 FRONTEND_ASSETS_DIR = os.path.join(BASE_DIR, '..', 'frontend', 'public', 'assets')
 
 BOOKS_API_KEY = getenv("BOOKS_API_KEY")
+
+YOUTUBE_DATA_API_KEY = getenv("YOUTUBE_DATA_API_KEY")

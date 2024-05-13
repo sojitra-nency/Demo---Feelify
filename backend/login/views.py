@@ -120,16 +120,7 @@ class UserProfile(RetrieveUpdateDestroyAPIView):
         return self.request.user
     
     def perform_update(self, serializer):
-        avatar_file = self.request.FILES.get('avatar') 
-
-        if avatar_file:
-            fs = FileSystemStorage(location=settings.FRONTEND_ASSETS_DIR)
-            filename = fs.get_available_name(avatar_file.name)
-            fs.save(filename, avatar_file)
-            serializer.save(avatar=f'assets/{filename}')  
-        else:
-            serializer.save()  
-
+        serializer.save()  
         return super().perform_update(serializer)
 
     def delete(self, instance):

@@ -14,6 +14,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Grid from '@mui/material/Unstable_Grid2';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import TextField from '@mui/material/TextField';
 
 interface ProfileData {
   first_name?: string;
@@ -30,7 +31,7 @@ export function AccountDetailsForm(): React.JSX.Element {
       setIsLoading(true);
       try {
         const token = localStorage.getItem('auth_token');
-        const userId = 2
+        const userId = 1
 
         const response = await axios.get(`http://127.0.0.1:8000/login/profile/${userId}/`, {
           headers: {
@@ -54,7 +55,7 @@ export function AccountDetailsForm(): React.JSX.Element {
 
     try {
       const token = localStorage.getItem('auth_token');
-      const userId = 2;
+      const userId = 1;
       console.log(event.target)
       const formData = new FormData(event.target as HTMLFormElement);
 
@@ -76,6 +77,7 @@ export function AccountDetailsForm(): React.JSX.Element {
       console.error("Error updating profile:", error);
     } finally {
       setIsLoading(false);
+      window.location.reload();
     }
 
   };
@@ -88,28 +90,48 @@ export function AccountDetailsForm(): React.JSX.Element {
           {isLoading && <p>Loading profile data...</p>}
           <Grid container spacing={3}>
             <Grid md={6} xs={12}>
-              <FormControl fullWidth required>
-                <InputLabel>First name</InputLabel>
-                <OutlinedInput defaultValue={profileData.first_name} label="First name" name="first_name" />
-              </FormControl>
+              <TextField
+                fullWidth
+                required
+                variant="outlined"
+                label="First name"
+                value={profileData.first_name || ''}
+                name="first_name"
+                onChange={e => setProfileData({ ...profileData, first_name: e.target.value })}
+              />
             </Grid>
             <Grid md={6} xs={12}>
-              <FormControl fullWidth required>
-                <InputLabel>Last name</InputLabel>
-                <OutlinedInput defaultValue={profileData.last_name} label="Last name" name="last_name" />
-              </FormControl>
+              <TextField
+                fullWidth
+                required
+                variant="outlined"
+                label="Last name"
+                value={profileData.last_name || ''}
+                name="last_name"
+                onChange={e => setProfileData({ ...profileData, last_name: e.target.value })}
+              />
             </Grid>
             <Grid md={6} xs={12}>
-              <FormControl fullWidth required>
-                <InputLabel>Email address</InputLabel>
-                <OutlinedInput defaultValue={profileData.email} label="Email address" name="email" />
-              </FormControl>
+              <TextField
+                fullWidth
+                required
+                variant="outlined"
+                label="Email"
+                value={profileData.email || ''}
+                name="email"
+                disabled
+              />
             </Grid>
             <Grid md={6} xs={12}>
-              <FormControl fullWidth required>
-                <InputLabel>Phone number</InputLabel>
-                <OutlinedInput defaultValue={profileData.phone_number} label="Phone number" name="phone_number" type="tel" />
-              </FormControl>
+              <TextField
+                fullWidth
+                required
+                variant="outlined"
+                label="Phone number"
+                value={profileData.phone_number || ''}
+                name="phone_number"
+                onChange={e => setProfileData({ ...profileData, phone_number: e.target.value })}
+              />
             </Grid>
           </Grid>
         </CardContent>
