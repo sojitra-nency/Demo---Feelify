@@ -4,12 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from djoser.social.views import ProviderAuthView
-from rest_framework.permissions import AllowAny
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from login.models import User
 from login.serializers import UserProfileSerializer
-from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 
 
@@ -76,8 +74,10 @@ class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         refresh_token = request.COOKIES.get('refresh')
 
-        if refresh_token:
-            request.data['refresh'] = refresh_token
+        if not refresh_token:
+            return Response("Refresh token not found", status=status.HTTP_401_UNAUTHORIZED)
+
+        request.data['refresh'] = refresh_token
         
         response = super().post(request, *args, **kwargs)
 
@@ -99,13 +99,8 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 class LogoutView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request, *args, **kwargs):
-        access_token = request.COOKIES.get('access')
-        print("logout", access_token)  
-
-        if not access_token:
-            return Response("Already logged out.", status=status.HTTP_204_NO_CONTENT)
-
         response = Response("Logout successful.", status=status.HTTP_204_NO_CONTENT)
         response.delete_cookie('access')
         response.delete_cookie('refresh')
@@ -117,7 +112,10 @@ class UserProfile(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_object(self):
-        return self.request.user
+        if self.request.user.is_authenticated:
+            return self.request.user
+        else:
+            return Response("Not authenticated", status=status.HTTP_401_UNAUTHORIZED)
     
     def perform_update(self, serializer):
         serializer.save()  

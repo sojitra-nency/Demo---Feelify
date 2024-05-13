@@ -67,6 +67,7 @@ export default function Recording(): React.JSX.Element {
       setTimeout(() => {
         if (mediaRecorder) {
           mediaRecorder?.stop();
+          stream.getTracks().forEach((track) => track.stop());
         }
       }, 1000); // 1-second timeout
 
@@ -86,23 +87,24 @@ export default function Recording(): React.JSX.Element {
 
   const sendVideoToBackend = async (videoBlob: Blob) => {
     const formData = new FormData();
-    formData.append("video_file", videoBlob, "recording.mp4");
-
+    formData.append("video_file", videoBlob, "recording.webm");
+    
     try {
       const response = await axios.post(
         'http://127.0.0.1:8000/emotions/recording/',
         formData,
         {
           headers: {
-            Authorization: `Bearer your_auth_token`,
-            'Content-Type': 'multipart/form-data'
+            Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
+            'Content-Type': 'video/webm',
           },
         }
       );
       console.log("Video upload response:", response);
 
     } catch (error) {
-      console.error("Error uploading video:", error);
+
+      console.error("Error uploading video:", JSON.stringify(error));
 
     }
   };
@@ -135,7 +137,7 @@ export default function Recording(): React.JSX.Element {
       <form onSubmit={handleSubmit}>
         <input
           type="file"
-          accept="video/mp4"
+          accept="video/webm"
           onChange={handleFileChange}
         />
         <Button

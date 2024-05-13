@@ -185,6 +185,7 @@ AUTH_COOKIE_SECURE = getenv("AUTH_COOKIE_SECURE", "True") == True
 AUTH_COOKIE_HTTP_ONLY=True
 AUTH_COOKIE_PATH = '/'
 AUTH_COOKIE_SAMESITE = 'None' #strict(no cross origin) Lax(allowed only for safe methods like get, options)
+SESSION_COOKIE_AGE = 60 * 60 # 1 hour
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY')
