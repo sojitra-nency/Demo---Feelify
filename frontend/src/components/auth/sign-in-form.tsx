@@ -57,15 +57,15 @@ export function SignInForm(): React.JSX.Element {
       const temp = JSON.stringify(loginResult);
       const temp2 = JSON.parse(temp)
 
-      if(temp2.error?.status == '401') {
-          toast.error('Failed to login.');
-      }else{
+      if(temp2.data?.status_code == '200') {
           localStorage.setItem('auth_token', temp2.data.access);
           dispatch(setAuth()); 
           toast.success('Logged In Successfully.');
           router.push(paths.home);
       }
-
+      else{
+        toast.error('Failed to login.');
+      }
     } catch (error) {
       toast.error('Failed to login.');
     }

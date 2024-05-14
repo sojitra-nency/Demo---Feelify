@@ -61,15 +61,19 @@ export function SignUpForm(): React.JSX.Element {
       const registerResult = await register({ first_name, last_name, email, password, re_password });;
       const temp = JSON.stringify(registerResult);
       const temp2 = JSON.parse(temp)
-      if(temp2.error?.status == '400') {
-        toast.error('Failed to register the account.');
-        toast.error('Email already exist or Invalid Email');
-      }else{
+    
+      if(temp2.data.id) {
+        localStorage.setItem('id', temp2.data.id);
         toast.success('Please check email to verify account.');
         router.push(paths.auth.signIn);
       }  
+      else {
+        toast.error('Failed to register the account.');
+        toast.error('Email already exist or Invalid Email');
+      }
     } catch (error) {
       toast.error('Failed to register the account.');
+      toast.error('Email already exist or Invalid Email');
     }
   });
  

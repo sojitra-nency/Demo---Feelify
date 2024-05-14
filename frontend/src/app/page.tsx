@@ -1,10 +1,13 @@
-import { AccountInfo } from "@/components/dashboard/account/account-info";
+"use client"
+import * as React from 'react';
+import {useRouter} from 'next/navigation';
+import { paths } from '@/paths';
 
-export default function Home() {
-  return (
-    <>
-    <AccountInfo/>
-    </>
-        
+
+export default function Page(): React.JSX.Element {
+  const router = useRouter();
+  router.push(paths.auth.signIn)
+  return (      
+        <></>
   );
 }

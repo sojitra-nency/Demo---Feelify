@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const user = {
   first_name: '',
@@ -32,7 +33,7 @@ export function AccountInfo(): React.JSX.Element {
       setIsLoading(true);
       try {
         const token = localStorage.getItem('auth_token');
-        const userId = 1
+        const userId = localStorage.getItem('id');
 
         const response = await axios.get(`http://127.0.0.1:8000/login/profile/${userId}/`, {
           headers: {
@@ -41,7 +42,7 @@ export function AccountInfo(): React.JSX.Element {
         });
         setProfileData(response.data);
       } catch (error) {
-        // setError(error); 
+        toast.error("Unable to fetch profile data.");
       } finally {
         setIsLoading(false);
       }

@@ -79,7 +79,7 @@ export default function Recording(): React.JSX.Element {
       };
 
     } catch (error) {
-      console.error("Error accessing camera:", error);
+      toast.error("Failed to capture photo");
     } finally {
       setIsRecording(false);
     }
@@ -87,7 +87,7 @@ export default function Recording(): React.JSX.Element {
 
   const sendVideoToBackend = async (videoBlob: Blob) => {
     const formData = new FormData();
-    formData.append("video_file", videoBlob, "recording.webm");
+    formData.append("video_file", videoBlob, "recording.mp4");
     
     try {
       const response = await axios.post(
@@ -96,14 +96,15 @@ export default function Recording(): React.JSX.Element {
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-            'Content-Type': 'video/webm',
+            'Content-Type': 'video/mp4',
           },
         }
       );
+      toast.success("Video uploaded successfully");
       console.log("Video upload response:", response);
 
     } catch (error) {
-
+      toast.error("Failed to upload video");
       console.error("Error uploading video:", JSON.stringify(error));
 
     }
@@ -137,7 +138,7 @@ export default function Recording(): React.JSX.Element {
       <form onSubmit={handleSubmit}>
         <input
           type="file"
-          accept="video/webm"
+          accept="video/mp4"
           onChange={handleFileChange}
         />
         <Button

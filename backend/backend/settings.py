@@ -169,6 +169,7 @@ REST_FRAMEWORK = {
 
 
 DJOSER = {
+    "DEFAULT_FROM_EMAIL": getenv("AWS_SES_FROM_EMAIL"), 
     "PASSWORD_RESET_CONFIRM_URL": 'password-reset/{uid}/{token}',
     "SEND_ACTIVATION_EMAIL": True,
     "ACTIVATION_URL": "activation/{uid}/{token}",

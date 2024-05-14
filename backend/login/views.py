@@ -1,5 +1,6 @@
 from django.conf import settings
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,7 +10,6 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from login.models import User
 from login.serializers import UserProfileSerializer
 from django.conf import settings
-
 
 class CustomProviderAuthView(ProviderAuthView):
     def post(self, request, *args, **kwargs):
@@ -38,6 +38,7 @@ class CustomProviderAuthView(ProviderAuthView):
                 httponly = settings.AUTH_COOKIE_HTTP_ONLY,
                 samesite = settings.AUTH_COOKIE_SAMESITE
             )
+        response.data['status_code'] = response.status_code
         return response
 
 class CustomTokenObtainView(TokenObtainPairView):
@@ -67,6 +68,7 @@ class CustomTokenObtainView(TokenObtainPairView):
                 httponly = settings.AUTH_COOKIE_HTTP_ONLY,
                 samesite = settings.AUTH_COOKIE_SAMESITE
             )
+        response.data['status_code'] = response.status_code
         return response
     
 
@@ -93,20 +95,8 @@ class CustomTokenRefreshView(TokenRefreshView):
                 httponly = settings.AUTH_COOKIE_HTTP_ONLY,
                 samesite = settings.AUTH_COOKIE_SAMESITE
             )
+        response.data['status_code'] = response.status_code
         return response
-    
-
-
-# class LogoutView(APIView):
-#     permission_classes = [AllowAny]
-
-#     def post(self, request, *args, **kwargs):
-#         response = Response("Logout successful.", status=status.HTTP_204_NO_CONTENT)
-#         response.delete_cookie('access')
-#         response.delete_cookie('refresh')
-#         return response
-    
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 class LogoutView(APIView):
     permission_classes = [AllowAny]
@@ -131,7 +121,6 @@ class LogoutView(APIView):
         response = Response("Logout successful.", status=status.HTTP_204_NO_CONTENT)
         response.delete_cookie('access')
         response.delete_cookie('refresh')
-
         return response
 
 class UserProfile(RetrieveUpdateDestroyAPIView):

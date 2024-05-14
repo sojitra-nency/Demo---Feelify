@@ -36,7 +36,6 @@ export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): Reac
       router.push(paths.auth.signIn); 
       toast.success('You have been logged out.');
     } catch (error) {
-      console.error('Logout error:', error);
       toast.error('An error occurred during logout.');
     }
   };

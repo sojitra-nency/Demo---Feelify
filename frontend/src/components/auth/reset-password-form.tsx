@@ -46,14 +46,13 @@ export function ResetPasswordForm(): React.JSX.Element {
       const resetResult = await resetPassword( email );
       const temp = JSON.stringify(resetResult);
       const temp2 = JSON.parse(temp)
-      if(temp2.error?.status == '400') {
-        console.log("Fail")
-        toast.error('Invalid Email. Enter valid email address.');
-      }else{
-        console.log("Pass")
+      if(temp2.data == null) {
         toast.success('Please check email to Reset Password.');
         router.push(paths.auth.signIn);
-      }      
+      } 
+      else{
+        toast.error('Failed to send Reset Password email.');
+      }     
     } catch (error) {
       toast.error('Failed to send Reset Password email.');
     }

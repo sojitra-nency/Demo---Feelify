@@ -11,6 +11,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 interface Video {
 id: string;
@@ -40,7 +41,7 @@ export default function VideoSearch() {
           const data = await response.data;
           setVideos(data);
         } catch (error) {
-          console.error('Error fetching videos:', error);
+          toast.error('Failed to fetch videos.');
         } finally {
           setLoading(false);
         }

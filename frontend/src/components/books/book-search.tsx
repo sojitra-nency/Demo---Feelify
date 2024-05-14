@@ -11,6 +11,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 interface Book {
   id: string;
@@ -48,7 +49,7 @@ export default function BookSearch() {
         const data = await response.data;
         setBooks(data);
       } catch (error) {
-        console.error('Error fetching books:', error);
+        toast.error('Failed to fetch books.');
       } finally {
         setLoading(false);
       }

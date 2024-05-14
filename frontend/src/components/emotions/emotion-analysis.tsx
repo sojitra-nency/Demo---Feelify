@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-// import { Chart } from 'chart.js'; // Assuming you want to use Chart.js
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
@@ -16,6 +15,9 @@ import Paper from '@mui/material/Paper';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Grid from '@mui/material/Grid';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import { paths } from '@/paths';
 
 
 interface EmotionData {
@@ -23,6 +25,7 @@ interface EmotionData {
 }
 
 export default function EmotionAnalysis(): React.JSX.Element {
+    const router = useRouter();
     const [emotionData, setEmotionData] = useState<EmotionData | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedEmotion, setSelectedEmotion] = useState('');
@@ -39,7 +42,7 @@ export default function EmotionAnalysis(): React.JSX.Element {
                 });
                 setEmotionData(response.data.emotion_percentages);
             } catch (error) {
-                console.error('Error fetching emotion data:', error);
+                toast.error('Failed to fetch emotion data.');
             } finally {
                 setIsLoading(false);
             }
@@ -55,6 +58,12 @@ export default function EmotionAnalysis(): React.JSX.Element {
 
     const handleOptionChange = (event: SelectChangeEvent<string>) => {
         setSelectedOption(event.target.value as 'books' | 'videos');
+    };
+
+    const handleRecommendation = (emotion: string, option: 'books' | 'videos') => {
+        console.log("Selected Emotion:", emotion);
+        console.log("Selected Option:", option);
+        // router.push(paths.recommend.emotion.option)
     };
 
     return (
@@ -129,7 +138,3 @@ export default function EmotionAnalysis(): React.JSX.Element {
     );
 }
 
-const handleRecommendation = (emotion: string, option: 'books' | 'videos') => {
-    console.log("Selected Emotion:", emotion);
-    console.log("Selected Option:", option);
-};

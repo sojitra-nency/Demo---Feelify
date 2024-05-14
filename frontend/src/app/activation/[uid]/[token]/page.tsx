@@ -32,7 +32,7 @@ export default function Page({ params }: Props): React.JSX.Element {
         toast.success("Account activated.")
       })
       .catch((err) => {
-        console.log("error")
+        console.log(err)
         toast.error("Failed to activate account.")
       })
       .finally(() => {

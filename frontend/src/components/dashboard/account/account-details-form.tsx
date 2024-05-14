@@ -31,7 +31,7 @@ export function AccountDetailsForm(): React.JSX.Element {
       setIsLoading(true);
       try {
         const token = localStorage.getItem('auth_token');
-        const userId = 1
+        const userId = localStorage.getItem('id');
 
         const response = await axios.get(`http://127.0.0.1:8000/login/profile/${userId}/`, {
           headers: {
@@ -40,7 +40,7 @@ export function AccountDetailsForm(): React.JSX.Element {
         });
         setProfileData(response.data);
       } catch (error) {
-        console.log(error)
+        toast.error("Unable to fetch profile data.");
       } finally {
         setIsLoading(false);
       }
@@ -55,8 +55,7 @@ export function AccountDetailsForm(): React.JSX.Element {
 
     try {
       const token = localStorage.getItem('auth_token');
-      const userId = 1;
-      console.log(event.target)
+      const userId = localStorage.getItem('id');
       const formData = new FormData(event.target as HTMLFormElement);
 
       const response = await axios.patch(
@@ -74,7 +73,6 @@ export function AccountDetailsForm(): React.JSX.Element {
 
     } catch (error) {
       toast.error("Unable to update your profile.");
-      console.error("Error updating profile:", error);
     } finally {
       setIsLoading(false);
       window.location.reload();
