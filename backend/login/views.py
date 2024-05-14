@@ -111,16 +111,18 @@ class UserProfile(RetrieveUpdateDestroyAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get_object(self):
-        if self.request.user.is_authenticated:
-            return self.request.user
+    def retrieve(self, request, *args, **kwargs): 
+        if request.user.is_authenticated:
+            serializer = self.get_serializer(request.user)  
+            return Response(serializer.data)
         else:
             return Response("Not authenticated", status=status.HTTP_401_UNAUTHORIZED)
-    
+
     def perform_update(self, serializer):
-        serializer.save()  
+        serializer.save()
         return super().perform_update(serializer)
 
     def delete(self, instance):
         instance.is_deleted = True
         instance.save()
+

@@ -11,7 +11,7 @@ def fetch_videos(query):
         'part': 'snippet',
         'q': query,
         'key': settings.YOUTUBE_DATA_API_KEY,
-        'maxResults': 50,
+        'maxResults': 10,
         'type': 'video'
     }
 
