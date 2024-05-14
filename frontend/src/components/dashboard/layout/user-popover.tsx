@@ -9,6 +9,7 @@ import MenuList from '@mui/material/MenuList';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LockResetIcon from '@mui/icons-material/LockReset';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { toast } from "react-toastify";
 import { paths } from '@/paths';
@@ -60,6 +61,12 @@ export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): Reac
             <AccountCircleIcon/>
           </ListItemIcon>
           Profile
+        </MenuItem>
+        <MenuItem component={RouterLink} href={paths.auth.resetPassword} onClick={onClose}>
+          <ListItemIcon>
+            <LockResetIcon/>
+          </ListItemIcon>
+          Change Password
         </MenuItem>
         <MenuItem onClick={handleLogout}>
         {/* <MenuItem> */}

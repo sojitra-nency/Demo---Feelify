@@ -13,10 +13,10 @@ const SurpriseVideos = React.lazy(() => import('@/components/videos/surprise-vid
 
 const videoCategories = [
   { title: 'Happy: Escape the ordinary and discover extraordinary moments of happiness.', component: HappyVideos, image: '/assets/happy/image.jpg'},
-  { title: 'Sad: Turn your blues into hues with these uplifting videos.', component: SadVideos, image: '/assets/sad/image.jpg'},
   { title: "Fear: Turn those goosebumps into laughter. It's video therapy time!", component: FearVideos, image: '/assets/fear/image.jpg'},
-  { title: 'Neutral: Open the door to endless possibilities. Click play and let the adventure begin.', component: NeutralVideos, image: '/assets/neutral/image.jpg'},
+  { title: 'Sad: Turn your blues into hues with these uplifting videos.', component: SadVideos, image: '/assets/sad/image.jpg'},
   { title: 'Surprise: Get ready to have your expectations delightfully shattered.', component: SurpriseVideos, image: '/assets/surprise/image.jpg'},
+  { title: 'Neutral: Open the door to endless possibilities. Click play and let the adventure begin.', component: NeutralVideos, image: '/assets/neutral/image.jpg'},
 ];
 
 
