@@ -12,5 +12,21 @@ export const paths = {
       account: '/dashboard/account',
     },
     errors: { notFound: '/errors/not-found' },
+    recommendation: {
+      books:{
+        happy: '/recommendation/books/happy',
+        sad: '/recommendation/books/sad',
+        surprise: '/recommendation/books/surprise',
+        fear: '/recommendation/books/fear',
+        neutral: '/recommendation/books/neutral',
+      },
+      videos:{
+        happy: '/recommendation/videos/happy',
+        sad: '/recommendation/videos/sad',
+        surprise: '/recommendation/videos/surprise',
+        fear: '/recommendation/videos/fear',
+        neutral: '/recommendation/videos/neutral',
+      },
+    },
   } as const;
   

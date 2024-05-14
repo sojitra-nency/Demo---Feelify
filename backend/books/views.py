@@ -17,10 +17,11 @@ def fetch_books(query):
 
     r = requests.get(search_url,params=search_params)
     results = r.json()['items']
-
+    print("result: ", results)
     books = []
     for result in results:
         book_url = result.get('selfLink')
+        print("book_id: ", book_url)
         if book_url:
             book_details = requests.get(book_url).json()
             book_data = {

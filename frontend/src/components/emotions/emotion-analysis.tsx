@@ -21,7 +21,7 @@ import { paths } from '@/paths';
 
 
 interface EmotionData {
-    [key: string]: number; // e.g., { happy: 35, sad: 10, ... } 
+    [key: string]: number; 
 }
 
 export default function EmotionAnalysis(): React.JSX.Element {
@@ -29,7 +29,7 @@ export default function EmotionAnalysis(): React.JSX.Element {
     const [emotionData, setEmotionData] = useState<EmotionData | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedEmotion, setSelectedEmotion] = useState('');
-    const [selectedOption, setSelectedOption] = useState<'books' | 'videos'>('books');;
+    const [selectedOption, setSelectedOption] = useState<'books' | 'videos'>('videos');;
 
     useEffect(() => {
         const fetchEmotionData = async () => {
@@ -61,9 +61,14 @@ export default function EmotionAnalysis(): React.JSX.Element {
     };
 
     const handleRecommendation = (emotion: string, option: 'books' | 'videos') => {
-        console.log("Selected Emotion:", emotion);
-        console.log("Selected Option:", option);
-        // router.push(paths.recommend.emotion.option)
+        if (!emotion) {
+            toast.error('Please select an emotion.');
+            return;
+        }
+        
+        else {
+            router.push(`/recommendation/${option}/${emotion}`);
+        }
     };
 
     return (
