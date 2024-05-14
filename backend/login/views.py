@@ -97,15 +97,43 @@ class CustomTokenRefreshView(TokenRefreshView):
     
 
 
+# class LogoutView(APIView):
+#     permission_classes = [AllowAny]
+
+#     def post(self, request, *args, **kwargs):
+#         response = Response("Logout successful.", status=status.HTTP_204_NO_CONTENT)
+#         response.delete_cookie('access')
+#         response.delete_cookie('refresh')
+#         return response
+    
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+
 class LogoutView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
+        refresh_token = request.COOKIES.get('refresh')
+        if refresh_token:
+            try:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+            except Exception as e:  
+                return Response({"error": "Invalid refresh token"}, status=status.HTTP_400_BAD_REQUEST)
+
+        access_token = request.COOKIES.get('access')
+        if access_token:
+            try:
+                token = AccessToken(access_token)
+                token.blacklist()
+            except Exception as e:  
+                return Response({"error": "Invalid access token"}, status=status.HTTP_400_BAD_REQUEST)
+
         response = Response("Logout successful.", status=status.HTTP_204_NO_CONTENT)
         response.delete_cookie('access')
         response.delete_cookie('refresh')
+
         return response
-    
+
 class UserProfile(RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
