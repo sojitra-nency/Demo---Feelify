@@ -1,9 +1,9 @@
 from django.urls import path
-from . import views
+from .views import RecordingView, EmotionAnalysisView
 
 urlpatterns = [
-    path('recording/',views.recording, name='recording'),
-    path("emotion-analysis/", views.emotion_analysis, name="emotion_analysis"),
+    path('recording/', RecordingView.as_view(), name='recording'),
+    path('emotion-analysis/', EmotionAnalysisView.as_view(), name='emotion-analysis'),
 ]
 
 # POST
