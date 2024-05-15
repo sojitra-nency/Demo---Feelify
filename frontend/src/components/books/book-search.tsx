@@ -63,7 +63,11 @@ export default function BookSearch() {
   };
 
   return (
+    
     <Box sx={{ padding: 2 }}>
+      <Typography variant="h4" component="h1" align="center" gutterBottom sx={{mb:6}}>
+        SEARCH BOOKS
+      </Typography>
       <TextField
         label="Search Books"
         variant="outlined"

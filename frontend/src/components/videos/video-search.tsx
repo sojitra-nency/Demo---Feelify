@@ -14,56 +14,59 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 interface Video {
-id: string;
-title: string;
-description: string;
-url: string;
-thumbnail: string;
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  thumbnail: string;
 }
 
 export default function VideoSearch() {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [videos, setVideos] = useState<Video[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
-  
-    useEffect(() => {
-      const fetchVideos = async () => {
-        if (searchTerm.trim() === '') return; 
-        setLoading(true);
-  
-        try {
-          const response = await axios.get(`http://127.0.0.1:8000/videos/video-search/?q=${searchTerm}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-            },
+  const [searchTerm, setSearchTerm] = useState('');
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      if (searchTerm.trim() === '') return;
+      setLoading(true);
+
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/videos/video-search/?q=${searchTerm}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
+          },
         });
-          const data = await response.data;
-          setVideos(data);
-        } catch (error) {
-          toast.error('Failed to fetch videos.');
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      fetchVideos();
-    }, [searchTerm]);
-  
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchTerm(event.target.value);
+        const data = await response.data;
+        setVideos(data);
+      } catch (error) {
+        toast.error('Failed to fetch videos.');
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const handleCardClick = (video: Video) => {
-        setSelectedVideo(video);
-      };
-    
-      const handleCloseModal = () => {
-        setSelectedVideo(null);
-      };
+    fetchVideos();
+  }, [searchTerm]);
 
-    return (
-        <Box sx={{ padding: 2 }}>
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };``
+
+  const handleCardClick = (video: Video) => {
+    setSelectedVideo(video);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedVideo(null);
+  };
+
+  return (
+    <Box sx={{ padding: 2 }}>
+      <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 6 }}>
+        SEARCH VIDEOS
+      </Typography>
       <TextField
         label="Search YouTube"
         variant="outlined"
@@ -96,18 +99,18 @@ export default function VideoSearch() {
 
       <Modal open={selectedVideo !== null} onClose={handleCloseModal}>
         <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 800 }}>
-          <iframe 
-            width="100%" 
-            height="450" 
+          <iframe
+            width="100%"
+            height="450"
             src={`https://www.youtube.com/embed/${selectedVideo?.id}`}
             title={selectedVideo?.title}
-            frameBorder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
         </Box>
       </Modal>
     </Box>
-    );
-  }
+  );
+}
 

@@ -6,6 +6,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { paths } from "@/paths";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 interface MediaRecorderType extends EventTarget {
   start(): void;
@@ -52,7 +54,7 @@ export default function Recording(): React.JSX.Element {
   };
 
 
- 
+
   const handleCapturePhoto = async () => {
     setIsRecording(true);
 
@@ -88,7 +90,7 @@ export default function Recording(): React.JSX.Element {
   const sendVideoToBackend = async (videoBlob: Blob) => {
     const formData = new FormData();
     formData.append("video_file", videoBlob, "recording.mp4");
-    
+
     try {
       const response = await axios.post(
         'http://127.0.0.1:8000/emotions/recording/',
@@ -112,43 +114,61 @@ export default function Recording(): React.JSX.Element {
 
   return (
     <div>
-      <video
-        ref={videoRef}
-        autoPlay
-        style={{
-          width: 500,
-          height: 300,
-          borderRadius: 2,
-          boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.5)',
-        }}
-      />
-      <br />
-      <br />
-      <Button
-        variant="contained"
-        onClick={handleCapturePhoto}
-        disabled={isRecording}
-      >
-        Capture Photo
-      </Button>
-      <br />
-      <br />
-      <br />
-      <br />
-      <form onSubmit={handleSubmit}>
-        <input
-          type="file"
-          accept="video/mp4"
-          onChange={handleFileChange}
+      <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 5 }}>
+        CAPTURE YOUR EMOTIONS
+      </Typography>
+      <Box display="flex" justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
+        <video
+          ref={videoRef}
+          autoPlay
+          style={{
+            width: 500,
+            height: 270,
+            borderRadius: 2,
+            boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.5)',
+            backgroundColor: 'white',
+          }}
         />
+      </Box>
+      <Box display="flex" justifyContent="center" alignItems="center" sx={{ mb: 8 }}>
         <Button
           variant="contained"
-          type="submit"
+          onClick={handleCapturePhoto}
+          disabled={isRecording}
         >
-          Upload
+          Capture Photo
         </Button>
-        <p>{uploadStatus}</p>
-      </form>
+      </Box>
+
+      <Typography variant="h4" component="h1" align="center" gutterBottom >
+        UPLOAD YOUR RECORDING
+      </Typography>
+      <Box display="flex" justifyContent="center" alignItems="center" >
+        <form onSubmit={handleSubmit}>
+          <Box>
+            <input
+              type="file"
+              accept="video/mp4"
+              onChange={handleFileChange}
+              style={{
+                border: '1px solid white',
+                padding: '20px',
+                borderRadius: '5px',
+                boxShadow: '0px 2px 4px -1px rgba(0, 0, 0, 0.5)',
+                backgroundColor: 'white',
+                margin: '30px',
+              }}
+            />
+            <Button
+              variant="contained"
+              type="submit"
+            >
+              Upload
+            </Button>
+          </Box>
+          
+        </form>
+      </Box>
     </div>
   )
 }

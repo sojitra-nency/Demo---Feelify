@@ -22,8 +22,8 @@ export default function Books() {
 
   return (
     <Container maxWidth="md">
-      <Typography variant="h4" component="h1" align="center" gutterBottom>
-        Book recommendation
+      <Typography variant="h4" component="h1" align="center" gutterBottom sx={{mb:6}}>
+        EMOTION BASED BOOK RECOMMENDATION
       </Typography>
 
       <Grid container direction="column" spacing={3}>

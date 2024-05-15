@@ -10,6 +10,7 @@ export const paths = {
       vrecom: '/dashboard/vrecom',
       brecom: '/dashboard/brecom',
       account: '/dashboard/account',
+      about: '/dashboard/about',
     },
     errors: { notFound: '/errors/not-found' },
     recommendation: {

@@ -8,16 +8,19 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import PeopleIcon from '@mui/icons-material/People';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { MobileNav } from './mobile-nav';
 import { usePopover } from '@/hooks/use-popover';
 import { UserPopover } from './user-popover';
+import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/navigation';
+import { paths } from '@/paths';
 
 
 export function MainNav(): React.JSX.Element {
-  
+  const router = useRouter();
+
   const [openNav, setOpenNav] = React.useState<boolean>(false);
 
   const userPopover = usePopover<HTMLDivElement>();
@@ -44,19 +47,21 @@ export function MainNav(): React.JSX.Element {
               setOpenNav(true);
             }}
               sx={{ display: { lg: 'none' } }} />
-            <Tooltip title="Search">
-              <SearchIcon />
-            </Tooltip>
+            <Typography variant="h3" >
+              FEELIFY
+            </Typography>
           </Stack>
           <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-            <Tooltip title="Contacts">
+            <Tooltip title="About Us">
+            <IconButton onClick={() => router.push(paths.dashboard.about)}>
               <PeopleIcon />
+            </IconButton>
             </Tooltip>
-            <Tooltip title="Notifications">
+            {/* <Tooltip title="Notifications">
               <Badge badgeContent={4} color="error" variant="dot">
                 <NotificationsIcon />
               </Badge>
-            </Tooltip>
+            </Tooltip> */}
             <Avatar
               onClick={userPopover.handleOpen}
               ref={userPopover.anchorRef}

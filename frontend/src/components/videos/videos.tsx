@@ -18,8 +18,8 @@ export default function Videos() {
 
   return (
     <Container maxWidth="md">
-      <Typography variant="h4" component="h1" align="center" gutterBottom>
-        Video recommendation
+      <Typography variant="h4" component="h1" align="center" gutterBottom sx={{mb:6}}>
+        EMOTION BASED VIDEO RECOMMENDATION
       </Typography>
 
       <Grid container direction="column" spacing={3}>
