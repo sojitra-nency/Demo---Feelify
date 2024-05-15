@@ -8,20 +8,17 @@ def fetch_books(query):
     search_url = "https://www.googleapis.com/books/v1/volumes"
 
     search_params = {
-        'filter': 'free-ebooks',
+        'filter': 'full',
         'maxResults': 10,
         'key': settings.BOOKS_API_KEY,
-        'orderBy':'newest',
         'q': query,
     }
 
     r = requests.get(search_url,params=search_params)
     results = r.json()['items']
-    print("result: ", results)
     books = []
     for result in results:
         book_url = result.get('selfLink')
-        print("book_id: ", book_url)
         if book_url:
             book_details = requests.get(book_url).json()
             book_data = {
@@ -37,7 +34,7 @@ def fetch_books(query):
                 'categories':result['volumeInfo'].get('categories', []),
                 'language':book_details['volumeInfo'].get('language', ''),
                 'thumbnail':book_details['volumeInfo']['imageLinks'].get('small', ''),
-                'preview':result['volumeInfo'].get('previewLink', ''),
+                'webReaderLink':book_details['accessInfo'].get('webReaderLink', ''),
                 'download':book_details['accessInfo']['pdf'].get('downloadLink','')
             }
             books.append(book_data)
