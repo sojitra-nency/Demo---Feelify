@@ -7,6 +7,6 @@ export const metadata = { title: `Feelify | Books | Surprise ` } satisfies Metad
 
 export default function Page(): React.JSX.Element {
   return (
-    <EmotionBooks title="Book Recommendation for Surprise Emotion" queries={['Mystery', 'Thriller', 'Speculative' , 'Fiction', 'Unexpected', 'Wonder', 'Non-Fiction' , 'Page-Turner', 'Twists', 'Unforgettable']}/>
+    <EmotionBooks title="Book Recommendation for Surprise Emotion" queries={['Mystery', 'Thriller', 'Speculative' , 'Fiction', 'Unexpected', 'Wonder', 'Non-Fiction' , 'Page-Turner', 'Twists', 'Suspense']} subtitle={['Mystery Books', 'Thrilling Books', 'Speculative Books' , 'Fictional Books', 'Unexpected Stories', 'Wonderful Books', 'Non-Fictional Books' , 'Page-Turner Books', 'Twists Stories', 'Suspense Books']}/>
   );
 }

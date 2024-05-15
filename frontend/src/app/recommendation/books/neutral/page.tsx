@@ -7,6 +7,6 @@ export const metadata = { title: `Feelify | Books | Neutral ` } satisfies Metada
 
 export default function Page(): React.JSX.Element {
   return (
-    <EmotionBooks title="Book Recommendation for Neutral Emotion" queries={['Science', 'History', 'Biography' , 'Nature', 'Tranquil', 'Reflective', 'Culture' , 'Instructional', 'Observations', 'Environment']}/>
+    <EmotionBooks title="Book Recommendation for Neutral Emotion" queries={['Science', 'History', 'Biography' , 'Nature', 'Tranquil', 'Reflective', 'Culture' , 'Instructional', 'Observations', 'Environment']} subtitle={['Science Books', 'Historical Books', 'Biography' , 'Nature', 'Tranquil Books', 'Reflective Books', 'Cultural Books' , 'Instructional Books', 'Observational Books', 'Environmental Books']}/>
   );
 }

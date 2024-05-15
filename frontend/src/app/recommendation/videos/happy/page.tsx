@@ -7,6 +7,6 @@ export const metadata = { title: `Feelify | Videos | Happy ` } satisfies Metadat
 
 export default function Page(): React.JSX.Element {
   return (
-    <EmotionVideos title="Escape the ordinary and discover extraordinary moments of happiness." queries={['JoyfulMoments', 'HappinessBoost', 'CelebratingLife' , 'PositiveVibes', 'GoodMoodMusic', 'InspiringStories', 'lifestyle' , 'Travel', 'Adventure', 'UpliftingMusic']}/>
+    <EmotionVideos title="Escape the ordinary and discover extraordinary moments of happiness." queries={['JoyfulMoments', 'HappinessBoost', 'CelebratingLife' , 'PositiveVibes', 'GoodMoodMusic', 'InspiringStories', 'lifestyle' , 'Travel', 'Adventure', 'UpliftingMusic']} subtitle={['Joyful Moments', 'Happiness Boost', 'Celebrating Life' , 'Positive Vibes', 'Good Mood Music', 'Inspiring Stories', 'Lifestyle' , 'Travel', 'Adventure', 'Uplifting Music']}/>
   );
 }

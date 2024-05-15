@@ -10,6 +10,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Button from '@mui/material/Button';
 import { toast } from 'react-toastify';
+import Modal from '@mui/material/Modal';
 
 interface VideoData {
     id: string;
@@ -22,11 +23,15 @@ interface VideoData {
 interface VideoListProps {
     title: string;
     queries: string[];
+    subtitle: string[];
 }
 
-export default function EmotionVideos({ title, queries }: VideoListProps) {
+export default function EmotionVideos({ title, queries, subtitle }: VideoListProps) {
     const [hasMore, setHasMore] = useState(true);
     const [videos, setVideos] = useState<Record<string, VideoData[]>>({});
+    const [selectedVideo, setSelectedVideo] = useState<VideoData | null>(null);
+    const handleOpen = (video: VideoData) => setSelectedVideo(video);
+    const handleClose = () => setSelectedVideo(null);
 
     useEffect(() => {
 
@@ -53,8 +58,15 @@ export default function EmotionVideos({ title, queries }: VideoListProps) {
     const handleScroll = (query: string, direction: 'left' | 'right') => {
         const container = scrollRefs.current[query];
         if (container) {
-            const scrollAmount = direction === 'left' ? -300 : 300;
+            const scrollAmount = direction === 'left' ? -250 : 250;
             container.scrollLeft += scrollAmount;
+
+
+            if (direction === 'right' && container.scrollLeft + container.offsetWidth >= container.scrollWidth) {
+                container.scrollLeft = 0;
+            } else if (direction === 'left' && container.scrollLeft <= 0) {
+                container.scrollLeft = container.scrollWidth - container.offsetWidth;
+            }
         }
     };
 
@@ -64,7 +76,7 @@ export default function EmotionVideos({ title, queries }: VideoListProps) {
 
     return (
         <div style={{ padding: 20 }}>
-            <Typography variant="h4" component="h1" align="center" gutterBottom>
+            <Typography variant="h3" component="h1" align="center" gutterBottom sx={{ mb:4 }}>
                 {title}
             </Typography>
 
@@ -76,8 +88,8 @@ export default function EmotionVideos({ title, queries }: VideoListProps) {
             >
                 {Object.entries(videos).map(([query, videosForQuery]) => (
                     <div key={query}>
-                        <Typography variant="h6" gutterBottom>
-                            {query.charAt(0).toUpperCase() + query.slice(1)}
+                        <Typography variant="h5" gutterBottom sx={{ mb:4 }}>
+                            {subtitle[queries.indexOf(query)]}
                         </Typography>
                         <Box
                             sx={{
@@ -88,10 +100,21 @@ export default function EmotionVideos({ title, queries }: VideoListProps) {
                             ref={(ref: HTMLDivElement | null) => { scrollRefs.current[query] = ref; }}
                         >
                             {[...videosForQuery, ...videosForQuery].map((video) => (
-                                <a href={video.url} target="_blank" key={video.id} rel="noreferrer" style={{ marginRight: 16 }}>
-                                    <img src={video.thumbnail} alt={video.title} width={250} height={200} />
-                                    <Typography variant="caption">{video.title}</Typography>
-                                </a>
+                                
+                                <div 
+                                key={video.id} 
+                                style={{ marginRight: 16, cursor: 'pointer' }} 
+                                onClick={() => handleOpen(video)}
+                            >
+                                <div 
+                            key={video.id} 
+                            style={{ marginRight: 16, cursor: 'pointer' }} 
+                            onClick={() => handleOpen(video)} 
+                        >
+                            <img src={video.thumbnail} alt={video.title} width={250} height={200} />
+                            <Typography variant="caption">{video.title}</Typography>
+                        </div>
+                                </div>
                             ))}
                         </Box>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
@@ -102,6 +125,33 @@ export default function EmotionVideos({ title, queries }: VideoListProps) {
                     </div>
                 ))}
             </InfiniteScroll>
+            <Modal open={!!selectedVideo} onClose={handleClose}>
+                <Box sx={{ 
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 800,
+                    bgcolor: '#eaebfe',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,
+                }}>
+                    {selectedVideo && (
+                        <>
+                            <Typography variant="h6" component="h2">{selectedVideo.title}</Typography>
+                            <iframe 
+                                width="100%" 
+                                height="450" 
+                                src={`https://www.youtube.com/embed/${selectedVideo.id}`}
+                                title={selectedVideo.title}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            />
+                        </>
+                    )}
+                </Box>
+            </Modal>
         </div>
     )
 }

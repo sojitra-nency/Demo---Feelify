@@ -11,7 +11,7 @@ def fetch_videos(query):
         'part': 'snippet',
         'q': query,
         'key': settings.YOUTUBE_DATA_API_KEY,
-        'maxResults': 10,
+        'maxResults': 5,
         'type': 'video'
     }
 
@@ -25,13 +25,12 @@ def fetch_videos(query):
     video_params = {
         'key': settings.YOUTUBE_DATA_API_KEY,
         'part': 'snippet',
-        'maxResults': 10,
+        'maxResults': 5,
         'id': ','.join(video_ids),
     }
 
     r = requests.get(video_url, params=video_params)
     
-    print(r.json())
     results = r.json()['items']
 
     for result in results:

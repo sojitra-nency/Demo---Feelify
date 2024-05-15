@@ -5,7 +5,7 @@ import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { CardContent, CardMedia, Grid, Link, Modal, Paper, Typography, Button, Box, Divider, AppBar, IconButton, Toolbar } from '@mui/material';
+import { CardContent, CardMedia, Grid, Link, Modal, Typography, Button, Box, Divider } from '@mui/material';
 import { toast } from 'react-toastify';
 
 interface BookData {
@@ -29,9 +29,10 @@ interface BookData {
 interface BookListProps {
     title: string;
     queries: string[];
+    subtitle: string[];
 }
 
-export default function EmotionBooks({ title, queries }: BookListProps) {
+export default function EmotionBooks({ title, queries, subtitle }: BookListProps) {
     const [books, setBooks] = useState<Record<string, BookData[]>>({});
     const [hasMore, setHasMore] = useState(true);
     const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
@@ -106,7 +107,7 @@ export default function EmotionBooks({ title, queries }: BookListProps) {
                 {Object.entries(books).map(([query, booksForQuery]) => (
                     <Box key={query} sx={{ mb: 4 }}>
                         <Typography variant="h5" gutterBottom sx={{ mb: 4 }}>
-                            {query.charAt(0).toUpperCase() + query.slice(1)}
+                            {subtitle[queries.indexOf(query)]}
                         </Typography>
 
                         <Box
@@ -158,22 +159,24 @@ export default function EmotionBooks({ title, queries }: BookListProps) {
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 800,
-                    bgcolor: 'background.paper',
+                    transform: 'translate(-35%, -50%)',
+                    width: 900,
+                    bgcolor: '#eaebfe',
                     boxShadow: 24,
                     p: 4,
                     outline: 'none',
+                    borderRadius: 2,
                 }}>
-                    <Paper elevation={3} sx={{ borderRadius: 2 }}>
+                    
                         {selectedBook && (
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={4}>
                                     <CardMedia
                                         component="img"
-                                        height="350"
+                                        height="400"
                                         image={selectedBook.thumbnail}
                                         alt={selectedBook.title}
+                                        sx={{ m: 2 }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={8}>
@@ -201,11 +204,11 @@ export default function EmotionBooks({ title, queries }: BookListProps) {
                                                 Publisher: {selectedBook.publisher}
                                             </Typography>
                                         )}
-                                        {selectedBook.isbn && selectedBook.isbn.length > 0 && (
-                                            <Typography variant="body2" color="text.secondary" gutterBottom>
-                                                ISBN: {selectedBook.isbn.join(', ')}
+                                        {selectedBook.isbn && selectedBook.isbn.length > 0 && selectedBook.isbn.map((isbnObj, index) => (
+                                            <Typography key={index} variant="body2" color="text.secondary" gutterBottom>
+                                                {Object.entries(isbnObj).map(([key, value]) => ` ${value}`).join(': ')}
                                             </Typography>
-                                        )}
+                                        ))}
                                         {selectedBook.description && selectedBook.description.length > 0 && (
                                             <>
                                                 <Typography variant="body1" gutterBottom>
@@ -216,10 +219,10 @@ export default function EmotionBooks({ title, queries }: BookListProps) {
                                                         ? selectedBook.description
                                                         : `${selectedBook.description.slice(0, 150)}...`}
                                                     <Link href="#" onClick={toggleDescription}>
-                                                    {showFullDescription ? 'View Less' : 'View More'}
+                                                        {showFullDescription ? 'View Less' : 'View More'}
                                                     </Link>
                                                 </Typography>
-                                                
+
                                             </>
                                         )}
                                         {selectedBook.categories && selectedBook.categories.length > 0 && (
@@ -238,22 +241,22 @@ export default function EmotionBooks({ title, queries }: BookListProps) {
                                             </Typography>
                                         )}
 
-                                        
-                                        
+
+
                                         <Box sx={{ '& > :not(style)': { m: 1 } }}>
-                                        <Button variant="contained" color="primary" onClick={() => window.open(selectedBook?.webReaderLink, '_blank')}>
-                                            Read
-                                        </Button>
-                                        <Button variant="contained" color="primary" onClick={() => window.open(selectedBook?.download, '_blank')}>
-                                            Download
-                                        </Button>
+                                            <Button variant="contained" color="primary" onClick={() => window.open(selectedBook?.webReaderLink, '_blank')}>
+                                                Read
+                                            </Button>
+                                            <Button variant="contained" color="primary" onClick={() => window.open(selectedBook?.download, '_blank')}>
+                                                Download
+                                            </Button>
                                         </Box>
                                     </CardContent>
-                                    
+
                                 </Grid>
                             </Grid>
                         )}
-                    </Paper>
+                    
                 </Box>
             </Modal>
 
