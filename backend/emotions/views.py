@@ -5,6 +5,8 @@ import cv2
 import numpy as np
 from keras.models import load_model # type: ignore
 from collections import Counter
+import moviepy.editor as mpe
+from django.core.files.storage import default_storage
 
 class RecordingView(APIView):
     def post(self, request):
@@ -12,7 +14,7 @@ class RecordingView(APIView):
         if serializer.is_valid():
             video_file = serializer.validated_data['video_file']
             
-            if video_file.content_type != "video/mp4":
+            if video_file.content_type != "video/webm":
                 return Response({"error": "Invalid file format."}, status=400)
             
             with open("media/recording/recording.mp4", "wb") as f:
@@ -22,6 +24,7 @@ class RecordingView(APIView):
             return Response({"message": "Recording saved successfully."})
         else:
             return Response(serializer.errors, status=400)
+
 
 
 class EmotionAnalysisView(APIView):
