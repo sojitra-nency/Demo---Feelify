@@ -18,10 +18,12 @@ import Grid from '@mui/material/Grid';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { paths } from '@/paths';
+import Typography from '@mui/material/Typography';
+import Spinner from '../common/Spinner';
 
 
 interface EmotionData {
-    [key: string]: number; 
+    [key: string]: number;
 }
 
 export default function EmotionAnalysis(): React.JSX.Element {
@@ -65,81 +67,84 @@ export default function EmotionAnalysis(): React.JSX.Element {
             toast.error('Please select an emotion.');
             return;
         }
-        
+
         else {
             router.push(`/recommendation/${option}/${emotion}`);
         }
     };
 
+
     return (
         <div>
-            {isLoading && <p>Analyzing emotions...</p>}
+            <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 5 }}>
+                EMOTION ANALYSIS
+            </Typography>
+            {isLoading && <Spinner/>}
             {emotionData && (
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 10 }} aria-label="Emotion Analysis Table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Emotion</TableCell>
-                                <TableCell align="right">Percentage (%)</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {Object.entries(emotionData).map(([emotion, percentage]) => (
-                                <TableRow key={emotion}>
-                                    <TableCell component="th" scope="row">
-                                        {emotion.charAt(0).toUpperCase() + emotion.slice(1)}
-                                    </TableCell>
-                                    <TableCell align="right">{percentage.toFixed(2)}</TableCell>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <TableContainer component={Paper} sx={{ maxWidth: 700 }}>
+                        <Table sx={{ minWidth: 10 }} aria-label="Emotion Analysis Table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Emotion</TableCell>
+                                    <TableCell align="right">Percentage (%)</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            )}
-            {emotionData && (
-                <>
-                    <Grid container justifyContent="center" spacing={2} sx={{ mt: 2 }}> 
-                    <Grid item spacing={2} xs={12} sx={{ border: '1px solid lightgray', borderRadius: 2, p: 2 , marginTop: 10}}>
-                        <Grid item spacing={2} xs={12} sm={8} >
-                            <FormControl sx={{ width: 300, marginLeft: 20 }}> 
-                                <FormLabel>Select Emotion </FormLabel>
-                                    <Select value={selectedEmotion} onChange={handleEmotionChange} sx={{ width: 300, marginRight: 2,  borderRadius: 1 }}>
-                                        {Object.entries(emotionData)
-                                            .filter(([emotion, percentage]) => percentage >= 10)
-                                            .map(([emotion, percentage]) => (
-                                                <MenuItem key={emotion} value={emotion} >
-                                                    {emotion.charAt(0).toUpperCase() + emotion.slice(1) + ' '}
-                                                    ({percentage.toFixed(2)}%)
-                                                </MenuItem>
-                                            ))}
-                                    </Select>
-                                
-                            </FormControl>
-                        </Grid>
-                        <Grid item spacing={2} xs={12} sm={8} sx={{ marginTop: 3}}>
-                            <FormControl sx={{ width: 200, marginLeft: 20  }}> 
-                                <FormLabel>Select Choice </FormLabel>
-                                <Select value={selectedOption} onChange={handleOptionChange} sx={{ width: 300, marginRight: 2,  borderRadius: 1 }}>
-                                    <MenuItem value="books">Books</MenuItem>
-                                    <MenuItem value="videos">Videos</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item spacing={2} xs={12} sx={{ marginTop: 3}}> 
-                                <Button 
-                                    variant="contained" 
-                                    onClick={() => handleRecommendation(selectedEmotion, selectedOption)} 
-                                    sx={{ width: '20%', py: 1.5,  marginLeft: 20  }} 
-                                >
-                                    Recommendations
-                                </Button>
+                            </TableHead>
+                            <TableBody>
+                                {Object.entries(emotionData).map(([emotion, percentage]) => (
+                                    <TableRow key={emotion}>
+                                        <TableCell component="th" scope="row">
+                                            {emotion.charAt(0).toUpperCase() + emotion.slice(1)}
+                                        </TableCell>
+                                        <TableCell align="right">{percentage.toFixed(2)}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <Grid container justifyContent="center" spacing={2} sx={{ mt: 4, maxWidth: 400 }}>
+                        <Grid item xs={12} component={Paper} sx={{ p: 2 }}>
+                            <Grid container spacing={2} alignItems="center">
+                                <Grid item xs={12} justifyContent="center">
+                                    <FormControl fullWidth sx={{alignItems: 'center'}}>
+                                        <FormLabel>Select Emotion </FormLabel>
+                                        <Select value={selectedEmotion} onChange={handleEmotionChange} sx={{ width: 300, borderRadius: 1 }}>
+                                            {Object.entries(emotionData)
+                                                .filter(([emotion, percentage]) => percentage >= 10)
+                                                .map(([emotion, percentage]) => (
+                                                    <MenuItem key={emotion} value={emotion} >
+                                                        {emotion.charAt(0).toUpperCase() + emotion.slice(1) + ' '}
+                                                        ({percentage.toFixed(2)}%)
+                                                    </MenuItem>
+                                                ))}
+                                        </Select>
+
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FormControl fullWidth sx={{alignItems: 'center'}}>
+
+                                        <FormLabel>Select Choice </FormLabel>
+                                        <Select value={selectedOption} onChange={handleOptionChange} sx={{ width: 300, borderRadius: 1 }}>
+                                            <MenuItem value="books">Books</MenuItem>
+                                            <MenuItem value="videos">Videos</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => handleRecommendation(selectedEmotion, selectedOption)}
+                                        fullWidth
+                                    >
+                                        Get Recommendations
+                                    </Button>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
-                    </Grid>
-                </>
+                </div>
             )}
-            
         </div>
     );
 }
-

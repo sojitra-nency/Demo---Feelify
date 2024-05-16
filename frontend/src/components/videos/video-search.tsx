@@ -12,6 +12,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Paper } from '@mui/material';
 
 interface Video {
   id: string;
@@ -73,6 +74,7 @@ export default function VideoSearch() {
         fullWidth
         value={searchTerm}
         onChange={handleSearchChange}
+        component={Paper}
       />
 
       {loading && <CircularProgress sx={{ margin: 2 }} />}

@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Link from 'next/link';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Paper } from '@mui/material';
 
 interface Book {
   id: string;
@@ -74,6 +75,7 @@ export default function BookSearch() {
         fullWidth
         value={searchTerm}
         onChange={handleSearchChange}
+        component={Paper}
       />
 
       {loading && <CircularProgress sx={{ margin: 2 }} />}
