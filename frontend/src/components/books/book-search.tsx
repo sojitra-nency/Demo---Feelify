@@ -72,10 +72,10 @@ export default function BookSearch() {
       <TextField
         label="Search Books"
         variant="outlined"
-        fullWidth
         value={searchTerm}
         onChange={handleSearchChange}
         component={Paper}
+        fullWidth
       />
 
       {loading && <CircularProgress sx={{ margin: 2 }} />}

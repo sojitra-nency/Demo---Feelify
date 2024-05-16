@@ -69,7 +69,7 @@ export default function VideoSearch() {
         SEARCH VIDEOS
       </Typography>
       <TextField
-        label="Search YouTube"
+        label="Search Videos"
         variant="outlined"
         fullWidth
         value={searchTerm}
@@ -106,7 +106,6 @@ export default function VideoSearch() {
             height="450"
             src={`https://www.youtube.com/embed/${selectedVideo?.id}`}
             title={selectedVideo?.title}
-            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
