@@ -14,6 +14,7 @@ from os import getenv, path
 from pathlib import Path
 import dotenv
 import os
+import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -186,7 +187,7 @@ AUTH_COOKIE_SECURE = getenv("AUTH_COOKIE_SECURE", "True") == True
 AUTH_COOKIE_HTTP_ONLY=True
 AUTH_COOKIE_PATH = '/'
 AUTH_COOKIE_SAMESITE = 'None' #strict(no cross origin) Lax(allowed only for safe methods like get, options)
-SESSION_COOKIE_AGE = 60 * 60 # 1 hour
+
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY')
@@ -197,7 +198,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', "last_name"]
 
-
+BOOKS_API_KEY = getenv("BOOKS_API_KEY")
+YOUTUBE_DATA_API_KEY = getenv("YOUTUBE_DATA_API_KEY")
 
 
 # Default primary key field type
@@ -214,6 +216,9 @@ CORS_ALLOW_CREDENTIALS = True
 
 FRONTEND_ASSETS_DIR = os.path.join(BASE_DIR, '..', 'frontend', 'public', 'assets')
 
-BOOKS_API_KEY = getenv("BOOKS_API_KEY")
 
-YOUTUBE_DATA_API_KEY = getenv("YOUTUBE_DATA_API_KEY")
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=180),  
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),     
+}

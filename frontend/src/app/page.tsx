@@ -1,13 +1,14 @@
-"use client"
-import * as React from 'react';
-import {useRouter} from 'next/navigation';
+'use client'
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { paths } from '@/paths';
-
 
 export default function Page(): React.JSX.Element {
   const router = useRouter();
-  router.push(paths.auth.signIn)
-  return (      
-        <></>
-  );
+
+  useEffect(() => {
+    router.push(paths.auth.signIn);
+  }, [router]);
+
+  return(<></>);
 }

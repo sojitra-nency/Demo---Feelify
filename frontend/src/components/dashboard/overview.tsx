@@ -19,6 +19,7 @@ import RateReviewIcon from '@mui/icons-material/RateReview';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import InfoIcon from '@mui/icons-material/Info';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 
 
@@ -31,7 +32,6 @@ export default function Overview(): React.JSX.Element {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        p: 3, // Add padding to the main container
       }}
     >
       <Typography variant="h2" component="h1" gutterBottom>
@@ -41,31 +41,25 @@ export default function Overview(): React.JSX.Element {
         Your emotion-based book and video recommendation system
       </Typography>
 
-      {/* Cards in a Single Row */}
+      
       <Grid container spacing={2} justifyContent={'center'}>
         {/* Emotion-Based Recommendations */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
             sx={{
               maxWidth: 280,
-              boxShadow: 3, // Add shadow
-              transition: 'transform 0.2s', // Add hover effect
+              boxShadow: 3, 
+              transition: 'transform 0.2s', 
               '&:hover': { transform: 'scale(1.05)' },
             }}
           >
-            <CardMedia
-              component="img"
-              height="140"
-              image="https://source.unsplash.com/random" // Replace with emotion-related image
-              alt="Emotion-Based Recommendations"
-            />
+            
             <CardContent>
               <Typography variant="h6" component="div" gutterBottom>
                 <MoodIcon sx={{mr:1}}/> Feel, Watch, Read
               </Typography>
               <Typography variant="body2">
-                Discover books and videos that match your mood across 5 emotions:
-                happy, sad, neutral, fear, and surprise.
+                Discover books and videos that match your mood across 5 emotions.
               </Typography>
               <Button
                 variant="contained"
@@ -88,12 +82,7 @@ export default function Overview(): React.JSX.Element {
               '&:hover': { transform: 'scale(1.05)' },
             }}
           >
-            <CardMedia
-              component="img"
-              height="140"
-              image="https://source.unsplash.com/random" // Replace with search-related image
-              alt="Search Books and Videos"
-            />
+            
             <CardContent>
               <Typography variant="h6" component="div" gutterBottom>
                 <SearchIcon sx={{mr:1}}/> Search
@@ -118,6 +107,38 @@ export default function Overview(): React.JSX.Element {
             </CardContent>
           </Card>
         </Grid>
+
+
+        {/* Upgrade to Premium */}
+        <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
+          <Card
+            sx={{
+              maxWidth: 280,
+              boxShadow: 3,
+              transition: 'transform 0.2s',
+              '&:hover': { transform: 'scale(1.05)' },
+            }}
+          >
+            
+            <CardContent>
+              <Typography variant="h6" component="div" gutterBottom>
+                <CurrencyRupeeIcon sx={{mr:1}} /> Go Premium!
+              </Typography>
+              <Typography variant="body2">
+                Unlock personalized recommendations based on your live emotions.
+              </Typography>
+              <Button
+                variant="contained"
+                sx={{ mt: 2 }}
+                onClick={() => router.push(paths.home)} 
+              >
+                Upgrade Now
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+      
+
 
         {/* Rate and Review */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
