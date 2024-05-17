@@ -5,7 +5,12 @@ import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import BookIcon from '@mui/icons-material/Book';
 import VideoCameraFrontIcon from '@mui/icons-material/VideoCameraFront';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
-
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import WatchLaterIcon from '@mui/icons-material/WatchLater';
+import UpgradeIcon from '@mui/icons-material/Upgrade';
+import FeedbackIcon from '@mui/icons-material/Feedback';
+import StarHalfIcon from '@mui/icons-material/StarHalf';
+import ChatIcon from '@mui/icons-material/Chat';
 
 export const navIcons = {
   'chart-pie': PieChartIcon,
@@ -14,4 +19,12 @@ export const navIcons = {
   'bsearch': BookIcon,
   'vrecom': VideoLibraryIcon,
   'brecom': CollectionsBookmarkIcon,
+  'library': BookmarksIcon,
+  'watchlist': WatchLaterIcon,
+  'upgrade': UpgradeIcon,
+  'feedback': FeedbackIcon,
+  'rating': StarHalfIcon,
+  'chat': ChatIcon,
+
+
 } as Record<string, React.ComponentType>

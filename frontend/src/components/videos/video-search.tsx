@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import CircularProgress from '@mui/material/CircularProgress';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Modal from '@mui/material/Modal';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { Paper } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Modal from "@mui/material/Modal";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { Button, Paper } from "@mui/material";
 
 interface Video {
   id: string;
@@ -23,37 +23,45 @@ interface Video {
 }
 
 export default function VideoSearch() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [inputValue, setInputValue] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
 
   useEffect(() => {
-    const fetchVideos = async () => {
-      if (searchTerm.trim() === '') return;
+    const fetchBooks = async () => {
+      if (searchTerm.trim() === "") return;
       setLoading(true);
 
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/videos/video-search/?q=${searchTerm}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-          },
-        });
+        const response = await axios.get(
+          `http://127.0.0.1:8000/videos/video-search/?q=${searchTerm}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+            },
+          }
+        );
         const data = await response.data;
         setVideos(data);
       } catch (error) {
-        toast.error('Failed to fetch videos.');
+        toast.error("Failed to fetch books.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchVideos();
+    fetchBooks();
   }, [searchTerm]);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };``
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleSearchClick = () => {
+    setSearchTerm(inputValue);
+  };
 
   const handleCardClick = (video: Video) => {
     setSelectedVideo(video);
@@ -65,23 +73,61 @@ export default function VideoSearch() {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h4" component="h1" align="center" gutterBottom sx={{ mb: 6 }}>
+      <Typography
+        variant="h4"
+        component="h1"
+        align="center"
+        gutterBottom
+        sx={{ mb: 6 }}
+      >
         SEARCH VIDEOS
       </Typography>
-      <TextField
-        label="Search Videos"
-        variant="outlined"
-        fullWidth
-        value={searchTerm}
-        onChange={handleSearchChange}
-        component={Paper}
-      />
+      <Grid container spacing={1} alignItems="flex-end" justifyContent="center">
+        <Grid item xs={6}>
+          <TextField
+            label="Search Videos"
+            variant="outlined"
+            value={inputValue}
+            onChange={handleInputChange}
+            component={Paper}
+            fullWidth
+          />
+        </Grid>
+        <Grid item>
+          <Button
+            onClick={handleSearchClick}
+            variant="contained"
+            color="primary"
+            sx={{ p: 2 }}
+          >
+            Search
+          </Button>
+        </Grid>
+      </Grid>
 
-      {loading && <CircularProgress sx={{ margin: 2 }} />}
+      {loading && (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+          sx={{ margin: 2 }}
+        >
+          <CircularProgress />
+          <Typography variant="h6">Loading Videos...</Typography>
+        </Box>
+      )}
 
       <Grid container spacing={2} sx={{ marginTop: 2 }}>
         {videos.map((video) => (
-          <Grid item xs={12} sm={6} md={4} key={video.id} onClick={() => handleCardClick(video)}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            key={video.id}
+            onClick={() => handleCardClick(video)}
+          >
             <Card>
               <CardMedia
                 component="img"
@@ -100,7 +146,15 @@ export default function VideoSearch() {
       </Grid>
 
       <Modal open={selectedVideo !== null} onClose={handleCloseModal}>
-        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 800 }}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 800,
+          }}
+        >
           <iframe
             width="100%"
             height="450"
@@ -114,4 +168,3 @@ export default function VideoSearch() {
     </Box>
   );
 }
-

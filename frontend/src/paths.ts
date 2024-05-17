@@ -11,6 +11,8 @@ export const paths = {
       brecom: '/dashboard/brecom',
       account: '/dashboard/account',
       about: '/dashboard/about',
+      library: '/dashboard/library',
+      watchlist: '/dashboard/watchlist',
     },
     errors: { notFound: '/errors/not-found' },
     recommendation: {
