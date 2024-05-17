@@ -10,6 +10,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuIcon from '@mui/icons-material/Menu';
 import PeopleIcon from '@mui/icons-material/People';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import FeedbackIcon from '@mui/icons-material/Feedback';
 import { MobileNav } from './mobile-nav';
 import { usePopover } from '@/hooks/use-popover';
 import { UserPopover } from './user-popover';
@@ -52,6 +53,11 @@ export function MainNav(): React.JSX.Element {
             </Typography>
           </Stack>
           <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
+          <Tooltip title="About Us">
+            <IconButton onClick={() => router.push(paths.feedback)}>
+              <FeedbackIcon />
+            </IconButton>
+            </Tooltip>
             <Tooltip title="About Us">
             <IconButton onClick={() => router.push(paths.dashboard.about)}>
               <PeopleIcon />

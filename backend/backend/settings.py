@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'login',
     'emotions',
     'books',
-    'videos'
+    'videos',
+    'api',
 ]
 
 MIDDLEWARE = [

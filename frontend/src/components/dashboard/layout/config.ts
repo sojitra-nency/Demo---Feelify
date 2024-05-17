@@ -8,7 +8,6 @@ export const navItems = [
   { key: 'Emotions', title: 'Emotions', href: paths.dashboard.emotions, icon: 'emotions' },
   { key: 'Video Recommendation', title: 'Video Recommendation', href: paths.dashboard.vrecom, icon: 'vrecom' },
   { key: 'Book Recommendation', title: 'Book Recommendation', href: paths.dashboard.brecom, icon: 'brecom' },
-  { key: 'My Library', title: 'My Library', href: paths.dashboard.library, icon: 'library' },
   { key: 'My WatchList', title: 'My WatchList', href: paths.dashboard.watchlist, icon: 'watchlist' },
   { key: 'Upgrade', title: 'Upgrade', href: paths.home, icon: 'upgrade' },
   { key: 'Feedback', title: 'Feedback', href: paths.home, icon: 'feedback' },

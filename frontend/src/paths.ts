@@ -1,3 +1,5 @@
+import FeedBack from "./components/feedback/feedback-form";
+
 export const paths = {
     home: '/dashboard',
     auth: { signIn: '/auth/sign-in', signUp: '/auth/sign-up', resetPassword: '/auth/reset-password' },
@@ -11,7 +13,6 @@ export const paths = {
       brecom: '/dashboard/brecom',
       account: '/dashboard/account',
       about: '/dashboard/about',
-      library: '/dashboard/library',
       watchlist: '/dashboard/watchlist',
     },
     errors: { notFound: '/errors/not-found' },
@@ -31,5 +32,6 @@ export const paths = {
         neutral: '/recommendation/videos/neutral',
       },
     },
+    feedback: '/feedback',
   } as const;
   
