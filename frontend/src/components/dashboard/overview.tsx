@@ -45,14 +45,19 @@ export default function Overview(): React.JSX.Element {
       <Grid container spacing={2} justifyContent={'center'}>
         {/* Emotion-Based Recommendations */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
-          <Card
-            sx={{
-              maxWidth: 280,
-              boxShadow: 3, 
-              transition: 'transform 0.2s', 
-              '&:hover': { transform: 'scale(1.05)' },
-            }}
-          >
+        <Card
+        sx={{
+          maxWidth: 400,
+          margin: "auto",
+          padding: 2,
+          boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
+          transition: "0.3s",
+          "&:hover": {
+            transform: "scale(1.03)",
+            boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
+          },
+        }}
+      >
             
             <CardContent>
               <Typography variant="h6" component="div" gutterBottom>
@@ -75,13 +80,18 @@ export default function Overview(): React.JSX.Element {
         {/* Search Books and Videos */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
-            sx={{
-              maxWidth: 280,
-              boxShadow: 3,
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'scale(1.05)' },
-            }}
-          >
+        sx={{
+          maxWidth: 400,
+          margin: "auto",
+          padding: 2,
+          boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
+          transition: "0.3s",
+          "&:hover": {
+            transform: "scale(1.03)",
+            boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
+          },
+        }}
+      >
             
             <CardContent>
               <Typography variant="h6" component="div" gutterBottom>
@@ -111,14 +121,19 @@ export default function Overview(): React.JSX.Element {
 
         {/* Upgrade to Premium */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
-          <Card
-            sx={{
-              maxWidth: 280,
-              boxShadow: 3,
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'scale(1.05)' },
-            }}
-          >
+        <Card
+        sx={{
+          maxWidth: 400,
+          margin: "auto",
+          padding: 2,
+          boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
+          transition: "0.3s",
+          "&:hover": {
+            transform: "scale(1.03)",
+            boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
+          },
+        }}
+      >
             
             <CardContent>
               <Typography variant="h6" component="div" gutterBottom>
@@ -143,29 +158,34 @@ export default function Overview(): React.JSX.Element {
         {/* Rate and Review */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
-            sx={{
-              maxWidth: 280,
-              boxShadow: 3,
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'scale(1.05)' },
-            }}
-          >
+        sx={{
+          maxWidth: 400,
+          margin: "auto",
+          padding: 2,
+          boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
+          transition: "0.3s",
+          "&:hover": {
+            transform: "scale(1.03)",
+            boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
+          },
+        }}
+      >
            <CardContent>
               <Typography variant="h6" component="div" gutterBottom>
                 <RateReviewIcon sx={{mr:1}}/> Rate & Review
               </Typography>
               <Typography variant="body2">
-                Share your thoughts and help others discover amazing content.
+              Loved a book or video? Let the world know! Your ratings and reviews help others find their next emotional journey.
               </Typography>
-              <Button
-                variant="outlined"
-                sx={{ mt: 2 }}
-                onClick={() =>
-                  router.push(paths.home) 
-                }
-              >
-                Leave a Review
-              </Button>
+              <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
+                <Button
+                  variant="outlined"
+                  onClick={() => router.push(paths.feedback)}
+                >
+                  <FeedbackIcon sx={{mr:1}}/> Feedback
+                </Button>
+                
+              </Box>
             </CardContent>
           </Card>
         </Grid>
@@ -173,27 +193,28 @@ export default function Overview(): React.JSX.Element {
         {/* Feedback and Contact */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
-            sx={{
-              maxWidth: 280,
-              boxShadow: 3,
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'scale(1.05)' },
-            }}
-          >
+        sx={{
+          maxWidth: 400,
+          margin: "auto",
+          padding: 2,
+          boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
+          transition: "0.3s",
+          "&:hover": {
+            transform: "scale(1.03)",
+            boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
+          },
+        }}
+      >
             <CardContent>
               <Typography variant="h6" component="div" gutterBottom>
-                <FeedbackIcon sx={{mr:1}}/> Feedback & Contact
+                <FeedbackIcon sx={{mr:1}}/> Contact Us
               </Typography>
               <Typography variant="body2">
-                We value your feedback. Get in touch with us!
+              We're here to help! Contact us for support, partnership inquiries, or just to chat.
+
               </Typography>
               <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
-                <Button
-                  variant="outlined"
-                  onClick={() => router.push(paths.home)}
-                >
-                  <FeedbackIcon sx={{mr:1}}/> Feedback
-                </Button>
+                
                 <Button
                   variant="outlined"
                   onClick={() => router.push(paths.home)}
@@ -208,13 +229,18 @@ export default function Overview(): React.JSX.Element {
         {/* About Us */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
-            sx={{
-              maxWidth: 280,
-              boxShadow: 3,
-              transition: 'transform 0.2s',
-              '&:hover': { transform: 'scale(1.05)' },
-            }}
-          >
+        sx={{
+          maxWidth: 400,
+          margin: "auto",
+          padding: 2,
+          boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
+          transition: "0.3s",
+          "&:hover": {
+            transform: "scale(1.03)",
+            boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
+          },
+        }}
+      >
            <CardContent>
               <Typography variant="h6" component="div" gutterBottom>
                 <InfoIcon sx={{mr:1}}/> About Us

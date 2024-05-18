@@ -8,9 +8,7 @@ export const navItems = [
   { key: 'Emotions', title: 'Emotions', href: paths.dashboard.emotions, icon: 'emotions' },
   { key: 'Video Recommendation', title: 'Video Recommendation', href: paths.dashboard.vrecom, icon: 'vrecom' },
   { key: 'Book Recommendation', title: 'Book Recommendation', href: paths.dashboard.brecom, icon: 'brecom' },
-  { key: 'My WatchList', title: 'My WatchList', href: paths.dashboard.watchlist, icon: 'watchlist' },
+  { key: 'My WatchList', title: 'My WatchList', href: paths.home, icon: 'watchlist' },
   { key: 'Upgrade', title: 'Upgrade', href: paths.home, icon: 'upgrade' },
-  { key: 'Feedback', title: 'Feedback', href: paths.home, icon: 'feedback' },
-  { key: 'Rating', title: 'Rating', href: paths.home, icon: 'rating' },
   { key: 'chat', title: 'Chat', href: paths.home, icon: 'chat' },
 ] satisfies NavItemConfig[];

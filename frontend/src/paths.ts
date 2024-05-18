@@ -33,5 +33,6 @@ export const paths = {
       },
     },
     feedback: '/feedback',
+    contact: '/contact',
   } as const;
   

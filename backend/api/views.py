@@ -1,6 +1,6 @@
-from rest_framework import viewsets, permissions, mixins  
-from .serializers import FeedbackSerializer
-from .models import Feedback
+from rest_framework import viewsets, permissions, mixins, generics
+from .serializers import FeedbackSerializer, ContactSerializer
+from .models import Feedback, Contact
 
 class FeedbackViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = Feedback.objects.all()
@@ -9,3 +9,10 @@ class FeedbackViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+class ContactView(generics.CreateAPIView):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+    permission_classes = [permissions.AllowAny] 
+
+    def perform_create(self, serializer):
+        serializer.save()

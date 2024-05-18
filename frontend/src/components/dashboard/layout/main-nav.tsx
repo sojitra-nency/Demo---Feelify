@@ -9,6 +9,7 @@ import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import MenuIcon from '@mui/icons-material/Menu';
 import PeopleIcon from '@mui/icons-material/People';
+import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import { MobileNav } from './mobile-nav';
@@ -53,7 +54,12 @@ export function MainNav(): React.JSX.Element {
             </Typography>
           </Stack>
           <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-          <Tooltip title="About Us">
+          <Tooltip title="Contact US">
+            <IconButton onClick={() => router.push(paths.contact)}>
+              <ContactSupportIcon />
+            </IconButton>
+            </Tooltip>
+          <Tooltip title="Feedback, Review & Ratings">
             <IconButton onClick={() => router.push(paths.feedback)}>
               <FeedbackIcon />
             </IconButton>
