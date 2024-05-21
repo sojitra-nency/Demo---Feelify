@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 interface EmotionData {
   [key: string]: number;
@@ -40,10 +40,10 @@ export default function EmotionAnalysis(): React.JSX.Element {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/emotions/emotion-analysis/",
+          `${process.env.NEXT_PUBLIC_HOST}/api/emotion-analysis/`,
           {
             headers: {
-              Authorization: `Bearer ${Cookies.get('auth_token')}`,
+              Authorization: `Bearer ${Cookies.get("auth_token")}`,
             },
           }
         );

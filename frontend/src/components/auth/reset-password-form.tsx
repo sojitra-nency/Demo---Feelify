@@ -1,29 +1,30 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Alert from '@mui/material/Alert';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
-import InputLabel from '@mui/material/InputLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import { Controller, useForm } from 'react-hook-form';
-import { z as zod } from 'zod';
-import { paths } from '@/paths';
-import { useRouter } from 'next/navigation';
-import { useResetPasswordMutation } from "@/redux/features/authApiSlice"
+import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Alert from "@mui/material/Alert";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { Controller, useForm } from "react-hook-form";
+import { z as zod } from "zod";
+import { paths } from "@/paths";
+import { useRouter } from "next/navigation";
+import { useResetPasswordMutation } from "@/redux/features/authApiSlice";
 import { toast } from "react-toastify";
-import Spinner from '@/components/common/Spinner';
+import Spinner from "@/components/common/Spinner";
 
-
-const schema = zod.object({ email: zod.string().min(1, { message: 'Email is required' }).email() });
+const schema = zod.object({
+  email: zod.string().min(1, { message: "Email is required" }).email(),
+});
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = {email: ''} satisfies Values;
+const defaultValues = { email: "" } satisfies Values;
 
 export function ResetPasswordForm(): React.JSX.Element {
   const router = useRouter();
@@ -38,23 +39,22 @@ export function ResetPasswordForm(): React.JSX.Element {
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  const [resetPassword, {isLoading}] = useResetPasswordMutation();
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
   const onSubmit = handleSubmit(async (value: Values) => {
     try {
-      const {email} = value
-      const resetResult = await resetPassword( email );
+      const { email } = value;
+      const resetResult = await resetPassword(email);
       const temp = JSON.stringify(resetResult);
-      const temp2 = JSON.parse(temp)
-      if(temp2.data == null) {
-        toast.success('Please check email to Reset Password.');
+      const temp2 = JSON.parse(temp);
+      if (temp2.data == null) {
+        toast.success("Please check email to Reset Password.");
         router.push(paths.auth.signIn);
-      } 
-      else{
-        toast.error('Failed to send Reset Password email.');
-      }     
+      } else {
+        toast.error("Failed to send Reset Password email.");
+      }
     } catch (error) {
-      toast.error('Failed to send Reset Password email.');
+      toast.error("Failed to send Reset Password email.");
     }
   });
 
@@ -70,13 +70,17 @@ export function ResetPasswordForm(): React.JSX.Element {
               <FormControl error={Boolean(errors.email)}>
                 <InputLabel>Email address</InputLabel>
                 <OutlinedInput {...field} label="Email address" type="email" />
-                {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null}
+                {errors.email ? (
+                  <FormHelperText>{errors.email.message}</FormHelperText>
+                ) : null}
               </FormControl>
             )}
           />
-          {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
+          {errors.root ? (
+            <Alert color="error">{errors.root.message}</Alert>
+          ) : null}
           <Button disabled={isLoading} type="submit" variant="contained">
-            {isLoading ? <Spinner sm />: 'Send recovery link'}
+            {isLoading ? <Spinner sm /> : "Send recovery link"}
           </Button>
           <Button variant="contained" onClick={handleSignInClick}>
             Sign In

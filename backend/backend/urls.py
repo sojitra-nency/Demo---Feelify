@@ -21,8 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', include('djoser.urls')),
     path('login/',include('login.urls')),
-    path('emotions/',include('emotions.urls')),
-    path('books/',include('books.urls')),
-    path('videos/',include('videos.urls')),
     path('api/',include('api.urls')),
 ]

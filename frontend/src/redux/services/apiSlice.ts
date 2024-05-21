@@ -49,7 +49,7 @@ const baseQueryWithReauth: BaseQueryFn<
 };
 
 export const apiSlice = createApi({
-    reducerPath: 'login',
-    baseQuery: baseQueryWithReauth,
-    endpoints: builder => ({}),
+  reducerPath: "api",
+  baseQuery: baseQueryWithReauth,
+  endpoints: (builder) => ({}),
 });

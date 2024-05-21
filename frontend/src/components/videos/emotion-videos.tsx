@@ -9,7 +9,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Button from "@mui/material/Button";
-import { toast } from "react-toastify";
 import Modal from "@mui/material/Modal";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
@@ -48,17 +47,17 @@ export default function EmotionVideos({
       try {
         for (const query of queries) {
           const response = await axios.get(
-            `http://127.0.0.1:8000/videos/video-search/?q=${query}`,
+            `${process.env.NEXT_PUBLIC_HOST}/api/video-search/?q=${query}`,
             {
               headers: {
-                Authorization: `Bearer ${Cookies.get('auth_token')}`,
+                Authorization: `Bearer ${Cookies.get("auth_token")}`,
               },
             }
           );
           setVideos((prev) => ({ ...prev, [query]: response.data }));
         }
       } catch (error) {
-        console.log("error")
+        console.log("error");
       }
     }
     fetchVideos();
@@ -147,7 +146,11 @@ export default function EmotionVideos({
                       <CardMedia
                         component="img"
                         height="300"
-                        image={video.thumbnail ? video.thumbnail: "/assets/video_cover.jpg"}
+                        image={
+                          video.thumbnail
+                            ? video.thumbnail
+                            : "/assets/video_cover.jpg"
+                        }
                         alt={video.title}
                       />
                       <CardContent>

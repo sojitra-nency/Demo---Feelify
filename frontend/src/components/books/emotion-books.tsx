@@ -18,7 +18,6 @@ import {
   Card,
   CircularProgress,
 } from "@mui/material";
-import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
 interface BookData {
@@ -61,17 +60,17 @@ export default function EmotionBooks({
       try {
         for (const query of queries) {
           const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_HOST}/books/book-search/?q=${query}`,
+            `${process.env.NEXT_PUBLIC_HOST}/api/book-search/?q=${query}`,
             {
               headers: {
-                Authorization: `Bearer ${Cookies.get('auth_token')}`,
+                Authorization: `Bearer ${Cookies.get("auth_token")}`,
               },
             }
           );
           setBooks((prev) => ({ ...prev, [query]: response.data }));
         }
       } catch {
-        console.log("Failed to fetch books")
+        console.log("Failed to fetch books");
       }
     }
     fetchBooks();

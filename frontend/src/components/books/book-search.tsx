@@ -13,7 +13,7 @@ import Link from "next/link";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Paper } from "@mui/material";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 interface Book {
   id: string;
@@ -46,10 +46,10 @@ export default function BookSearch() {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/books/book-search/?q=${searchTerm}`,
+          `${process.env.NEXT_PUBLIC_HOST}/api/book-search/?q=${searchTerm}`,
           {
             headers: {
-              Authorization: `Bearer ${Cookies.get('auth_token')}`,
+              Authorization: `Bearer ${Cookies.get("auth_token")}`,
             },
           }
         );

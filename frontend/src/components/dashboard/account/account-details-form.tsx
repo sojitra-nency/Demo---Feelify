@@ -1,18 +1,17 @@
+"use client";
 
-'use client';
-
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Unstable_Grid2';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import TextField from '@mui/material/TextField';
-import Cookies from 'js-cookie';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Unstable_Grid2";
+import axios from "axios";
+import { toast } from "react-toastify";
+import TextField from "@mui/material/TextField";
+import Cookies from "js-cookie";
 
 interface ProfileData {
   first_name?: string;
@@ -23,22 +22,23 @@ interface ProfileData {
 export function AccountDetailsForm(): React.JSX.Element {
   const [profileData, setProfileData] = React.useState<ProfileData>({});
   const [isLoading, setIsLoading] = React.useState(false);
-
+  const token = Cookies.get("auth_token");
+  const userId = localStorage.getItem("id");
   React.useEffect(() => {
     const fetchUserProfile = async () => {
       setIsLoading(true);
       try {
-        const token = Cookies.get('auth_token');
-        const userId = Cookies.get('id');
-
-        const response = await axios.get(`http://127.0.0.1:8000/login/profile/${userId}/`, {
-          headers: {
-            "Authorization": `Bearer ${token}`
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_HOST}/login/profile/${userId}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
         setProfileData(response.data);
       } catch (error) {
-        toast.error("Unable to fetch profile data.");
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
@@ -52,30 +52,26 @@ export function AccountDetailsForm(): React.JSX.Element {
     setIsLoading(true);
 
     try {
-      const token = Cookies.get('auth_token');
-      const userId = Cookies.get('id');
       const formData = new FormData(event.target as HTMLFormElement);
 
       const response = await axios.patch(
-        `http://127.0.0.1:8000/login/profile/${userId}/`,
+        `${process.env.NEXT_PUBLIC_HOST}/login/profile/${userId}/`,
         formData,
         {
           headers: {
-            "Authorization": `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
-          }
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       setProfileData(response.data);
       toast.success("Profile updated");
-
     } catch (error) {
-      toast.error("Unable to update your profile.");
+      console.log(error);
     } finally {
       setIsLoading(false);
       window.location.reload();
     }
-
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -91,9 +87,11 @@ export function AccountDetailsForm(): React.JSX.Element {
                 required
                 variant="outlined"
                 label="First name"
-                value={profileData.first_name || ''}
+                value={profileData.first_name || ""}
                 name="first_name"
-                onChange={e => setProfileData({ ...profileData, first_name: e.target.value })}
+                onChange={(e) =>
+                  setProfileData({ ...profileData, first_name: e.target.value })
+                }
               />
             </Grid>
             <Grid md={6} xs={12}>
@@ -102,9 +100,11 @@ export function AccountDetailsForm(): React.JSX.Element {
                 required
                 variant="outlined"
                 label="Last name"
-                value={profileData.last_name || ''}
+                value={profileData.last_name || ""}
                 name="last_name"
-                onChange={e => setProfileData({ ...profileData, last_name: e.target.value })}
+                onChange={(e) =>
+                  setProfileData({ ...profileData, last_name: e.target.value })
+                }
               />
             </Grid>
             <Grid md={6} xs={12}>
@@ -113,7 +113,7 @@ export function AccountDetailsForm(): React.JSX.Element {
                 required
                 variant="outlined"
                 label="Email"
-                value={profileData.email || ''}
+                value={profileData.email || ""}
                 name="email"
                 disabled
               />
@@ -124,16 +124,23 @@ export function AccountDetailsForm(): React.JSX.Element {
                 required
                 variant="outlined"
                 label="Phone number"
-                value={profileData.phone_number || ''}
+                value={profileData.phone_number || ""}
                 name="phone_number"
-                onChange={e => setProfileData({ ...profileData, phone_number: e.target.value })}
+                onChange={(e) =>
+                  setProfileData({
+                    ...profileData,
+                    phone_number: e.target.value,
+                  })
+                }
               />
             </Grid>
           </Grid>
         </CardContent>
         <Divider />
-        <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button variant="contained" type="submit">Save details</Button>
+        <CardActions sx={{ justifyContent: "flex-end" }}>
+          <Button variant="contained" type="submit">
+            Save details
+          </Button>
         </CardActions>
       </Card>
     </form>

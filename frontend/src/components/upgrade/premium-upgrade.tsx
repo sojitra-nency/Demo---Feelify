@@ -1,4 +1,3 @@
-// pages/premium.tsx
 "use client";
 
 import {
@@ -14,7 +13,6 @@ import {
   Grid,
 } from "@mui/material";
 import { CheckCircleOutline } from "@mui/icons-material";
-// import { loadRazorpay } from "razorpay-checkout";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -60,7 +58,7 @@ export default function PremiumUpgrade() {
   const handleSubscribe = async (plan: SubscriptionPlan) => {
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8000/api/upgrades/`,
+        `${process.env.NEXT_PUBLIC_HOST}/api/upgrades/`,
         {
           email: userEmail,
           amount: plan.price,
@@ -79,7 +77,7 @@ export default function PremiumUpgrade() {
           order_id: response.data.payment_id,
           handler: async (response: any) => {
             try {
-              await axios.post("http://127.0.0.1:8000/api/success/", response, {
+              await axios.post(`${process.env.NEXT_PUBLIC_HOST}/api/success/`, response, {
                 headers: {
                   Authorization: `Bearer ${Cookies.get("auth_token")}`,
                 },

@@ -5,7 +5,6 @@ import {
   Button,
   Card,
   CardContent,
-  CardMedia,
   Grid,
   Typography,
 } from "@mui/material";
@@ -40,7 +39,6 @@ export default function Overview(): React.JSX.Element {
       </Typography>
 
       <Grid container spacing={2} justifyContent={"center"}>
-        {/* Emotion-Based Recommendations */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
             sx={{
@@ -75,7 +73,6 @@ export default function Overview(): React.JSX.Element {
           </Card>
         </Grid>
 
-        {/* Search Books and Videos */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
             sx={{
@@ -116,7 +113,6 @@ export default function Overview(): React.JSX.Element {
           </Card>
         </Grid>
 
-        {/* Upgrade to Premium */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
             sx={{
@@ -150,7 +146,6 @@ export default function Overview(): React.JSX.Element {
           </Card>
         </Grid>
 
-        {/* Rate and Review */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
             sx={{
@@ -186,7 +181,6 @@ export default function Overview(): React.JSX.Element {
           </Card>
         </Grid>
 
-        {/* Feedback and Contact */}
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
             sx={{

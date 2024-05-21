@@ -1,4 +1,3 @@
-// pages/feedback.tsx
 "use client";
 
 import { useState } from "react";
@@ -17,7 +16,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import Card from "@mui/material/Card";
 import Paper from "@mui/material/Paper";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 export default function FeedBack(): React.JSX.Element {
   const [emotion, setEmotion] = useState("");
@@ -28,9 +27,9 @@ export default function FeedBack(): React.JSX.Element {
     event.preventDefault();
     try {
       const user_id = Cookies.get("id");
-      const token = Cookies.get('auth_token');
+      const token = Cookies.get("auth_token");
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/feedback/",
+        `${process.env.NEXT_PUBLIC_HOST}/api/feedback/`,
         { user: user_id, emotion, rating, comment },
         {
           headers: {

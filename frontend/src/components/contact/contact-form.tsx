@@ -23,7 +23,7 @@ export default function Contact(): React.JSX.Element {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/contact/", {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_HOST}/api/contact/`, {
         name,
         email,
         message,

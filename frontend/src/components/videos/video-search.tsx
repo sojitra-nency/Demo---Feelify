@@ -13,7 +13,7 @@ import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Button, Paper } from "@mui/material";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 interface Video {
   id: string;
@@ -37,10 +37,10 @@ export default function VideoSearch() {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/videos/video-search/?q=${searchTerm}`,
+          `${process.env.NEXT_PUBLIC_HOST}/api/video-search/?q=${searchTerm}`,
           {
             headers: {
-              Authorization: `Bearer ${Cookies.get('auth_token')}`,
+              Authorization: `Bearer ${Cookies.get("auth_token")}`,
             },
           }
         );
