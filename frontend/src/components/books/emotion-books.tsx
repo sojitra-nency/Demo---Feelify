@@ -19,6 +19,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 interface BookData {
   id: string;
@@ -60,10 +61,10 @@ export default function EmotionBooks({
       try {
         for (const query of queries) {
           const response = await axios.get(
-            `http://127.0.0.1:8000/books/book-search/?q=${query}`,
+            `${process.env.NEXT_PUBLIC_HOST}/books/book-search/?q=${query}`,
             {
               headers: {
-                Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+                Authorization: `Bearer ${Cookies.get('auth_token')}`,
               },
             }
           );

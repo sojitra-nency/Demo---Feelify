@@ -13,6 +13,7 @@ import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Button, Paper } from "@mui/material";
+import Cookies from 'js-cookie';
 
 interface Video {
   id: string;
@@ -39,7 +40,7 @@ export default function VideoSearch() {
           `http://127.0.0.1:8000/videos/video-search/?q=${searchTerm}`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+              Authorization: `Bearer ${Cookies.get('auth_token')}`,
             },
           }
         );

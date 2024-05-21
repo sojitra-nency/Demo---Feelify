@@ -17,7 +17,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
-
+import Cookies from 'js-cookie';
 import { paths } from '@/paths';
 import { useRegisterMutation } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
@@ -63,7 +63,7 @@ export function SignUpForm(): React.JSX.Element {
       const temp2 = JSON.parse(temp)
     
       if(temp2.data.id) {
-        localStorage.setItem('id', temp2.data.id);
+        Cookies.set('auth_token', temp2.data.token);
         toast.success('Please check email to verify account.');
         router.push(paths.auth.signIn);
       }  

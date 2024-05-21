@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Feedback, Contact
+from .models import Feedback, Contact, Upgrade
 
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,3 +11,9 @@ class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
         fields = '__all__'
+
+class UpgradeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Upgrade
+        fields = ['id', 'email', 'amount', 'payment_id', 'paid']
+        read_only_fields = ['payment_id', 'start_date', 'end_date', 'paid']  

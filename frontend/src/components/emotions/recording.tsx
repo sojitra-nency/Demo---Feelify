@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { paths } from '@/paths';
+import Cookies from 'js-cookie';
 
 export default function Recording(): React.JSX.Element { 
   const router = useRouter();
@@ -62,7 +63,7 @@ export default function Recording(): React.JSX.Element {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
+            Authorization: `Bearer ${Cookies.get('auth_token')}`,
             'Content-Type': 'multipart/form-data',
           },
         }

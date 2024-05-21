@@ -16,6 +16,7 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia/CardMedia";
+import Cookies from "js-cookie";
 
 interface VideoData {
   id: string;
@@ -50,7 +51,7 @@ export default function EmotionVideos({
             `http://127.0.0.1:8000/videos/video-search/?q=${query}`,
             {
               headers: {
-                Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+                Authorization: `Bearer ${Cookies.get('auth_token')}`,
               },
             }
           );

@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 
 const user = {
@@ -32,8 +33,8 @@ export function AccountInfo(): React.JSX.Element {
     const fetchUserProfile = async () => {
       setIsLoading(true);
       try {
-        const token = localStorage.getItem('auth_token');
-        const userId = localStorage.getItem('id');
+        const token = Cookies.get('auth_token');
+        const userId = Cookies.get('id');
 
         const response = await axios.get(`http://127.0.0.1:8000/login/profile/${userId}/`, {
           headers: {

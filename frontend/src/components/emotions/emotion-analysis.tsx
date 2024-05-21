@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
+import Cookies from 'js-cookie';
 
 interface EmotionData {
   [key: string]: number;
@@ -42,7 +43,7 @@ export default function EmotionAnalysis(): React.JSX.Element {
           "http://127.0.0.1:8000/emotions/emotion-analysis/",
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+              Authorization: `Bearer ${Cookies.get('auth_token')}`,
             },
           }
         );

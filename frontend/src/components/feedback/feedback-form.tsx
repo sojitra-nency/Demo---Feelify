@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import Card from "@mui/material/Card";
 import Paper from "@mui/material/Paper";
+import Cookies from 'js-cookie';
 
 export default function FeedBack(): React.JSX.Element {
   const [emotion, setEmotion] = useState("");
@@ -26,8 +27,8 @@ export default function FeedBack(): React.JSX.Element {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const user_id = localStorage.getItem("id");
-      const token = localStorage.getItem("auth_token");
+      const user_id = Cookies.get("id");
+      const token = Cookies.get('auth_token');
       const response = await axios.post(
         "http://127.0.0.1:8000/api/feedback/",
         { user: user_id, emotion, rating, comment },

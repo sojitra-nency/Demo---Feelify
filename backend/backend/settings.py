@@ -202,6 +202,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', "last_name"]
 BOOKS_API_KEY = getenv("BOOKS_API_KEY")
 YOUTUBE_DATA_API_KEY = getenv("YOUTUBE_DATA_API_KEY")
 
+RAZORPAY_KEY_ID = getenv("RAZORPAY_KEY_ID")
+RAZORPAY_KEY_SECRET = getenv("RAZORPAY_KEY_SECRET")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

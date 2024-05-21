@@ -24,6 +24,7 @@ import Spinner from '@/components/common/Spinner';
 import GoogleButton from './google-button';
 import { useAppDispatch } from '@/redux/hooks';
 import { setAuth } from '@/redux/features/authSlice';
+import Cookies from 'js-cookie';
 
 const schema = zod.object({
   email: zod.string().min(1, { message: 'Email is required' }).email(),
@@ -58,7 +59,7 @@ export function SignInForm(): React.JSX.Element {
       const temp2 = JSON.parse(temp)
 
       if(temp2.data?.status_code == '200') {
-          localStorage.setItem('auth_token', temp2.data.access);
+          Cookies.set('auth_token', temp2.data.access);
           dispatch(setAuth()); 
           toast.success('Logged In Successfully.');
           router.push(paths.home);

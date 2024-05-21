@@ -12,6 +12,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import TextField from '@mui/material/TextField';
+import Cookies from 'js-cookie';
 
 interface ProfileData {
   first_name?: string;
@@ -27,8 +28,8 @@ export function AccountDetailsForm(): React.JSX.Element {
     const fetchUserProfile = async () => {
       setIsLoading(true);
       try {
-        const token = localStorage.getItem('auth_token');
-        const userId = localStorage.getItem('id');
+        const token = Cookies.get('auth_token');
+        const userId = Cookies.get('id');
 
         const response = await axios.get(`http://127.0.0.1:8000/login/profile/${userId}/`, {
           headers: {
@@ -51,8 +52,8 @@ export function AccountDetailsForm(): React.JSX.Element {
     setIsLoading(true);
 
     try {
-      const token = localStorage.getItem('auth_token');
-      const userId = localStorage.getItem('id');
+      const token = Cookies.get('auth_token');
+      const userId = Cookies.get('id');
       const formData = new FormData(event.target as HTMLFormElement);
 
       const response = await axios.patch(
