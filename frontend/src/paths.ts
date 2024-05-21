@@ -5,6 +5,7 @@ export const paths = {
     signUp: "/auth/sign-up",
     resetPassword: "/auth/reset-password",
   },
+  contact: "/contact",
   dashboard: {
     overview: "/dashboard",
     emotions: "/dashboard/emotions",
@@ -34,6 +35,29 @@ export const paths = {
     },
   },
   feedback: "/feedback",
-  contact: "/contact",
   upgrade: "/upgrade",
 } as const;
+
+export const protectedRoutes = [
+  paths.dashboard.overview,
+  paths.dashboard.emotions,
+  paths.dashboard.analysis,
+  paths.dashboard.vsearch,
+  paths.dashboard.bsearch,
+  paths.dashboard.vrecom,
+  paths.dashboard.brecom,
+  paths.dashboard.account,
+  paths.dashboard.about,
+  paths.recommendation.books.happy,
+  paths.recommendation.books.sad,
+  paths.recommendation.books.surprise,
+  paths.recommendation.books.fear,
+  paths.recommendation.books.neutral,
+  paths.recommendation.videos.happy,
+  paths.recommendation.videos.sad,
+  paths.recommendation.videos.surprise,
+  paths.recommendation.videos.fear,
+  paths.recommendation.videos.neutral,
+  paths.feedback,
+  paths.upgrade,
+];

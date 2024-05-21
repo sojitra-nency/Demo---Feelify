@@ -100,8 +100,10 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 class LogoutView(APIView):
     permission_classes = [AllowAny]
+    
 
     def post(self, request, *args, **kwargs):
+       
         refresh_token = request.COOKIES.get('refresh')
         if refresh_token:
             try:
@@ -142,4 +144,6 @@ class UserProfile(RetrieveUpdateDestroyAPIView):
     def delete(self, instance):
         instance.is_deleted = True
         instance.save()
+
+
 
