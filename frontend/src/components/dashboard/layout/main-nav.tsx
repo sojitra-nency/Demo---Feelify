@@ -13,9 +13,12 @@ import FeedbackIcon from "@mui/icons-material/Feedback";
 import { MobileNav } from "./mobile-nav";
 import { usePopover } from "@/hooks/use-popover";
 import { UserPopover } from "./user-popover";
-import Typography from "@mui/material/Typography";
 import { useRouter } from "next/navigation";
 import { paths } from "@/paths";
+import Modal from "@mui/material/Modal";
+import { useState } from "react";
+import Contact from "@/components/contact/contact-form";
+import Feedback from "@/components/feedback/feedback-form";
 
 export function MainNav(): React.JSX.Element {
   const router = useRouter();
@@ -23,6 +26,15 @@ export function MainNav(): React.JSX.Element {
   const [openNav, setOpenNav] = React.useState<boolean>(false);
 
   const userPopover = usePopover<HTMLDivElement>();
+  const [openContact, setOpenContact] = useState(false);
+  const [openFeedback, setOpenFeedback] = useState(false);
+
+  const handleOpenContact = () => setOpenContact(true);
+  const handleCloseContact = () => setOpenContact(false);
+
+  const handleOpenFeedback = () => setOpenFeedback(true);
+  const handleCloseFeedback = () => setOpenFeedback(false);
+
 
   return (
     <React.Fragment>
@@ -34,6 +46,8 @@ export function MainNav(): React.JSX.Element {
           position: "sticky",
           top: 0,
           zIndex: "var(--mui-zIndex-appBar)",
+          boxShadow:
+            "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
         }}
       >
         <Stack
@@ -53,19 +67,62 @@ export function MainNav(): React.JSX.Element {
               }}
               sx={{ display: { lg: "none" } }}
             />
-            <Typography variant="h3">FEELIFY</Typography>
           </Stack>
           <Stack sx={{ alignItems: "center" }} direction="row" spacing={2}>
-            <Tooltip title="Contact US">
-              <IconButton onClick={() => router.push(paths.contact)}>
-                <ContactSupportIcon />
-              </IconButton>
-            </Tooltip>
+          <Tooltip title="Contact US">
+        <IconButton onClick={handleOpenContact}>
+          <ContactSupportIcon />
+        </IconButton>
+      </Tooltip>
+      <Modal
+        open={openContact}
+        onClose={handleCloseContact}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: 600,
+                  borderRadius: 2,
+                  bgcolor: "background.paper",
+                  boxShadow: 24,
+                  p: 4,
+                }}
+              >
+                <Contact />
+              </Box>
+            </Modal>
             <Tooltip title="Feedback, Review & Ratings">
-              <IconButton onClick={() => router.push(paths.feedback)}>
-                <FeedbackIcon />
-              </IconButton>
-            </Tooltip>
+        <IconButton onClick={handleOpenFeedback}>
+          <FeedbackIcon />
+        </IconButton>
+      </Tooltip>
+      <Modal
+        open={openFeedback}
+        onClose={handleCloseFeedback}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: 600,
+                  borderRadius: 2,
+                  bgcolor: "background.paper",
+                  boxShadow: 24,
+                  p: 4,
+                }}
+              >
+                <Feedback />
+              </Box>
+            </Modal>
             <Tooltip title="About Us">
               <IconButton onClick={() => router.push(paths.dashboard.about)}>
                 <PeopleIcon />

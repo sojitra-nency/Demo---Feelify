@@ -14,6 +14,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Paper } from "@mui/material";
 import Cookies from "js-cookie";
+import { neonBlue } from "@/styles/theme/colors";
 
 interface Book {
   id: string;
@@ -124,11 +125,15 @@ export default function BookSearch() {
       <Grid container spacing={2} sx={{ marginTop: 2 }}>
         {books.map((book) => (
           <Grid item xs={12} sm={6} md={4} key={book.id}>
-            <Card>
+            <Card sx={{width:350}}>
               {book.thumbnail && (
                 <CardMedia
                   component="img"
-                  height="500"
+                  sx={{
+                    height: 300,
+                    objectFit: "contain",
+                    background: neonBlue[200],
+                  }}
                   image={book.thumbnail}
                   alt={book.title}
                 />

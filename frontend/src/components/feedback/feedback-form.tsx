@@ -17,6 +17,7 @@ import axios from "axios";
 import Card from "@mui/material/Card";
 import Paper from "@mui/material/Paper";
 import Cookies from "js-cookie";
+import { neonBlue } from "@/styles/theme/colors";
 
 export default function FeedBack(): React.JSX.Element {
   const [emotion, setEmotion] = useState("");
@@ -53,12 +54,11 @@ export default function FeedBack(): React.JSX.Element {
   return (
     <>
       <Typography
-        variant="h4"
-        component="h1"
-        align="center"
-        gutterBottom
-        sx={{ mb: 5 }}
-      >
+  variant="h2"
+  component="h1"
+  gutterBottom
+  sx={{ color: neonBlue[700], fontStyle: "bold", textAlign: "center", fontSize: "2rem", mb:5 }}
+>
         FEEDBACK, REVIEWS AND RATINGS
       </Typography>
 
@@ -68,6 +68,7 @@ export default function FeedBack(): React.JSX.Element {
           margin: "auto",
           padding: 2,
           boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
+          backgroundColor: "#eaebfe",
           transition: "0.3s",
           "&:hover": {
             transform: "scale(1.03)",
@@ -79,8 +80,8 @@ export default function FeedBack(): React.JSX.Element {
           <Typography variant="h5" gutterBottom>
             Your Feedback Matters :)
           </Typography>
-        </Box>
-        <Paper component="form" onSubmit={handleSubmit}>
+        
+          <form onSubmit={handleSubmit}>
           <FormControl fullWidth sx={{ my: 3 }}>
             <InputLabel id="emotion-label">Emotion</InputLabel>
             <Select
@@ -123,7 +124,8 @@ export default function FeedBack(): React.JSX.Element {
               Submit Feedback
             </Button>
           </Box>
-        </Paper>
+          </form>
+        </Box>
       </Card>
     </>
   );

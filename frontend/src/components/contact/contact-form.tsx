@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { neonBlue } from "@/styles/theme/colors";
 
 export default function Contact(): React.JSX.Element {
   const [name, setName] = useState("");
@@ -46,19 +47,19 @@ export default function Contact(): React.JSX.Element {
   return (
     <>
       <Typography
-        variant="h4"
-        component="h1"
-        align="center"
-        gutterBottom
-        sx={{ mb: 5 }}
-      >
-        CONTACT FEELIFY
-      </Typography>
+  variant="h2"
+  component="h1"
+  gutterBottom
+  sx={{ color: neonBlue[700], fontStyle: "bold", textAlign: "center", fontSize: "2rem", mb:5 }}
+>
+  CONTACT FEELIFY
+</Typography>
       <Card
         sx={{
           maxWidth: 400,
           margin: "auto",
           padding: 2,
+          backgroundColor: "#eaebfe",
           boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
           transition: "0.3s",
           "&:hover": {

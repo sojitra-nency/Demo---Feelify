@@ -19,6 +19,7 @@ import FeedbackIcon from "@mui/icons-material/Feedback";
 import InfoIcon from "@mui/icons-material/Info";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import { neonBlue } from "@/styles/theme/colors";
 
 export default function Overview(): React.JSX.Element {
   const router = useRouter();
@@ -31,7 +32,12 @@ export default function Overview(): React.JSX.Element {
         justifyContent: "center",
       }}
     >
-      <Typography variant="h2" component="h1" gutterBottom>
+      <Typography
+        variant="h2"
+        component="h1"
+        gutterBottom
+        sx={{ color: neonBlue[700], fontStyle: "bold" }}
+      >
         Welcome to Feelify
       </Typography>
       <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 6 }}>
@@ -46,8 +52,8 @@ export default function Overview(): React.JSX.Element {
               minHeight: 300,
               margin: "auto",
               padding: 2,
-              boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
               transition: "0.3s",
+              backgroundColor: "#eaebfe",
               "&:hover": {
                 transform: "scale(1.03)",
                 boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
@@ -55,16 +61,36 @@ export default function Overview(): React.JSX.Element {
             }}
           >
             <CardContent>
-              <Typography variant="h6" component="div" gutterBottom>
-                <MoodIcon sx={{ mr: 1 }} /> Feel, Watch, Read
+              <Typography
+                variant="h6"
+                component="div"
+                gutterBottom
+                sx={{
+                  display: "flex",
+                  fontWeight: "bold",
+                  color: neonBlue[700],
+                  fontSize: "1.35rem",
+                }}
+              >
+                <MoodIcon sx={{ mr: 1, mb: 1, fontSize: "2rem" }} />
+                Feel, Watch, Read
               </Typography>
-              <Typography variant="body2">
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: "semibold",
+                  lineHeight: "1.6",
+                  mb: 2,
+                }}
+              >
                 Discover books and videos that match your mood across 5
                 emotions.
               </Typography>
               <Button
                 variant="contained"
-                sx={{ mt: 2 }}
+                sx={{
+                  mt: 2,
+                }}
                 onClick={() => router.push(paths.dashboard.emotions)}
               >
                 Explore Now
@@ -82,6 +108,7 @@ export default function Overview(): React.JSX.Element {
               padding: 2,
               boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
               transition: "0.3s",
+              backgroundColor: "#eaebfe",
               "&:hover": {
                 transform: "scale(1.03)",
                 boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
@@ -89,13 +116,30 @@ export default function Overview(): React.JSX.Element {
             }}
           >
             <CardContent>
-              <Typography variant="h6" component="div" gutterBottom>
-                <SearchIcon sx={{ mr: 1 }} /> Search
+            <Typography
+                variant="h6"
+                component="div"
+                gutterBottom
+                sx={{
+                  display: "flex",
+                  fontWeight: "bold",
+                  color: neonBlue[700],
+                  fontSize: "1.35rem",
+                }}
+              >
+                <SearchIcon sx={{ mr: 1, mb: 1, fontSize: "2rem" }} /> Search
               </Typography>
-              <Typography variant="body2">
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: "semibold",
+                  lineHeight: "1.6",
+                  mb: 6,
+                }}
+              >
                 Find the perfect book or video to match your interests.
               </Typography>
-              <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
+              <Box sx={{ display: "flex", gap: 1, my: 2 }}>
                 <Button
                   variant="outlined"
                   onClick={() => router.push(paths.dashboard.vsearch)}
@@ -122,6 +166,7 @@ export default function Overview(): React.JSX.Element {
               padding: 2,
               boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
               transition: "0.3s",
+              backgroundColor: "#eaebfe",
               "&:hover": {
                 transform: "scale(1.03)",
                 boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
@@ -129,10 +174,28 @@ export default function Overview(): React.JSX.Element {
             }}
           >
             <CardContent>
-              <Typography variant="h6" component="div" gutterBottom>
-                <CurrencyRupeeIcon sx={{ mr: 1 }} /> Go Premium!
+            <Typography
+                variant="h6"
+                component="div"
+                gutterBottom
+                sx={{
+                  display: "flex",
+                  fontWeight: "bold",
+                  color: neonBlue[700],
+                  fontSize: "1.35rem",
+                }}
+              >
+                <CurrencyRupeeIcon sx={{ mr: 1, mb: 1, fontSize: "2rem" }} /> Go
+                Premium!
               </Typography>
-              <Typography variant="body2">
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: "semibold",
+                  lineHeight: "1.6",
+                  mb: 2,
+                }}
+              >
                 Unlock personalized recommendations based on your live emotions.
               </Typography>
               <Button
@@ -155,6 +218,7 @@ export default function Overview(): React.JSX.Element {
               padding: 2,
               boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
               transition: "0.3s",
+              backgroundColor: "#eaebfe",
               "&:hover": {
                 transform: "scale(1.03)",
                 boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
@@ -162,17 +226,35 @@ export default function Overview(): React.JSX.Element {
             }}
           >
             <CardContent>
-              <Typography variant="h6" component="div" gutterBottom>
-                <RateReviewIcon sx={{ mr: 1 }} /> Rate & Review
+            <Typography
+                variant="h6"
+                component="div"
+                gutterBottom
+                sx={{
+                  display: "flex",
+                  fontWeight: "bold",
+                  color: neonBlue[700],
+                  fontSize: "1.35rem",
+                }}
+              >
+                <RateReviewIcon sx={{ mr: 1, mb: 1, fontSize: "2rem" }} /> Rate
+                & Review
               </Typography>
-              <Typography variant="body2">
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: "semibold",
+                  lineHeight: "1.6",
+                  mb: 2,
+                }}
+              >
                 Loved a book or video? Let the world know! Your ratings and
                 reviews help others find their next emotional journey.
               </Typography>
               <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
                 <Button
                   variant="outlined"
-                  onClick={() => router.push(paths.feedback)}
+                  onClick={() => router.push(paths.dashboard.overview)}
                 >
                   <FeedbackIcon sx={{ mr: 1 }} /> Feedback
                 </Button>
@@ -181,6 +263,9 @@ export default function Overview(): React.JSX.Element {
           </Card>
         </Grid>
 
+        
+
+        
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
             sx={{
@@ -190,6 +275,7 @@ export default function Overview(): React.JSX.Element {
               padding: 2,
               boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
               transition: "0.3s",
+              backgroundColor: "#eaebfe",
               "&:hover": {
                 transform: "scale(1.03)",
                 boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
@@ -197,10 +283,79 @@ export default function Overview(): React.JSX.Element {
             }}
           >
             <CardContent>
-              <Typography variant="h6" component="div" gutterBottom>
-                <FeedbackIcon sx={{ mr: 1 }} /> Contact Us
+            <Typography
+                variant="h6"
+                component="div"
+                gutterBottom
+                sx={{
+                  display: "flex",
+                  fontWeight: "bold",
+                  color: neonBlue[700],
+                  fontSize: "1.35rem",
+                }}
+              >
+                <InfoIcon sx={{ mr: 1, mb: 1, fontSize: "2rem" }} /> About Us
               </Typography>
-              <Typography variant="body2">
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: "semibold",
+                  lineHeight: "1.6",
+                  mb: 5,
+                }}
+              >
+                Learn more about our mission and the team behind Feelify.
+              </Typography>
+              <Button
+                variant="contained"
+                sx={{ mt: 2 }}
+                onClick={() => router.push(paths.dashboard.about)}
+              >
+                Our Story
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
+          <Card
+            sx={{
+              maxWidth: 400,
+              minHeight: 300,
+              margin: "auto",
+              padding: 2,
+              boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
+              transition: "0.3s",
+              backgroundColor: "#eaebfe",
+              "&:hover": {
+                transform: "scale(1.03)",
+                boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
+              },
+            }}
+          >
+            <CardContent>
+            <Typography
+                variant="h6"
+                component="div"
+                gutterBottom
+                sx={{
+                  display: "flex",
+                  fontWeight: "bold",
+                  color: neonBlue[700],
+                  fontSize: "1.35rem",
+                }}
+              >
+                <FeedbackIcon sx={{ mr: 1, mb: 1, fontSize: "2rem" }} /> Contact
+                Us
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: "semibold",
+                  lineHeight: "1.6",
+                  mb:5,
+                }}
+              >
                 We're here to help! Contact us for support, partnership
                 inquiries, or just to chat.
               </Typography>
@@ -208,44 +363,11 @@ export default function Overview(): React.JSX.Element {
                 <Button
                   variant="outlined"
                   onClick={() => router.push(paths.contact)}
+                  
                 >
                   <ContactSupportIcon sx={{ mr: 1 }} /> Contact
                 </Button>
               </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* About Us */}
-        <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
-          <Card
-            sx={{
-              maxWidth: 400,
-              minHeight: 300,
-              margin: "auto",
-              padding: 2,
-              boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
-              transition: "0.3s",
-              "&:hover": {
-                transform: "scale(1.03)",
-                boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
-              },
-            }}
-          >
-            <CardContent>
-              <Typography variant="h6" component="div" gutterBottom>
-                <InfoIcon sx={{ mr: 1 }} /> About Us
-              </Typography>
-              <Typography variant="body2">
-                Learn more about our mission and the team behind Feelify.
-              </Typography>
-              <Button
-                variant="outlined"
-                sx={{ mt: 2 }}
-                onClick={() => router.push(paths.dashboard.about)}
-              >
-                Our Story
-              </Button>
             </CardContent>
           </Card>
         </Grid>

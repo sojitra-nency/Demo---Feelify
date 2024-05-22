@@ -34,7 +34,6 @@ export const paths = {
       neutral: "/recommendation/videos/neutral",
     },
   },
-  feedback: "/feedback",
   upgrade: "/upgrade",
 } as const;
 
@@ -58,6 +57,5 @@ export const protectedRoutes = [
   paths.recommendation.videos.surprise,
   paths.recommendation.videos.fear,
   paths.recommendation.videos.neutral,
-  paths.feedback,
   paths.upgrade,
 ];
