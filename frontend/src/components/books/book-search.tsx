@@ -4,7 +4,6 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import CircularProgress from "@mui/material/CircularProgress";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -77,13 +76,12 @@ export default function BookSearch() {
   return (
     <Box sx={{ padding: 2 }}>
       <Typography
-        variant="h4"
+        variant="h2"
         component="h1"
-        align="center"
         gutterBottom
-        sx={{ mb: 6 }}
+        sx={{ color: neonBlue[700], fontStyle: "bold", textAlign: "center" }}
       >
-        SEARCH BOOKS
+        Search Books
       </Typography>
 
       <Grid container spacing={1} alignItems="flex-end" justifyContent="center">
@@ -95,6 +93,7 @@ export default function BookSearch() {
             onChange={handleInputChange}
             component={Paper}
             fullWidth
+            sx={{ backgroundColor: "#eaebfe" }}
           />
         </Grid>
         <Grid item>
@@ -117,15 +116,36 @@ export default function BookSearch() {
           flexDirection="column"
           sx={{ margin: 2 }}
         >
-          <CircularProgress />
+          <img
+            src="/assets/book_loader.gif"
+            alt="Loading..."
+            height="400"
+            width="300"
+          />
           <Typography variant="h6">Loading Books...</Typography>
+        </Box>
+      )}
+
+      {!loading && books.length === 0 && (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+        >
+          <img
+            src="/assets/book_search.gif"
+            alt="Loading..."
+            height="400"
+            width="450"
+          />
         </Box>
       )}
 
       <Grid container spacing={2} sx={{ marginTop: 2 }}>
         {books.map((book) => (
           <Grid item xs={12} sm={6} md={4} key={book.id}>
-            <Card sx={{width:350}}>
+            <Card sx={{ width: 350 }}>
               {book.thumbnail && (
                 <CardMedia
                   component="img"

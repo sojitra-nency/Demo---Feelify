@@ -5,7 +5,6 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import CircularProgress from "@mui/material/CircularProgress";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -14,7 +13,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Button, Paper } from "@mui/material";
 import Cookies from "js-cookie";
-
+import { neonBlue } from "@/styles/theme/colors";
 interface Video {
   id: string;
   title: string;
@@ -75,13 +74,12 @@ export default function VideoSearch() {
   return (
     <Box sx={{ padding: 2 }}>
       <Typography
-        variant="h4"
+        variant="h2"
         component="h1"
-        align="center"
         gutterBottom
-        sx={{ mb: 6 }}
+        sx={{ color: neonBlue[700], fontStyle: "bold", textAlign: "center" }}
       >
-        SEARCH VIDEOS
+        Search Videos
       </Typography>
       <Grid container spacing={1} alignItems="flex-end" justifyContent="center">
         <Grid item xs={6}>
@@ -92,6 +90,7 @@ export default function VideoSearch() {
             onChange={handleInputChange}
             component={Paper}
             fullWidth
+            sx={{ backgroundColor: "#eaebfe" }}
           />
         </Grid>
         <Grid item>
@@ -114,8 +113,30 @@ export default function VideoSearch() {
           flexDirection="column"
           sx={{ margin: 2 }}
         >
-          <CircularProgress />
+          <img
+            src="/assets/video-loader.gif"
+            alt="Loading..."
+            height="300"
+            width="300"
+          />
           <Typography variant="h6">Loading Videos...</Typography>
+        </Box>
+      )}
+
+      {!loading && videos.length === 0 && (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+          sx={{ margin: 5 }}
+        >
+          <img
+            src="/assets/search.gif"
+            alt="Loading..."
+            height="300"
+            width="400"
+          />
         </Box>
       )}
 

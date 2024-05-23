@@ -10,37 +10,37 @@ import {
   Container,
   Grid,
   Button,
+  Box,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { paths } from "@/paths";
+import { neonBlue } from "@/styles/theme/colors";
 
 const videoCategories = [
   {
     title:
-      "Happy: Escape the ordinary and discover extraordinary moments of happiness.",
+      "Escape the ordinary and discover extraordinary moments of happiness.",
     path: paths.recommendation.videos.happy,
     image: "/assets/happy/image.jpg",
   },
   {
-    title:
-      "Fear: Turn those goosebumps into laughter. It's video therapy time!",
+    title: "Turn those goosebumps into laughter. It's video therapy time!",
     path: paths.recommendation.videos.fear,
     image: "/assets/fear/image.jpg",
   },
   {
-    title: "Sad: Turn your blues into hues with these uplifting videos.",
+    title: "Turn your blues into hues with these uplifting videos.",
     path: paths.recommendation.videos.sad,
     image: "/assets/sad/image.jpg",
   },
   {
-    title:
-      "Surprise: Get ready to have your expectations delightfully shattered.",
+    title: "Get ready to have your expectations delightfully shattered.",
     path: paths.recommendation.videos.surprise,
     image: "/assets/surprise/image.jpg",
   },
   {
     title:
-      "Neutral: Open the door to endless possibilities. Click play and let the adventure begin.",
+      "Open the door to endless possibilities. Click play and let the adventure begin.",
     path: paths.recommendation.videos.neutral,
     image: "/assets/neutral/image.jpg",
   },
@@ -52,20 +52,50 @@ export default function Videos() {
   return (
     <Container maxWidth="md">
       <Typography
-        variant="h4"
-        component="h1"
-        align="center"
+        variant="h3"
+        component="h2"
         gutterBottom
-        sx={{ mb: 6 }}
+        sx={{
+          color: neonBlue[700],
+          fontStyle: "bold",
+          textAlign: "center",
+          mb: 5,
+        }}
       >
-        EMOTION BASED VIDEO RECOMMENDATION
+        Match Your Mood, Discover New Videos...
       </Typography>
 
-      <Grid container direction="column" spacing={3}>
+      <Grid container direction="column" spacing={10}>
         {videoCategories.map(({ title, path, image }) => (
           <Grid item xs={12} sm={6} md={4} key={title}>
-            <Card>
-              <CardHeader title={title} align="center" />
+            <Card
+              sx={{
+                backgroundColor: "#eaebfe",
+                elevation: 3,
+                transition: "0.3s",
+                "&:hover": {
+                  transform: "scale(1.03)",
+                  boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
+                },
+              }}
+            >
+              <CardHeader
+                title={
+                  <Typography
+                    variant="h5"
+                    component="h2"
+                    sx={{
+                      fontStyle: "italic",
+                      textAlign: "center",
+                      fontSize: "1.25rem",
+                      mb: 2,
+                      color: neonBlue[900],
+                    }}
+                  >
+                    {title}
+                  </Typography>
+                }
+              />
               <CardMedia
                 component="img"
                 height="350"
@@ -73,13 +103,15 @@ export default function Videos() {
                 alt={title}
               />
               <CardContent>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => router.push(path)}
-                >
-                  Go to videos
-                </Button>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => router.push(path)}
+                  >
+                    Go to videos
+                  </Button>
+                </Box>
               </CardContent>
             </Card>
           </Grid>

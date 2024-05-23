@@ -19,8 +19,8 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import Cookies from "js-cookie";
+import { neonBlue } from "@/styles/theme/colors";
 
 interface EmotionData {
   [key: string]: number;
@@ -81,13 +81,12 @@ export default function EmotionAnalysis(): React.JSX.Element {
   return (
     <div>
       <Typography
-        variant="h4"
+        variant="h2"
         component="h1"
-        align="center"
         gutterBottom
-        sx={{ mb: 5 }}
+        sx={{ color: neonBlue[700], fontStyle: "bold", textAlign: "center" }}
       >
-        EMOTION ANALYSIS
+        Emotion Analysis
       </Typography>
       {isLoading && (
         <Box
@@ -97,8 +96,15 @@ export default function EmotionAnalysis(): React.JSX.Element {
           flexDirection="column"
           sx={{ margin: 2 }}
         >
-          <CircularProgress />
-          <Typography variant="h6">Analysing your Emotions...</Typography>
+          <img
+            src="/assets/emotion-loader.gif"
+            alt="Loading..."
+            height="300"
+            width="300"
+          />
+          <Typography variant="h6" sx={{ my: 3, color: neonBlue[700] }}>
+            Analysing your Emotions...
+          </Typography>
         </Box>
       )}
       {emotionData && (
@@ -109,7 +115,10 @@ export default function EmotionAnalysis(): React.JSX.Element {
             alignItems: "center",
           }}
         >
-          <TableContainer component={Paper} sx={{ maxWidth: 700 }}>
+          <TableContainer
+            component={Paper}
+            sx={{ maxWidth: 700, backgroundColor: "#eaebfe" }}
+          >
             <Table sx={{ minWidth: 10 }} aria-label="Emotion Analysis Table">
               <TableHead>
                 <TableRow>
@@ -129,13 +138,32 @@ export default function EmotionAnalysis(): React.JSX.Element {
               </TableBody>
             </Table>
           </TableContainer>
+
+          <Typography
+            variant="h4"
+            component="h3"
+            gutterBottom
+            sx={{
+              color: neonBlue[700],
+              fontStyle: "italic",
+              textAlign: "center",
+              marginTop: 4,
+            }}
+          >
+            Choose your vibe...
+          </Typography>
           <Grid
             container
             justifyContent="center"
             spacing={2}
-            sx={{ mt: 4, maxWidth: 400 }}
+            sx={{ mt: 2, maxWidth: 400 }}
           >
-            <Grid item xs={12} component={Paper} sx={{ p: 2 }}>
+            <Grid
+              item
+              xs={12}
+              component={Paper}
+              sx={{ p: 2, backgroundColor: "#eaebfe" }}
+            >
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12} justifyContent="center">
                   <FormControl fullWidth sx={{ alignItems: "center" }}>

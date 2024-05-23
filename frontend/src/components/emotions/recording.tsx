@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { paths } from "@/paths";
 import Cookies from "js-cookie";
+import { neonBlue } from "@/styles/theme/colors";
 
 export default function Recording(): React.JSX.Element {
   const router = useRouter();
@@ -82,13 +83,17 @@ export default function Recording(): React.JSX.Element {
   return (
     <div>
       <Typography
-        variant="h4"
-        component="h1"
-        align="center"
+        variant="h3"
+        component="h2"
         gutterBottom
-        sx={{ mb: 5 }}
+        sx={{
+          color: neonBlue[700],
+          fontStyle: "bold",
+          textAlign: "center",
+          mb: 5,
+        }}
       >
-        CAPTURE YOUR EMOTIONS
+        Capture Your Emotions :)
       </Typography>
       <Box
         display="flex"
@@ -104,7 +109,7 @@ export default function Recording(): React.JSX.Element {
             height: 370,
             borderRadius: 50,
             boxShadow: "0px 2px 4px -1px rgba(0, 0, 0, 0.5)",
-            backgroundColor: "white",
+            backgroundColor: "#eaebfe",
           }}
         />
       </Box>

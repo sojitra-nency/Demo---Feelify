@@ -40,7 +40,12 @@ export default function Overview(): React.JSX.Element {
       >
         Welcome to Feelify
       </Typography>
-      <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 6 }}>
+      <Typography
+        variant="h5"
+        component="h2"
+        gutterBottom
+        sx={{ mb: 6, color: neonBlue[900] }}
+      >
         Your emotion-based book and video recommendation system
       </Typography>
 
@@ -78,9 +83,10 @@ export default function Overview(): React.JSX.Element {
               <Typography
                 variant="body1"
                 sx={{
-                  fontWeight: "semibold",
+                  fontWeight: 600,
                   lineHeight: "1.6",
                   mb: 2,
+                  color: neonBlue[900],
                 }}
               >
                 Discover books and videos that match your mood across 5
@@ -116,7 +122,7 @@ export default function Overview(): React.JSX.Element {
             }}
           >
             <CardContent>
-            <Typography
+              <Typography
                 variant="h6"
                 component="div"
                 gutterBottom
@@ -132,14 +138,15 @@ export default function Overview(): React.JSX.Element {
               <Typography
                 variant="body1"
                 sx={{
-                  fontWeight: "semibold",
+                  fontWeight: 600,
                   lineHeight: "1.6",
-                  mb: 6,
+                  mb: 2,
+                  color: neonBlue[900],
                 }}
               >
                 Find the perfect book or video to match your interests.
               </Typography>
-              <Box sx={{ display: "flex", gap: 1, my: 2 }}>
+              <Box sx={{ display: "flex", gap: 1, mt: 6 }}>
                 <Button
                   variant="outlined"
                   onClick={() => router.push(paths.dashboard.vsearch)}
@@ -174,7 +181,7 @@ export default function Overview(): React.JSX.Element {
             }}
           >
             <CardContent>
-            <Typography
+              <Typography
                 variant="h6"
                 component="div"
                 gutterBottom
@@ -191,9 +198,10 @@ export default function Overview(): React.JSX.Element {
               <Typography
                 variant="body1"
                 sx={{
-                  fontWeight: "semibold",
+                  fontWeight: 600,
                   lineHeight: "1.6",
                   mb: 2,
+                  color: neonBlue[900],
                 }}
               >
                 Unlock personalized recommendations based on your live emotions.
@@ -226,7 +234,7 @@ export default function Overview(): React.JSX.Element {
             }}
           >
             <CardContent>
-            <Typography
+              <Typography
                 variant="h6"
                 component="div"
                 gutterBottom
@@ -243,9 +251,10 @@ export default function Overview(): React.JSX.Element {
               <Typography
                 variant="body1"
                 sx={{
-                  fontWeight: "semibold",
+                  fontWeight: 600,
                   lineHeight: "1.6",
                   mb: 2,
+                  color: neonBlue[900],
                 }}
               >
                 Loved a book or video? Let the world know! Your ratings and
@@ -263,9 +272,6 @@ export default function Overview(): React.JSX.Element {
           </Card>
         </Grid>
 
-        
-
-        
         <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
           <Card
             sx={{
@@ -283,7 +289,7 @@ export default function Overview(): React.JSX.Element {
             }}
           >
             <CardContent>
-            <Typography
+              <Typography
                 variant="h6"
                 component="div"
                 gutterBottom
@@ -299,16 +305,17 @@ export default function Overview(): React.JSX.Element {
               <Typography
                 variant="body1"
                 sx={{
-                  fontWeight: "semibold",
+                  fontWeight: 600,
                   lineHeight: "1.6",
-                  mb: 5,
+                  mb: 2,
+                  color: neonBlue[900],
                 }}
               >
                 Learn more about our mission and the team behind Feelify.
               </Typography>
               <Button
                 variant="contained"
-                sx={{ mt: 2 }}
+                sx={{ mt: 3 }}
                 onClick={() => router.push(paths.dashboard.about)}
               >
                 Our Story
@@ -334,7 +341,7 @@ export default function Overview(): React.JSX.Element {
             }}
           >
             <CardContent>
-            <Typography
+              <Typography
                 variant="h6"
                 component="div"
                 gutterBottom
@@ -351,9 +358,10 @@ export default function Overview(): React.JSX.Element {
               <Typography
                 variant="body1"
                 sx={{
-                  fontWeight: "semibold",
                   lineHeight: "1.6",
-                  mb:5,
+                  mb: 2,
+                  color: neonBlue[900],
+                  fontWeight: 600,
                 }}
               >
                 We're here to help! Contact us for support, partnership
@@ -363,7 +371,6 @@ export default function Overview(): React.JSX.Element {
                 <Button
                   variant="outlined"
                   onClick={() => router.push(paths.contact)}
-                  
                 >
                   <ContactSupportIcon sx={{ mr: 1 }} /> Contact
                 </Button>

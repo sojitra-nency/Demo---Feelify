@@ -11,40 +11,67 @@ import {
   ListItemIcon,
   ListItemText,
   Grid,
+  Stack,
+  Divider,
+  CardHeader,
 } from "@mui/material";
-import { CheckCircleOutline } from "@mui/icons-material";
+import {
+  CheckCircleOutline,
+  CurrencyBitcoin,
+  CurrencyRupee,
+} from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { paths } from "@/paths";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 import Cookies from "js-cookie";
+import { neonBlue } from "@/styles/theme/colors";
 
 interface SubscriptionPlan {
-  id: number;
   name: string;
   price: number;
   features: string[];
 }
 
 export default function PremiumUpgrade() {
-  const [plans, setPlans] = useState<SubscriptionPlan[]>([
-    {
-      id: 1,
-      name: "Basic",
-      price: 200,
-      features: ["Video recommendations", "Book recommendations"],
-    },
-    {
-      id: 2,
-      name: "Premium",
-      price: 400,
-      features: [
-        "Emotion based video recommendation",
-        "Emotion based book recommendation",
-      ],
-    },
-  ]);
+  // const [plans, setPlans] = useState<SubscriptionPlan[]>([
+  //   {
+  //     name: "Current",
+  //     price: 0,
+  //     features: ["Video Search", "Book Search"],
+  //   },
+  //   {
+  //     name: "Standard",
+  //     price: 200,
+  //     features: [
+  //       "Video Search",
+  //       "Book Search",
+  //       "Video Recommendation",
+  //       "Book Recommendation",
+  //     ],
+  //   },
+  //   {
+  //     name: "Premium",
+  //     price: 400,
+  //     features: [
+  //       "Video Search",
+  //       "Book Search",
+  //       "Video Recommendation",
+  //       "Book Recommendation",
+  //       "Emotion Based Video Recommendation",
+  //       "Emotion Based Book Recommendation",
+  //     ],
+  //   },
+  // ]);
+  const plans = [
+    "Video Search",
+    "Book Search",
+    "Video Recommendation",
+    "Book Recommendation",
+    "Emotion Based Video Recommendation",
+    "Emotion Based Book Recommendation",
+  ];
   const router = useRouter();
   const { data: userData, isLoading, isError } = useRetrieveUserQuery();
   const userEmail = userData?.email || "";
@@ -77,11 +104,15 @@ export default function PremiumUpgrade() {
           order_id: response.data.payment_id,
           handler: async (response: any) => {
             try {
-              await axios.post(`${process.env.NEXT_PUBLIC_HOST}/api/success/`, response, {
-                headers: {
-                  Authorization: `Bearer ${Cookies.get("auth_token")}`,
-                },
-              });
+              await axios.post(
+                `${process.env.NEXT_PUBLIC_HOST}/api/success/`,
+                response,
+                {
+                  headers: {
+                    Authorization: `Bearer ${Cookies.get("auth_token")}`,
+                  },
+                }
+              );
               router.push(paths.home);
             } catch (error) {
               console.error("Error updating payment status:", error);
@@ -102,42 +133,174 @@ export default function PremiumUpgrade() {
   };
 
   return (
-    <>
-      <Box sx={{ padding: 2 }}>
-        <Typography variant="h4" align="center" gutterBottom>
-          Feelify Premium Plans
-        </Typography>
+    <Box sx={{ padding: 2 }}>
+      <Typography
+        variant="h3"
+        component="h2"
+        gutterBottom
+        sx={{
+          color: neonBlue[700],
+          fontStyle: "bold",
+          textAlign: "center",
+          mb: 5,
+        }}
+      >
+        Feelify Premium Plans
+      </Typography>
 
-        <Grid container spacing={3} justifyContent="center">
-          {plans.map((plan) => (
-            <Grid item xs={12} sm={6} md={4} key={plan.id}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h5" component="div">
-                    {plan.name} - ₹{plan.price}/month
-                  </Typography>
-                  <List>
-                    {plan.features.map((feature, index) => (
-                      <ListItem key={index}>
-                        <ListItemIcon>
-                          <CheckCircleOutline />
-                        </ListItemIcon>
-                        <ListItemText primary={feature} />
-                      </ListItem>
-                    ))}
-                  </List>
-                  <Button
-                    variant="contained"
-                    onClick={() => handleSubscribe(plan)}
-                  >
-                    Subscribe
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+      <Grid container spacing={3} justifyContent="center">
+        <Grid item xs={12} sm={4} md={4}>
+          <Card
+            sx={{
+              maxWidth: 400,
+            }}
+          >
+            <CardHeader
+              title={
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{
+                    fontWeight: "bold",
+                    textShadow: "1px 1px 2px black",
+                  }}
+                >
+                  PRICING PLANS
+                </Typography>
+              }
+              sx={{
+                backgroundColor: neonBlue[900],
+                color: "#fff",
+                textAlign: "center",
+              }}
+            />
+            <Card
+              sx={{
+                maxWidth: 400,
+                margin: "auto",
+                padding: 2,
+                textAlign: "center",
+              }}
+            >
+              <CardContent
+                sx={{
+                  backgroundColor: "#fff",
+                  color: neonBlue[900],
+                  textAlign: "left",
+                }}
+              >
+                <Stack spacing={1}>
+                  {plans.map((feature, index) => (
+                    <Box key={feature}>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontWeight: 600,
+                          lineHeight: "1.6",
+                          mb: 2,
+                          color: neonBlue[900],
+                          textAlign: "center",
+                        }}
+                      >
+                        {feature}
+                      </Typography>
+                      {index < plans.length - 1 && <Divider sx={{ my: 1 }} />}
+                    </Box>
+                  ))}
+                </Stack>
+              </CardContent>
+            </Card>
+
+            <CardHeader
+              title={
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{
+                    fontWeight: "bold",
+                    textShadow: "1px 1px 2px black",
+                  }}
+                >
+                  BUY NOW
+                </Typography>
+              }
+              sx={{
+                backgroundColor: neonBlue[900],
+                color: "#fff",
+                textAlign: "center",
+              }}
+            />
+          </Card>
         </Grid>
-      </Box>
-    </>
+        {/* <Grid item xs={6} sm={4} md={4}>
+          <Card>
+            <CardHeader
+              title={
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{
+                    fontWeight: "bold",
+                    textShadow: "1px 1px 2px black",
+                    fontSize: "2rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem",
+                    backgroundColor: neonBlue[900],
+                    color: "#fff",
+                    padding: "0.5rem",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <CurrencyRupee sx={{ fontSize: "1.5em" }} /> 200
+                </Typography>
+              }
+              sx={{
+                backgroundColor: neonBlue[900],
+                color: "#fff",
+                textAlign: "center",
+              }}
+            />
+            <Card
+              sx={{
+                maxWidth: 400,
+                margin: "auto",
+                padding: 2,
+                textAlign: "center",
+              }}
+            >
+              <CardContent
+                sx={{
+                  backgroundColor: "#fff",
+                  color: neonBlue[900],
+                  textAlign: "left",
+                }}
+              >
+                <Stack spacing={1}>
+                  //  {plans.map((feature, index) => (
+                  //   <Box key={feature}>
+                  //     <Typography variant="body1" sx={{ textAlign: "center" }}>
+                  //       {feature}
+                  //     </Typography>
+                  //     {index < plans.length - 1 && <Divider sx={{ my: 1 }} />}
+                  //   </Box>
+                  // ))} 
+                </Stack>
+              </CardContent>
+            </Card>
+
+            <CardHeader
+              title="Buy Now"
+              sx={{
+                backgroundColor: neonBlue[900],
+                color: "#fff",
+                textAlign: "center",
+              }}
+            />
+          </Card>
+        </Grid> */}
+      </Grid>
+    </Box>
   );
 }
