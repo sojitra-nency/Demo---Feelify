@@ -32,9 +32,23 @@ class Upgrade(models.Model):
     end_date = models.DateField(null=True, blank=True)
     payment_id = models.CharField(max_length=100)
     paid = models.BooleanField(default=False)
+    ACCESS_LEVEL_CHOICES = (
+        ('free', 'Free'),
+        ('basic', 'Basic'),  
+        ('premium', 'Premium'), 
+    )
+    access_level = models.CharField(max_length=10, choices=ACCESS_LEVEL_CHOICES, default='free')
+
+    def save(self, *args, **kwargs):
+        
+        super().save(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         if self.paid and not self.start_date:
             self.start_date = timezone.now().date()
             self.end_date = self.start_date + relativedelta(months=1)
+            if self.paid and self.amount >= 400:  
+                self.access_level = 'premium'
+            elif self.paid and self.amount >= 200:
+                self.access_level = 'basic'
         super().save(*args, **kwargs)

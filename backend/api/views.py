@@ -39,6 +39,13 @@ class UpgradeCreateView(generics.CreateAPIView):
         
         serializer.save(payment_id=payment['id'])
 
+    def get(self, request, id):
+        try:
+            upgrade = Upgrade.objects.get(id=id)
+            return Response({'paid': upgrade.paid, 'amount': upgrade.amount})
+        except Upgrade.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
 class SuccessView(APIView):
     def post(self, request):
         razorpay_order_id = request.data.get('razorpay_order_id')
@@ -52,6 +59,8 @@ class SuccessView(APIView):
             return Response({'success': True})
         except Upgrade.DoesNotExist:
             return Response({'error': 'Invalid order_id'}, status=status.HTTP_404_NOT_FOUND)
+    
+    
 
 def fetch_books(query):
     # url = "https://www.googleapis.com/books/v1/volumes?q=happy&key=AIzaSyDUKCLVwPSQSex72ShbZeDWMp9srfDTNyQ"

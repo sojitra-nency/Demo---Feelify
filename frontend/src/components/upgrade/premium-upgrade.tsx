@@ -6,18 +6,14 @@ import {
   Button,
   Card,
   CardContent,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Grid,
   Stack,
   Divider,
   CardHeader,
 } from "@mui/material";
 import {
+  CancelOutlined,
   CheckCircleOutline,
-  CurrencyBitcoin,
   CurrencyRupee,
 } from "@mui/icons-material";
 import { useState, useEffect } from "react";
@@ -28,42 +24,7 @@ import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 import Cookies from "js-cookie";
 import { neonBlue } from "@/styles/theme/colors";
 
-interface SubscriptionPlan {
-  name: string;
-  price: number;
-  features: string[];
-}
-
 export default function PremiumUpgrade() {
-  // const [plans, setPlans] = useState<SubscriptionPlan[]>([
-  //   {
-  //     name: "Current",
-  //     price: 0,
-  //     features: ["Video Search", "Book Search"],
-  //   },
-  //   {
-  //     name: "Standard",
-  //     price: 200,
-  //     features: [
-  //       "Video Search",
-  //       "Book Search",
-  //       "Video Recommendation",
-  //       "Book Recommendation",
-  //     ],
-  //   },
-  //   {
-  //     name: "Premium",
-  //     price: 400,
-  //     features: [
-  //       "Video Search",
-  //       "Book Search",
-  //       "Video Recommendation",
-  //       "Book Recommendation",
-  //       "Emotion Based Video Recommendation",
-  //       "Emotion Based Book Recommendation",
-  //     ],
-  //   },
-  // ]);
   const plans = [
     "Video Search",
     "Book Search",
@@ -82,13 +43,13 @@ export default function PremiumUpgrade() {
     document.body.appendChild(script);
   }, []);
 
-  const handleSubscribe = async (plan: SubscriptionPlan) => {
+  const handleSubscribe = async (price: number) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_HOST}/api/upgrades/`,
         {
           email: userEmail,
-          amount: plan.price,
+          amount: price,
         },
         {
           headers: {
@@ -145,14 +106,15 @@ export default function PremiumUpgrade() {
           mb: 5,
         }}
       >
-        Feelify Premium Plans
+        Monthly Subscription
       </Typography>
 
       <Grid container spacing={3} justifyContent="center">
-        <Grid item xs={12} sm={4} md={4}>
+        <Grid item xs={6} sm={4} md={4}>
           <Card
             sx={{
               maxWidth: 400,
+              backgroundColor: "#eaebfe",
             }}
           >
             <CardHeader
@@ -162,7 +124,7 @@ export default function PremiumUpgrade() {
                   component="h2"
                   sx={{
                     fontWeight: "bold",
-                    textShadow: "1px 1px 2px black",
+                    textShadow: `1px 1px 2px ${neonBlue[900]}`,
                   }}
                 >
                   PRICING PLANS
@@ -180,11 +142,12 @@ export default function PremiumUpgrade() {
                 margin: "auto",
                 padding: 2,
                 textAlign: "center",
+                backgroundColor: "#eaebfe",
               }}
             >
               <CardContent
                 sx={{
-                  backgroundColor: "#fff",
+                  backgroundColor: "#eaebfe",
                   color: neonBlue[900],
                   textAlign: "left",
                 }}
@@ -197,7 +160,7 @@ export default function PremiumUpgrade() {
                         sx={{
                           fontWeight: 600,
                           lineHeight: "1.6",
-                          mb: 2,
+                          mb: 1.4,
                           color: neonBlue[900],
                           textAlign: "center",
                         }}
@@ -213,16 +176,15 @@ export default function PremiumUpgrade() {
 
             <CardHeader
               title={
-                <Typography
-                  variant="h5"
-                  component="h2"
-                  sx={{
-                    fontWeight: "bold",
-                    textShadow: "1px 1px 2px black",
-                  }}
-                >
-                  BUY NOW
-                </Typography>
+                <Button>
+                    <Typography
+                      variant="h5"
+                      component="h2"
+                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`,fontSize:"2rem", display:"flex", justifyContent:"center"}}
+                    >
+                      BUY NOW
+                    </Typography>
+                  </Button>
               }
               sx={{
                 backgroundColor: neonBlue[900],
@@ -232,8 +194,13 @@ export default function PremiumUpgrade() {
             />
           </Card>
         </Grid>
-        {/* <Grid item xs={6} sm={4} md={4}>
-          <Card>
+        <Grid item>
+          <Card
+            sx={{
+              maxWidth: 200,
+              backgroundColor: "#eaebfe",
+            }}
+          >
             <CardHeader
               title={
                 <Typography
@@ -241,65 +208,243 @@ export default function PremiumUpgrade() {
                   component="h2"
                   sx={{
                     fontWeight: "bold",
-                    textShadow: "1px 1px 2px black",
-                    fontSize: "2rem",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "0.5rem",
-                    backgroundColor: neonBlue[900],
-                    color: "#fff",
-                    padding: "0.5rem",
-                    borderRadius: "5px",
+                    textShadow: `1px 1px 2px ${neonBlue[900]}`,
                   }}
                 >
-                  <CurrencyRupee sx={{ fontSize: "1.5em" }} /> 200
+                  FREE PLAN
                 </Typography>
               }
               sx={{
-                backgroundColor: neonBlue[900],
+                backgroundColor: neonBlue[400],
                 color: "#fff",
                 textAlign: "center",
               }}
             />
+
             <Card
               sx={{
-                maxWidth: 400,
+                maxWidth: 200,
                 margin: "auto",
                 padding: 2,
                 textAlign: "center",
+                backgroundColor: "#eaebfe",
               }}
             >
               <CardContent
                 sx={{
-                  backgroundColor: "#fff",
+                  backgroundColor: "#eaebfe",
                   color: neonBlue[900],
                   textAlign: "left",
                 }}
               >
                 <Stack spacing={1}>
-                  //  {plans.map((feature, index) => (
-                  //   <Box key={feature}>
-                  //     <Typography variant="body1" sx={{ textAlign: "center" }}>
-                  //       {feature}
-                  //     </Typography>
-                  //     {index < plans.length - 1 && <Divider sx={{ my: 1 }} />}
-                  //   </Box>
-                  // ))} 
+                  {plans.map((feature, index) => (
+                    <Box key={feature}>
+                      <center>
+                        {index < 2 ? (
+                          <CheckCircleOutline sx={{ color: "green" }} />
+                        ) : (
+                          <CancelOutlined sx={{ color: "red" }} />
+                        )}
+                      </center>
+                      {index < plans.length - 1 && <Divider sx={{ my: 1 }} />}
+                    </Box>
+                  ))}
                 </Stack>
               </CardContent>
             </Card>
-
             <CardHeader
-              title="Buy Now"
+              title={
+                <Button>
+                    <Typography
+                      variant="h5"
+                      component="h2"
+                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`,fontSize:"2rem", display:"flex", justifyContent:"center"}}
+                    >
+                      <CurrencyRupee sx={{ color: "white", fontSize:"2rem" }} /> 0
+                    </Typography>
+                  </Button>
+              }
               sx={{
-                backgroundColor: neonBlue[900],
+                backgroundColor: neonBlue[400],
                 color: "#fff",
                 textAlign: "center",
               }}
             />
           </Card>
-        </Grid> */}
+        </Grid>
+        <Grid item>
+          <Card
+            sx={{
+              maxWidth: 200,
+              backgroundColor: "#eaebfe",
+            }}
+          >
+            <CardHeader
+              title={
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{
+                    fontWeight: "bold",
+                    textShadow: `1px 1px 2px ${neonBlue[900]}`,
+                  }}
+                >
+                  BASIC
+                </Typography>
+              }
+              sx={{
+                backgroundColor: neonBlue[600],
+                color: "#fff",
+                textAlign: "center",
+              }}
+            />
+
+            <Card
+              sx={{
+                maxWidth: 200,
+                margin: "auto",
+                padding: 2,
+                textAlign: "center",
+                backgroundColor: "#eaebfe",
+              }}
+            >
+              <CardContent
+                sx={{
+                  backgroundColor: "#eaebfe",
+                  color: neonBlue[900],
+                  textAlign: "left",
+                }}
+              >
+                <Stack spacing={1}>
+                  {plans.map((feature, index) => (
+                    <Box key={feature}>
+                      <center>
+                        {index < 4 ? (
+                          <CheckCircleOutline sx={{ color: "green" }} />
+                        ) : (
+                          <CancelOutlined sx={{ color: "red" }} />
+                        )}
+                      </center>
+                      {index < plans.length - 1 && <Divider sx={{ my: 1 }} />}
+                    </Box>
+                  ))}
+                </Stack>
+              </CardContent>
+            </Card>
+            <CardHeader
+              title={
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{
+                    fontWeight: "bold",
+                    textShadow: `1px 1px 2px ${neonBlue[900]}`,
+                  }}
+                >
+                  <Button onClick={() => handleSubscribe(200)}>
+                    <Typography
+                      variant="h5"
+                      component="h2"
+                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`,fontSize:"2rem", display:"flex", justifyContent:"center"}}
+                    >
+                     <CurrencyRupee sx={{ color: "white", fontSize:"2rem" }} />200
+                    </Typography>
+                  </Button>
+                </Typography>
+              }
+              sx={{
+                backgroundColor: neonBlue[600],
+                color: "#fff",
+                textAlign: "center",
+              }}
+            />
+          </Card>
+        </Grid>
+        <Grid item>
+          <Card
+            sx={{
+              maxWidth: 200,
+              backgroundColor: "#eaebfe",
+            }}
+          >
+            <CardHeader
+              title={
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{
+                    fontWeight: "bold",
+                    textShadow: `1px 1px 2px ${neonBlue[900]}`,
+                  }}
+                >
+                  PREMIUM
+                </Typography>
+              }
+              sx={{
+                backgroundColor: neonBlue[700],
+                color: "#fff",
+                textAlign: "center",
+              }}
+            />
+
+            <Card
+              sx={{
+                maxWidth: 200,
+                margin: "auto",
+                padding: 2,
+                textAlign: "center",
+                backgroundColor: "#eaebfe",
+              }}
+            >
+              <CardContent
+                sx={{
+                  backgroundColor: "#eaebfe",
+                  color: neonBlue[900],
+                  textAlign: "left",
+                }}
+              >
+                <Stack spacing={1}>
+                  {plans.map((feature, index) => (
+                    <Box key={feature}>
+                      <center>
+                        <CheckCircleOutline sx={{ color: "green" }} />
+                      </center>
+                      {index < plans.length - 1 && <Divider sx={{ my: 1 }} />}
+                    </Box>
+                  ))}
+                </Stack>
+              </CardContent>
+            </Card>
+            <CardHeader
+              title={
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{
+                    fontWeight: "bold",
+                    textShadow: `1px 1px 2px ${neonBlue[900]}`,
+                  }}
+                >
+                  <Button onClick={() => handleSubscribe(400)}>
+                    <Typography
+                      variant="h5"
+                      component="h2"
+                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`,fontSize:"2rem", display:"flex", justifyContent:"center"}}
+                    >
+                      <CurrencyRupee sx={{ color: "white", fontSize:"2rem" }} />400
+                    </Typography>
+                  </Button>
+                </Typography>
+              }
+              sx={{
+                backgroundColor: neonBlue[600],
+                color: "#fff",
+                textAlign: "center",
+              }}
+            />
+          </Card>
+        </Grid>
       </Grid>
     </Box>
   );
