@@ -110,7 +110,7 @@ export default function FeedBack(): React.JSX.Element {
             />
           </Box>
           <TextField
-            label="Share your thoughts"
+            label="Share your thoughts..."
             multiline
             rows={4}
             fullWidth

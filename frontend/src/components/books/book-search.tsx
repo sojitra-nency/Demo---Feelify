@@ -14,6 +14,9 @@ import { toast } from "react-toastify";
 import { Paper } from "@mui/material";
 import Cookies from "js-cookie";
 import { neonBlue } from "@/styles/theme/colors";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import IconButton from "@mui/material/IconButton";
 
 interface Book {
   id: string;
@@ -38,6 +41,8 @@ export default function BookSearch() {
   const [searchTerm, setSearchTerm] = useState("");
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const booksPerPage = 6;
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -73,7 +78,21 @@ export default function BookSearch() {
     setSearchTerm(inputValue);
   };
 
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 0) {
+      setCurrentPage(0);
+    } else {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const indexOfLastBook = currentPage * booksPerPage;
+  const indexOfFirstBook = indexOfLastBook - booksPerPage;
+  const CurrentBooks = books.slice(indexOfFirstBook, indexOfLastBook);
+  const totalPages = Math.ceil(books.length / booksPerPage);
+
   return (
+    <>
     <Box sx={{ padding: 2 }}>
       <Typography
         variant="h2"
@@ -143,7 +162,7 @@ export default function BookSearch() {
       )}
 
       <Grid container spacing={2} sx={{ marginTop: 2 }}>
-        {books.map((book) => (
+        {CurrentBooks.map((book) => (
           <Grid item xs={12} sm={6} md={4} key={book.id}>
             <Card sx={{ width: 350 }}>
               {book.thumbnail && (
@@ -200,5 +219,49 @@ export default function BookSearch() {
         ))}
       </Grid>
     </Box>
+    <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ marginTop: 2, borderRadius: "5px", padding: "10px" }}
+      >
+        <IconButton
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          sx={{ color: neonBlue[500], "&:hover": { backgroundColor: "#fff" } }}
+        >
+          <ArrowBackIosIcon />
+        </IconButton>
+
+        <Box display="flex">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Button
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              variant={currentPage === index + 1 ? "contained" : "outlined"}
+              size="small"
+              sx={{
+                mx: 0.5,
+                minWidth: "auto",
+                color: currentPage === index + 1 ? "#fff" : neonBlue[500],
+                borderColor: neonBlue[500],
+                "&:hover": { backgroundColor: neonBlue[500], color: "#fff" },
+              }}
+            >
+              {index + 1}
+            </Button>
+          ))}
+        </Box>
+
+        <IconButton
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          size="small"
+          sx={{ color: neonBlue[500], "&:hover": { backgroundColor: "#fff" } }}
+        >
+          <ArrowForwardIosIcon />
+        </IconButton>
+      </Box>
+    </>
   );
 }

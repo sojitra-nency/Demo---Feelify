@@ -14,6 +14,10 @@ import { toast } from "react-toastify";
 import { Button, Paper } from "@mui/material";
 import Cookies from "js-cookie";
 import { neonBlue } from "@/styles/theme/colors";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import IconButton from "@mui/material/IconButton";
+
 interface Video {
   id: string;
   title: string;
@@ -28,9 +32,11 @@ export default function VideoSearch() {
   const [searchTerm, setSearchTerm] = useState("");
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const videosPerPage = 2;
 
   useEffect(() => {
-    const fetchBooks = async () => {
+    const fetchVideos = async () => {
       if (searchTerm.trim() === "") return;
       setLoading(true);
 
@@ -46,13 +52,13 @@ export default function VideoSearch() {
         const data = await response.data;
         setVideos(data);
       } catch (error) {
-        toast.error("Failed to fetch books.");
+        toast.error("Failed to fetch videos.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBooks();
+    fetchVideos();
   }, [searchTerm]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,6 +67,7 @@ export default function VideoSearch() {
 
   const handleSearchClick = () => {
     setSearchTerm(inputValue);
+    setCurrentPage(1);
   };
 
   const handleCardClick = (video: Video) => {
@@ -70,6 +77,19 @@ export default function VideoSearch() {
   const handleCloseModal = () => {
     setSelectedVideo(null);
   };
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 0) {
+      setCurrentPage(0);
+    } else {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const indexOfLastVideo = currentPage * videosPerPage;
+  const indexOfFirstVideo = indexOfLastVideo - videosPerPage;
+  const currentVideos = videos.slice(indexOfFirstVideo, indexOfLastVideo);
+  const totalPages = Math.ceil(videos.length / videosPerPage);
 
   return (
     <Box sx={{ padding: 2 }}>
@@ -134,14 +154,14 @@ export default function VideoSearch() {
           <img
             src="/assets/search.gif"
             alt="Loading..."
-            height="300"
-            width="400"
+            height="400"
+            width="600"
           />
         </Box>
       )}
 
       <Grid container spacing={2} sx={{ marginTop: 2 }}>
-        {videos.map((video) => (
+        {currentVideos.map((video) => (
           <Grid
             item
             xs={12}
@@ -166,6 +186,50 @@ export default function VideoSearch() {
           </Grid>
         ))}
       </Grid>
+
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ marginTop: 2, borderRadius: "5px", padding: "10px" }}
+      >
+        <IconButton
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          sx={{ color: neonBlue[500], "&:hover": { backgroundColor: "#fff" } }}
+        >
+          <ArrowBackIosIcon />
+        </IconButton>
+
+        <Box display="flex">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Button
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              variant={currentPage === index + 1 ? "contained" : "outlined"}
+              size="small"
+              sx={{
+                mx: 0.5,
+                minWidth: "auto",
+                color: currentPage === index + 1 ? "#fff" : neonBlue[500],
+                borderColor: neonBlue[500],
+                "&:hover": { backgroundColor: neonBlue[500], color: "#fff" },
+              }}
+            >
+              {index + 1}
+            </Button>
+          ))}
+        </Box>
+
+        <IconButton
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          size="small"
+          sx={{ color: neonBlue[500], "&:hover": { backgroundColor: "#fff" } }}
+        >
+          <ArrowForwardIosIcon />
+        </IconButton>
+      </Box>
 
       <Modal open={selectedVideo !== null} onClose={handleCloseModal}>
         <Box
