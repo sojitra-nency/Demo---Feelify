@@ -11,7 +11,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import CircularProgress from "@mui/material/CircularProgress";
-import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia/CardMedia";
@@ -19,6 +18,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 import { paths } from "@/paths";
+import { neonBlue } from "@/styles/theme/colors";
 
 interface VideoData {
   id: string;
@@ -75,7 +75,9 @@ export default function EmotionVideos({
     fetchUpgradeDetails();
   }, [userData?.email]);
 
-  const isAllowed = upgradeData?.access_level === "premium" || upgradeData?.access_level === "basic";
+  const isAllowed =
+    upgradeData?.access_level === "premium" ||
+    upgradeData?.access_level === "basic";
 
   useEffect(() => {
     if (!isAllowed && !isLoadingUpgrade) {
@@ -132,6 +134,7 @@ export default function EmotionVideos({
   const fetchMoreData = async () => {
     setHasMore(false);
   };
+
   if (isAllowed) {
     return (
       <div style={{ padding: 20 }}>
@@ -140,7 +143,7 @@ export default function EmotionVideos({
           component="h1"
           align="center"
           gutterBottom
-          sx={{ mb: 4 }}
+          sx={{ mb: 4, color: neonBlue[900] }}
         >
           {title}
         </Typography>
@@ -158,15 +161,21 @@ export default function EmotionVideos({
                 flexDirection="column"
                 sx={{ margin: 2 }}
               >
-                <CircularProgress />
+                <img
+                  src="assets/recom_video_loader.gif"
+                  alt="Loading..."
+                  height="300"
+                  width="300"
+                />
                 <Typography variant="h6">Loading Videos...</Typography>
               </Box>
             </>
           }
         >
+          <Divider sx={{ my: 2 }} />
           {Object.entries(videos).map(([query, videosForQuery]) => (
             <div key={query}>
-              <Typography variant="h5" gutterBottom sx={{ mb: 4 }}>
+              <Typography variant="h5" gutterBottom sx={{ mb: 4, color:neonBlue[800] }}>
                 {subtitle[queries.indexOf(query)]}
               </Typography>
               <Box
@@ -179,36 +188,45 @@ export default function EmotionVideos({
                   scrollRefs.current[query] = ref;
                 }}
               >
-                <Grid container spacing={2} sx={{ marginTop: 2 }}>
-                  {[...videosForQuery, ...videosForQuery].map((video) => (
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      key={video.id}
-                      onClick={() => handleOpen(video)}
+                {[...videosForQuery, ...videosForQuery].map((video) => (
+                  <Box
+                    key={video.id}
+                    sx={{ minWidth: 280, marginRight: 4 }}
+                    onClick={() => handleOpen(video)}
+                  >
+                    <Card
+                      sx={{
+                        maxWidth: 400,
+                        minHeight: 500,
+                        margin: "auto",
+                        padding: 2,
+                        boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
+                        transition: "0.3s",
+                        backgroundColor: "#eaebfe",
+                        "&:hover": {
+                          transform: "scale(1.03)",
+                          boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
+                        },
+                      }}
                     >
-                      <Card>
-                        <CardMedia
-                          component="img"
-                          height="300"
-                          image={
-                            video.thumbnail
-                              ? video.thumbnail
-                              : "/assets/video_cover.jpg"
-                          }
-                          alt={video.title}
-                        />
-                        <CardContent>
-                          <Typography gutterBottom variant="h6" component="div">
-                            {video.title}
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))}
-                </Grid>
+                      <CardMedia
+                        component="img"
+                        height="300"
+                        image={
+                          video.thumbnail
+                            ? video.thumbnail
+                            : "/assets/video_cover.jpg"
+                        }
+                        alt={video.title}
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h6" component="div" sx={{color:neonBlue[500]}}>
+                          {video.title}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Box>
+                ))}
               </Box>
               <div
                 style={{
@@ -229,7 +247,16 @@ export default function EmotionVideos({
           ))}
         </InfiniteScroll>
 
-        <Modal open={selectedVideo !== null} onClose={handleClose}>
+        <Modal
+          open={selectedVideo !== null}
+          onClose={handleClose}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+          }}
+        >
           <Box
             sx={{
               position: "absolute",
@@ -237,11 +264,13 @@ export default function EmotionVideos({
               left: "50%",
               transform: "translate(-50%, -50%)",
               width: 800,
+              borderRadius: "10px",
+              boxShadow: "0 0 10px rgba(0, 0, 0, 0.25)",
             }}
           >
             <iframe
-              width="100%"
-              height="450"
+              width="800"
+              height="600"
               src={`https://www.youtube.com/embed/${selectedVideo?.id}`}
               title={selectedVideo?.title}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

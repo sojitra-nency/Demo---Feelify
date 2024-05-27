@@ -16,12 +16,21 @@ import { paths } from "@/paths";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { useLogoutMutation } from "@/redux/features/authApiSlice";
 import { logout as setLogout } from "@/redux/features/authSlice";
-
+import axios from "axios";
+import Cookies from "js-cookie";
 export interface UserPopoverProps {
   anchorEl: Element | null;
   onClose: () => void;
   open: boolean;
 }
+
+interface ProfileData {
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  phone_number?: string;
+}
+
 
 export function UserPopover({
   anchorEl,
@@ -43,6 +52,35 @@ export function UserPopover({
       toast.error("An error occurred during logout.");
     }
   };
+
+  const [profileData, setProfileData] = React.useState<ProfileData>({});
+  const [isLoading, setIsLoading] = React.useState(false);
+  const token = Cookies.get("auth_token");
+  const userId = localStorage.getItem("id");
+
+  React.useEffect(() => {
+    const fetchUserProfile = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_HOST}/login/profile/${userId}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setProfileData(response.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
   return (
     <Popover
       anchorEl={anchorEl}
@@ -52,12 +90,12 @@ export function UserPopover({
       slotProps={{ paper: { sx: { width: "240px" } } }}
     >
       <Box sx={{ p: "16px 20px " }}>
-        <Typography variant="subtitle1">Name</Typography>
+        <Typography variant="subtitle1">{profileData.first_name} {profileData.last_name}</Typography>
         <Typography color="text.secondary" variant="body2">
-          Email
+        {profileData.email}
         </Typography>
       </Box>
-      <Divider />
+      <Divider /> 
       <MenuList
         disablePadding
         sx={{ p: "8px", "& .MuiMenuItem-root": { borderRadius: 1 } }}

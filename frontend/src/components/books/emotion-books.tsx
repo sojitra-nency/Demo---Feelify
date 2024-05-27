@@ -15,13 +15,13 @@ import {
   Button,
   Box,
   Divider,
-  Card,
-  CircularProgress,
+  Card
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
 import { paths } from "@/paths";
+import { neonBlue } from "@/styles/theme/colors";
 
 interface BookData {
   id: string;
@@ -88,7 +88,9 @@ export default function EmotionBooks({
     fetchUpgradeDetails();
   }, [userData?.email]);
 
-  const isAllowed = upgradeData?.access_level === "premium" || upgradeData?.access_level === "basic";
+  const isAllowed =
+    upgradeData?.access_level === "premium" ||
+    upgradeData?.access_level === "basic";
 
   useEffect(() => {
     if (!isAllowed && !isLoadingUpgrade) {
@@ -158,258 +160,289 @@ export default function EmotionBooks({
   };
 
   if (isAllowed) {
-  return (
-    <div style={{ padding: 20 }}>
-      <Typography variant="h4" component="h1" align="center" gutterBottom>
-        {title}
-      </Typography>
-
-      <InfiniteScroll
-        dataLength={Object.keys(books).length}
-        next={fetchMoreData}
-        hasMore={hasMore}
-        loader={
-          <>
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              flexDirection="column"
-              sx={{ margin: 2 }}
-            >
-              <CircularProgress />
-              <Typography variant="h6">Loading Books...</Typography>
-            </Box>
-          </>
-        }
-      >
-        {Object.entries(books).map(([query, booksForQuery]) => (
-          <Box key={query} sx={{ mb: 4 }}>
-            <Typography variant="h5" gutterBottom sx={{ mb: 4 }}>
-              {subtitle[queries.indexOf(query)]}
-            </Typography>
-
-            <Box
-              sx={{
-                display: "flex",
-                overflowX: "auto",
-                "&::-webkit-scrollbar": { display: "none" },
-              }}
-              ref={(ref: HTMLDivElement) => {
-                scrollRefs.current[query] = ref;
-              }}
-            >
-              {booksForQuery.map((book) => (
-                <Box
-                  key={book.id}
-                  sx={{
-                    minWidth: 250,
-                    marginRight: 4,
-                  }}
-                  onClick={() => handleOpenModal(book)}
-                >
-                  <Grid item xs={12} sm={3} md={3} key={book.id}>
-                    <Card>
-                      <CardMedia
-                        component="img"
-                        height="300"
-                        width="300"
-                        image={
-                          book.thumbnail
-                            ? book.thumbnail
-                            : "/assets/book_cover.jpg"
-                        }
-                        alt={book.title}
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h6" component="div">
-                          {book.title}
-                        </Typography>
-                        {book.authors && book.authors.length > 0 && (
-                          <Typography variant="body2" color="text.secondary">
-                            by {book.authors.join(", ")}
-                          </Typography>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Box>
-              ))}
-            </Box>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: 8,
-              }}
-            >
-              <Button onClick={() => handleScroll(query, "left")}>
-                <ArrowBackIosIcon />
-              </Button>
-              <Button onClick={() => handleScroll(query, "right")}>
-                <ArrowForwardIosIcon />
-              </Button>
-            </div>
-
-            <Divider sx={{ my: 2 }} />
-          </Box>
-        ))}
-      </InfiniteScroll>
-      <Modal
-        open={openModal}
-        onClose={handleCloseModal}
-        aria-labelledby="book-detail-modal"
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-35%, -50%)",
-            width: 900,
-            bgcolor: "#eaebfe",
-            boxShadow: 24,
-            p: 4,
-            outline: "none",
-            borderRadius: 2,
-          }}
+    return (
+      <div style={{ padding: 20 }}>
+        <Typography
+          variant="h4"
+          component="h1"
+          align="center"
+          gutterBottom
+          sx={{ color: neonBlue[900] }}
         >
-          {selectedBook && (
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={4}>
-                <CardMedia
-                  component="img"
-                  height="400"
-                  image={
-                    selectedBook.thumbnail
-                      ? selectedBook.thumbnail
-                      : "/assets/book_cover.jpg"
-                  }
-                  alt={selectedBook.title}
-                  sx={{ m: 2 }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {selectedBook.title}
-                  </Typography>
-                  {selectedBook.subtitle &&
-                    selectedBook.subtitle.length > 0 && (
-                      <Typography variant="subtitle1" gutterBottom>
-                        {selectedBook.subtitle}
-                      </Typography>
-                    )}
-                  {selectedBook.authors && selectedBook.authors.length > 0 && (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      by {selectedBook.authors?.join(", ")}
-                    </Typography>
-                  )}
-                  {selectedBook.publishedDate &&
-                    selectedBook.publishedDate.length > 0 && (
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        Published: {selectedBook.publishedDate}
-                      </Typography>
-                    )}
-                  {selectedBook.publisher &&
-                    selectedBook.publisher.length > 0 && (
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        Publisher: {selectedBook.publisher}
-                      </Typography>
-                    )}
-                  {selectedBook.isbn &&
-                    selectedBook.isbn.length > 0 &&
-                    selectedBook.isbn.map((isbnObj, index) => (
-                      <Typography
-                        key={index}
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        {Object.entries(isbnObj)
-                          .map(([key, value]) => ` ${value}`)
-                          .join(": ")}
-                      </Typography>
-                    ))}
-                  {selectedBook.description &&
-                    selectedBook.description.length > 0 && (
-                      <>
-                        <Typography variant="body1" gutterBottom>
-                          Description:
-                        </Typography>
-                        <Typography variant="body1" paragraph>
-                          {showFullDescription
-                            ? selectedBook.description
-                            : `${selectedBook.description.slice(0, 150)}...`}
-                          <Link href="#" onClick={toggleDescription}>
-                            {showFullDescription ? "View Less" : "View More"}
-                          </Link>
-                        </Typography>
-                      </>
-                    )}
-                  {selectedBook.categories &&
-                    selectedBook.categories.length > 0 && (
-                      <Typography variant="body2" color="text.secondary">
-                        Categories: {selectedBook.categories.join(", ")}
-                      </Typography>
-                    )}
-                  {selectedBook.pageCount && (
-                    <Typography variant="body2" color="text.secondary">
-                      Pages: {selectedBook.pageCount}
-                    </Typography>
-                  )}
-                  {selectedBook.language &&
-                    selectedBook.language.length > 0 && (
-                      <Typography variant="body2" color="text.secondary">
-                        Language:{" "}
-                        {selectedBook.language === "en"
-                          ? "English"
-                          : selectedBook.language}
-                      </Typography>
-                    )}
+          {title}
+        </Typography>
 
-                  <Box sx={{ "& > :not(style)": { m: 1 } }}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() =>
-                        window.open(selectedBook?.webReaderLink, "_blank")
-                      }
-                    >
-                      Read
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() =>
-                        window.open(selectedBook?.download, "_blank")
-                      }
-                    >
-                      Download
-                    </Button>
+        <InfiniteScroll
+          dataLength={Object.keys(books).length}
+          next={fetchMoreData}
+          hasMore={hasMore}
+          loader={
+            <>
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                flexDirection="column"
+                sx={{ margin: 2 }}
+              >
+                <img
+                  src="assets/recom_book_loader.gif"
+                  alt="Loading..."
+                  height="300"
+                  width="300"
+                />
+                <Typography variant="h6">Loading Books...</Typography>
+              </Box>
+            </>
+          }
+        >
+          <Divider sx={{ my: 2 }} />
+          {Object.entries(books).map(([query, booksForQuery]) => (
+            <Box key={query} sx={{ mb: 4 }}>
+              <Typography
+                variant="h5"
+                gutterBottom
+                sx={{ mb: 4, color: neonBlue[800] }}
+              >
+                {subtitle[queries.indexOf(query)]}
+              </Typography>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  overflowX: "auto",
+                  "&::-webkit-scrollbar": { display: "none" },
+                }}
+                ref={(ref: HTMLDivElement) => {
+                  scrollRefs.current[query] = ref;
+                }}
+              >
+                {booksForQuery.map((book) => (
+                  <Box
+                    key={book.id}
+                    sx={{
+                      minWidth: 250,
+                      marginRight: 4,
+                    }}
+                    onClick={() => handleOpenModal(book)}
+                  >
+                    <Grid item xs={12} sm={3} md={3} key={book.id}>
+                      <Card
+                        sx={{
+                          maxWidth: 400,
+                          minHeight: 450,
+                          margin: "auto",
+                          padding: 2,
+                          boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
+                          transition: "0.3s",
+                          backgroundColor: "#eaebfe",
+                          "&:hover": {
+                            transform: "scale(1.03)",
+                            boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
+                          },
+                        }}
+                      >
+                        <CardMedia
+                          component="img"
+                          height="300"
+                          width="300"
+                          image={
+                            book.thumbnail
+                              ? book.thumbnail
+                              : "/assets/book_cover.jpg"
+                          }
+                          alt={book.title}
+                        />
+                        <CardContent>
+                          <Typography
+                            gutterBottom
+                            variant="h6"
+                            component="div"
+                            sx={{ color: neonBlue[500] }}
+                          >
+                            {book.title}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
                   </Box>
-                </CardContent>
+                ))}
+              </Box>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: 8,
+                }}
+              >
+                <Button onClick={() => handleScroll(query, "left")}>
+                  <ArrowBackIosIcon />
+                </Button>
+                <Button onClick={() => handleScroll(query, "right")}>
+                  <ArrowForwardIosIcon />
+                </Button>
+              </div>
+
+              <Divider sx={{ my: 2 }} />
+            </Box>
+          ))}
+        </InfiniteScroll>
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="book-detail-modal"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-35%, -50%)",
+              width: 900,
+              bgcolor: "#eaebfe",
+              boxShadow: 24,
+              p: 4,
+              outline: "none",
+              borderRadius: 2,
+            }}
+          >
+            {selectedBook && (
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={4}>
+                  <CardMedia
+                    component="img"
+                    height="400"
+                    image={
+                      selectedBook.thumbnail
+                        ? selectedBook.thumbnail
+                        : "/assets/book_cover.jpg"
+                    }
+                    alt={selectedBook.title}
+                    sx={{ m: 2 }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {selectedBook.title}
+                    </Typography>
+                    {selectedBook.subtitle &&
+                      selectedBook.subtitle.length > 0 && (
+                        <Typography variant="subtitle1" gutterBottom>
+                          {selectedBook.subtitle}
+                        </Typography>
+                      )}
+                    {selectedBook.authors &&
+                      selectedBook.authors.length > 0 && (
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          by {selectedBook.authors?.join(", ")}
+                        </Typography>
+                      )}
+                    {selectedBook.publishedDate &&
+                      selectedBook.publishedDate.length > 0 && (
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          Published: {selectedBook.publishedDate}
+                        </Typography>
+                      )}
+                    {selectedBook.publisher &&
+                      selectedBook.publisher.length > 0 && (
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          Publisher: {selectedBook.publisher}
+                        </Typography>
+                      )}
+                    {selectedBook.isbn &&
+                      selectedBook.isbn.length > 0 &&
+                      selectedBook.isbn.map((isbnObj, index) => (
+                        <Typography
+                          key={index}
+                          variant="body2"
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          {Object.entries(isbnObj)
+                            .map(([key, value]) => ` ${value}`)
+                            .join(": ")}
+                        </Typography>
+                      ))}
+                    {selectedBook.description &&
+                      selectedBook.description.length > 0 && (
+                        <>
+                          <Typography variant="body1" gutterBottom>
+                            Description:
+                          </Typography>
+                          <Typography variant="body1" paragraph>
+                            {showFullDescription
+                              ? selectedBook.description
+                              : `${selectedBook.description.slice(0, 150)}...`}
+                            <Link href="#" onClick={toggleDescription}>
+                              {showFullDescription ? "View Less" : "View More"}
+                            </Link>
+                          </Typography>
+                        </>
+                      )}
+                    {selectedBook.categories &&
+                      selectedBook.categories.length > 0 && (
+                        <Typography variant="body2" color="text.secondary">
+                          Categories: {selectedBook.categories.join(", ")}
+                        </Typography>
+                      )}
+                    {selectedBook.pageCount && (
+                      <Typography variant="body2" color="text.secondary">
+                        Pages: {selectedBook.pageCount}
+                      </Typography>
+                    )}
+                    {selectedBook.language &&
+                      selectedBook.language.length > 0 && (
+                        <Typography variant="body2" color="text.secondary">
+                          Language:{" "}
+                          {selectedBook.language === "en"
+                            ? "English"
+                            : selectedBook.language}
+                        </Typography>
+                      )}
+
+                    <Box sx={{ "& > :not(style)": { m: 1 } }}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                          window.open(selectedBook?.webReaderLink, "_blank")
+                        }
+                      >
+                        Read
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                          window.open(selectedBook?.download, "_blank")
+                        }
+                      >
+                        Download
+                      </Button>
+                    </Box>
+                  </CardContent>
+                </Grid>
               </Grid>
-            </Grid>
-          )}
-        </Box>
-      </Modal>
-    </div>
-  );
-} else {
-  return null;
-}
+            )}
+          </Box>
+        </Modal>
+      </div>
+    );
+  } else {
+    return null;
+  }
 }
