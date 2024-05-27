@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, FormEvent } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,8 @@ import Button from "@mui/material/Button";
 import { paths } from "@/paths";
 import Cookies from "js-cookie";
 import { neonBlue } from "@/styles/theme/colors";
+import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
+
 
 export default function Recording(): React.JSX.Element {
   const router = useRouter();
@@ -17,6 +19,49 @@ export default function Recording(): React.JSX.Element {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
   const [isRecording, setIsRecording] = useState(false);
+
+  const { data: userData, isLoading: isLoadingUser } = useRetrieveUserQuery();
+  const [upgradeData, setUpgradeData] = useState<any>(null);
+  const [isLoadingUpgrade, setIsLoadingUpgrade] = useState(true);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  useEffect(() => {
+    const fetchUpgradeDetails = async () => {
+      try {
+        if (!userData?.email) return;
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_HOST}/api/upgrades/${userData?.email}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("auth_token")}`,
+            },
+          }
+        );
+        setUpgradeData(response.data);
+        console.log("upgradeData", response.data);
+      } catch (error) {
+        console.error("Error fetching upgrade details:", error);
+      } finally {
+        setIsLoadingUpgrade(false);
+      }
+    };
+
+    fetchUpgradeDetails();
+  }, [userData?.email]);
+
+  const isAllowed = upgradeData?.access_level === "premium";
+
+  useEffect(() => {
+    if (!isAllowed && !isLoadingUpgrade) {
+      setShouldRedirect(true);
+    }
+  }, [isAllowed, isLoadingUpgrade]);
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      router.push(paths.upgrade);
+    }
+  }, [shouldRedirect]);
 
   const handleCapturePhoto = async () => {
     setIsRecording(true);
@@ -79,7 +124,7 @@ export default function Recording(): React.JSX.Element {
       console.error("Error uploading video:", error);
     }
   };
-
+  if (isAllowed) {
   return (
     <div>
       <Typography
@@ -129,4 +174,7 @@ export default function Recording(): React.JSX.Element {
       </Box>
     </div>
   );
+} else {
+  return <></>;
+}
 }

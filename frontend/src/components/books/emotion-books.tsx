@@ -19,6 +19,9 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
+import { paths } from "@/paths";
 
 interface BookData {
   id: string;
@@ -49,11 +52,55 @@ export default function EmotionBooks({
   queries,
   subtitle,
 }: BookListProps) {
+  const router = useRouter();
   const [books, setBooks] = useState<Record<string, BookData[]>>({});
   const [hasMore, setHasMore] = useState(true);
   const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
+
+  const { data: userData, isLoading: isLoadingUser } = useRetrieveUserQuery();
+  const [upgradeData, setUpgradeData] = useState<any>(null);
+  const [isLoadingUpgrade, setIsLoadingUpgrade] = useState(true);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  useEffect(() => {
+    const fetchUpgradeDetails = async () => {
+      try {
+        if (!userData?.email) return;
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_HOST}/api/upgrades/${userData?.email}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("auth_token")}`,
+            },
+          }
+        );
+        setUpgradeData(response.data);
+        console.log("upgradeData", response.data);
+      } catch (error) {
+        console.error("Error fetching upgrade details:", error);
+      } finally {
+        setIsLoadingUpgrade(false);
+      }
+    };
+
+    fetchUpgradeDetails();
+  }, [userData?.email]);
+
+  const isAllowed = upgradeData?.access_level === "premium" || upgradeData?.access_level === "basic";
+
+  useEffect(() => {
+    if (!isAllowed && !isLoadingUpgrade) {
+      setShouldRedirect(true);
+    }
+  }, [isAllowed, isLoadingUpgrade]);
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      router.push(paths.upgrade);
+    }
+  }, [shouldRedirect]);
 
   useEffect(() => {
     async function fetchBooks() {
@@ -110,6 +157,7 @@ export default function EmotionBooks({
     setShowFullDescription(!showFullDescription);
   };
 
+  if (isAllowed) {
   return (
     <div style={{ padding: 20 }}>
       <Typography variant="h4" component="h1" align="center" gutterBottom>
@@ -361,4 +409,7 @@ export default function EmotionBooks({
       </Modal>
     </div>
   );
+} else {
+  return null;
+}
 }

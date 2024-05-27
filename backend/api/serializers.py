@@ -12,7 +12,7 @@ class ContactSerializer(serializers.ModelSerializer):
 class UpgradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Upgrade
-        fields = ['id', 'email', 'amount', 'payment_id', 'paid']
-        read_only_fields = ['payment_id', 'start_date', 'end_date', 'paid']  
+        fields = ['id', 'email', 'amount', 'payment_id', 'paid', 'access_level']
+        read_only_fields = ['payment_id', 'start_date', 'end_date', 'paid', 'access_level']  
 class VideoFileSerializer(serializers.Serializer):
     video_file = serializers.FileField()

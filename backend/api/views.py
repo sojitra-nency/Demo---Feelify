@@ -38,14 +38,17 @@ class UpgradeCreateView(generics.CreateAPIView):
         payment = razorpay_client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': '1'})
         
         serializer.save(payment_id=payment['id'])
+    
+class UpgradeDetailsView(generics.RetrieveAPIView):
+    queryset = Upgrade.objects.all()
+    serializer_class = UpgradeSerializer
 
-    def get(self, request, id):
+    def get_object(self):
+        user_email = self.kwargs['user_email'] 
         try:
-            upgrade = Upgrade.objects.get(id=id)
-            return Response({'paid': upgrade.paid, 'amount': upgrade.amount})
+            return Upgrade.objects.get(email=user_email) 
         except Upgrade.DoesNotExist:
-            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-
+            return Response({'error': 'Upgrade not found'}, status=status.HTTP_404_NOT_FOUND)
 class SuccessView(APIView):
     def post(self, request):
         razorpay_order_id = request.data.get('razorpay_order_id')

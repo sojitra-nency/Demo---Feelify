@@ -120,7 +120,7 @@ export default function PremiumUpgrade() {
             <CardHeader
               title={
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   component="h2"
                   sx={{
                     fontWeight: "bold",
@@ -178,9 +178,9 @@ export default function PremiumUpgrade() {
               title={
                 <Button>
                     <Typography
-                      variant="h5"
+                      variant="h6"
                       component="h2"
-                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`,fontSize:"2rem", display:"flex", justifyContent:"center"}}
+                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`, display:"flex", justifyContent:"center"}}
                     >
                       BUY NOW
                     </Typography>
@@ -204,7 +204,7 @@ export default function PremiumUpgrade() {
             <CardHeader
               title={
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   component="h2"
                   sx={{
                     fontWeight: "bold",
@@ -257,11 +257,11 @@ export default function PremiumUpgrade() {
               title={
                 <Button>
                     <Typography
-                      variant="h5"
+                      variant="h6"
                       component="h2"
-                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`,fontSize:"2rem", display:"flex", justifyContent:"center"}}
+                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`, display:"flex", justifyContent:"center"}}
                     >
-                      <CurrencyRupee sx={{ color: "white", fontSize:"2rem" }} /> 0
+                      <CurrencyRupee sx={{ color: "white", fontSize:"1.5rem" }} /> 0
                     </Typography>
                   </Button>
               }
@@ -283,7 +283,7 @@ export default function PremiumUpgrade() {
             <CardHeader
               title={
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   component="h2"
                   sx={{
                     fontWeight: "bold",
@@ -335,7 +335,7 @@ export default function PremiumUpgrade() {
             <CardHeader
               title={
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   component="h2"
                   sx={{
                     fontWeight: "bold",
@@ -344,11 +344,11 @@ export default function PremiumUpgrade() {
                 >
                   <Button onClick={() => handleSubscribe(200)}>
                     <Typography
-                      variant="h5"
+                      variant="h6"
                       component="h2"
-                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`,fontSize:"2rem", display:"flex", justifyContent:"center"}}
+                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`, display:"flex", justifyContent:"center"}}
                     >
-                     <CurrencyRupee sx={{ color: "white", fontSize:"2rem" }} />200
+                     <CurrencyRupee sx={{ color: "white", fontSize:"1.5rem" }} />200
                     </Typography>
                   </Button>
                 </Typography>
@@ -371,7 +371,7 @@ export default function PremiumUpgrade() {
             <CardHeader
               title={
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   component="h2"
                   sx={{
                     fontWeight: "bold",
@@ -419,7 +419,7 @@ export default function PremiumUpgrade() {
             <CardHeader
               title={
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   component="h2"
                   sx={{
                     fontWeight: "bold",
@@ -428,11 +428,11 @@ export default function PremiumUpgrade() {
                 >
                   <Button onClick={() => handleSubscribe(400)}>
                     <Typography
-                      variant="h5"
+                      variant="h6"
                       component="h2"
-                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`,fontSize:"2rem", display:"flex", justifyContent:"center"}}
+                      sx={{ color: "white", fontWeight: "bold", textShadow: `1px 1px 2px ${neonBlue[900]}`, display:"flex", justifyContent:"center"}}
                     >
-                      <CurrencyRupee sx={{ color: "white", fontSize:"2rem" }} />400
+                      <CurrencyRupee sx={{ color: "white", fontSize:"1.5rem" }} />400
                     </Typography>
                   </Button>
                 </Typography>
