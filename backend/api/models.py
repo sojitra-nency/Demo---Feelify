@@ -53,3 +53,13 @@ class Upgrade(models.Model):
             elif self.paid and self.amount >= 200:
                 self.access_level = 'basic'
         super().save(*args, **kwargs)
+
+
+class EmotionRecord(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    emotion = models.CharField(max_length=20)
+    percentage = models.FloatField()
+    recorded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user}"

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import FeedbackViewSet, ContactView, UpgradeCreateView, SuccessView, BookSearchAPIView, VideoSearchAPIView, RecordingView, EmotionAnalysisView, UpgradeDetailsView
+from .views import *
 
 urlpatterns = [
     path('feedback/', FeedbackViewSet.as_view({'post': 'create', 'get': 'list' }), name='feedback'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('video-search/', VideoSearchAPIView.as_view(), name='video_search_api'),
     path('recording/', RecordingView.as_view(), name='recording'),
     path('emotion-analysis/', EmotionAnalysisView.as_view(), name='emotion-analysis'),
+    path('records/', UserEmotionRecordsView.as_view(), name='user-emotion-records'),
 ]

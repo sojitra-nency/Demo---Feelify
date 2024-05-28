@@ -15,6 +15,7 @@ from nltk.stem.porter import PorterStemmer
 import re
 from nltk.corpus import stopwords
 import nltk
+from .models import EmotionRecord
 
 nltk.download('stopwords')
 
@@ -227,8 +228,24 @@ class EmotionAnalysisView(APIView):
 
         total_emotions = sum(emotion_count.values())
         emotion_percentages = {emotion: (count / total_emotions) * 100 for emotion, count in emotion_count.items()}
+        
+        user = request.user
+        for emotion, percentage in emotion_percentages.items():
+            EmotionRecord.objects.create(user=user, emotion=emotion, percentage=percentage)
 
         context = {
             'emotion_percentages': emotion_percentages,
         }
         return Response(context)
+class UserEmotionRecordsView(APIView):
+    def get(self, request):
+        user = request.user
+        records = EmotionRecord.objects.filter(user=user).order_by('-recorded_at')
+        data = []
+        for record in records:
+            data.append({
+                'emotion': record.emotion,
+                'percentage': record.percentage,
+                'recorded_at': record.recorded_at
+            })
+        return Response(data)
