@@ -227,7 +227,7 @@ class EmotionAnalysisView(APIView):
                 emotion_count += Counter({emotions[np.argmax(predictions[0])]: 1})
 
         total_emotions = sum(emotion_count.values())
-        emotion_percentages = {emotion: (count / total_emotions) * 100 for emotion, count in emotion_count.items()}
+        emotion_percentages = {emotion: round((count / total_emotions) * 100, 2) for emotion, count in emotion_count.items()}
         
         user = request.user
         for emotion, percentage in emotion_percentages.items():

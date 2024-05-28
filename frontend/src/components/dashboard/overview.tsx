@@ -49,7 +49,7 @@ import {} from "recharts";
 
 interface Feedback {
   id: number;
-  content: string;
+  comment: string;
   sentiment: string;
 }
 
@@ -59,7 +59,7 @@ interface EmotionRecord {
   recorded_at: string;
 }
 
-const COLORS = ["var(--mui-palette-primary-main)", "#FF8042"];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const colorMapping: { [key: string]: string } = {
   happy: neonBlue[600],
@@ -132,11 +132,16 @@ export default function Overview(): React.JSX.Element {
           const existingRecord = acc.find((r) => r.emotion === record.emotion);
           if (existingRecord) {
             existingRecord.percentage += record.percentage;
+            existingRecord.count += 1;
           } else {
-            acc.push({ ...record });
+            acc.push({ ...record, count: 1 });
           }
           return acc;
-        }, [] as EmotionRecord[]);
+        }, [] as Array<EmotionRecord & { count: number }>);
+
+        aggregatedRecords.forEach((record) => {
+          record.percentage /= record.count;
+        });
 
         setRecords(aggregatedRecords);
       } catch (error) {
@@ -151,179 +156,6 @@ export default function Overview(): React.JSX.Element {
 
   return (
     <>
-      {/* Emotion Detection */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Typography
-          variant="h2"
-          component="h1"
-          gutterBottom
-          sx={{ color: neonBlue[700], fontStyle: "bold" }}
-        >
-          Welcome to Feelify
-        </Typography>
-        <Typography
-          variant="h5"
-          component="h2"
-          gutterBottom
-          sx={{ mb: 6, color: neonBlue[900] }}
-        >
-          Your emotion-based book and video recommendation system
-        </Typography>
-        <Typography
-          variant="h4"
-          component="h1"
-          gutterBottom
-          sx={{ color: neonBlue[700], fontStyle: "bold" }}
-        >
-          Your Emotion Dashboard
-        </Typography>
-        <Box display="flex" justifyContent="space-between">
-          <Box sx={{ margin: "20px" }}>
-            {loading ? (
-              <CircularProgress style={{ margin: "20px auto" }} />
-            ) : (
-              <Paper
-                elevation={3}
-                style={{
-                  padding: "16px",
-                  borderRadius: "8px",
-                  boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
-                }}
-              >
-                <BarChart
-                  width={300}
-                  height={300}
-                  data={records}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="emotion"
-                    tick={{ fill: "#333" }}
-                    label={{
-                      value: "Emotions",
-                      position: "insideBottomRight",
-                      offset: -5,
-                    }}
-                  />
-                  <YAxis
-                    label={{
-                      value: "Percentage (%)",
-                      angle: -90,
-                      position: "insideLeft",
-                    }}
-                  />
-                  <Tooltip cursor={{ fill: "rgba(0, 0, 0, 0.1)" }} />
-                  <Bar dataKey="percentage">
-                    {records.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={colorMapping[entry.emotion]}
-                      />
-                    ))}
-                    <LabelList
-                      dataKey="percentage"
-                      position="top"
-                      formatter={(value: number| string) => {
-                        if (typeof value === 'number') {
-                          return value.toFixed(2).toString();
-                        } else {
-                          return Number(value).toFixed(2);
-                        }
-                        // value.toFixed(2).toString()
-                      }
-                    }
-                    />
-                  </Bar>
-                </BarChart>
-              </Paper>
-            )}
-          </Box>
-
-          <Box>
-            {loading ? (
-              <CircularProgress style={{ margin: "20px auto" }} />
-            ) : (
-              <Paper
-                elevation={3}
-                style={{
-                  padding: "16px",
-                  borderRadius: "8px",
-                  boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <LineChart
-                  width={600}
-                  height={300}
-                  data={records}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="emotion"
-                    tick={{ fill: "#333" }}
-                    label={{
-                      value: "Emotions",
-                      position: "insideBottomRight",
-                      offset: -10,
-                    }}
-                  />
-                  <YAxis
-                    label={{
-                      value: "Percentage (%)",
-                      angle: -90,
-                      position: "insideLeft",
-                    }}
-                  />
-                  <Tooltip cursor={{ fill: "rgba(0, 0, 0, 0.1)" }} />
-                  <Line
-                    type="monotone"
-                    dataKey="percentage"
-                    stroke="#ae83eb"
-                    activeDot={{ r: 8 }}
-                  />
-                </LineChart>
-              </Paper>
-            )}
-          </Box>
-        </Box>
-      </Box>
-
-      {/* feedback */}
-      <div>
-        <h1>Feedback Sentiment Dashboard</h1>
-        <PieChart width={400} height={400}>
-          <Pie
-            data={sentimentData}
-            cx={200}
-            cy={200}
-            labelLine={false}
-            label={({ name, percent = 10 }) =>
-              `${name}: ${(percent * 100).toFixed(0)}%`
-            }
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {sentimentData.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
-      </div>
-
       {/* overview */}
 
       <Box
@@ -512,177 +344,386 @@ export default function Overview(): React.JSX.Element {
                 <Button
                   variant="contained"
                   sx={{ mt: 2 }}
-                  onClick={() => router.push(paths.home)}
+                  onClick={() => router.push(paths.upgrade)}
                 >
                   Upgrade Now
                 </Button>
               </CardContent>
             </Card>
           </Grid>
-
-          <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
-            <Card
-              sx={{
-                maxWidth: 400,
-                minHeight: 300,
-                margin: "auto",
-                padding: 2,
-                boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
-                transition: "0.3s",
-                backgroundColor: "#eaebfe",
-                "&:hover": {
-                  transform: "scale(1.03)",
-                  boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
-                },
-              }}
-            >
-              <CardContent>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  gutterBottom
-                  sx={{
-                    display: "flex",
-                    fontWeight: "bold",
-                    color: neonBlue[700],
-                    fontSize: "1.35rem",
-                  }}
-                >
-                  <RateReviewIcon sx={{ mr: 1, mb: 1, fontSize: "2rem" }} />{" "}
-                  Rate & Review
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontWeight: 600,
-                    lineHeight: "1.6",
-                    mb: 2,
-                    color: neonBlue[900],
-                  }}
-                >
-                  Loved a book or video? Let the world know! Your ratings and
-                  reviews help others find their next emotional journey.
-                </Typography>
-                <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-                  <Button
-                    variant="outlined"
-                    onClick={() => router.push(paths.dashboard.overview)}
-                  >
-                    <FeedbackIcon sx={{ mr: 1 }} /> Feedback
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
-            <Card
-              sx={{
-                maxWidth: 400,
-                minHeight: 300,
-                margin: "auto",
-                padding: 2,
-                boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
-                transition: "0.3s",
-                backgroundColor: "#eaebfe",
-                "&:hover": {
-                  transform: "scale(1.03)",
-                  boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
-                },
-              }}
-            >
-              <CardContent>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  gutterBottom
-                  sx={{
-                    display: "flex",
-                    fontWeight: "bold",
-                    color: neonBlue[700],
-                    fontSize: "1.35rem",
-                  }}
-                >
-                  <InfoIcon sx={{ mr: 1, mb: 1, fontSize: "2rem" }} /> About Us
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontWeight: 600,
-                    lineHeight: "1.6",
-                    mb: 2,
-                    color: neonBlue[900],
-                  }}
-                >
-                  Learn more about our mission and the team behind Feelify.
-                </Typography>
-                <Button
-                  variant="contained"
-                  sx={{ mt: 3 }}
-                  onClick={() => router.push(paths.dashboard.about)}
-                >
-                  Our Story
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3} sx={{ mt: 5, ml: 2 }}>
-            <Card
-              sx={{
-                maxWidth: 400,
-                minHeight: 300,
-                margin: "auto",
-                padding: 2,
-                boxShadow: "0 4px 20px 0 rgba(0,0,0,0.12)",
-                transition: "0.3s",
-                backgroundColor: "#eaebfe",
-                "&:hover": {
-                  transform: "scale(1.03)",
-                  boxShadow: "0 6px 30px 0 rgba(0,0,0,0.24)",
-                },
-              }}
-            >
-              <CardContent>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  gutterBottom
-                  sx={{
-                    display: "flex",
-                    fontWeight: "bold",
-                    color: neonBlue[700],
-                    fontSize: "1.35rem",
-                  }}
-                >
-                  <FeedbackIcon sx={{ mr: 1, mb: 1, fontSize: "2rem" }} />{" "}
-                  Contact Us
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    lineHeight: "1.6",
-                    mb: 2,
-                    color: neonBlue[900],
-                    fontWeight: 600,
-                  }}
-                >
-                  We're here to help! Contact us for support, partnership
-                  inquiries, or just to chat.
-                </Typography>
-                <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-                  <Button
-                    variant="outlined"
-                    onClick={() => router.push(paths.contact)}
-                  >
-                    <ContactSupportIcon sx={{ mr: 1 }} /> Contact
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
         </Grid>
       </Box>
+
+      {/* Emotion Detection */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "50px",
+          marginTop: "100px",
+        }}
+      >
+        <Typography
+          variant="h3"
+          component="h1"
+          gutterBottom
+          sx={{ color: neonBlue[700], fontStyle: "bold" }}
+        >
+          Your Emotion Dashboard
+        </Typography>
+
+        <Box sx={{ margin: "20px" }}>
+          {loading ? (
+            <CircularProgress style={{ margin: "20px auto" }} />
+          ) : (
+            <Paper
+              elevation={3}
+              style={{
+                padding: "16px",
+                borderRadius: "8px",
+                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
+              }}
+            >
+              <BarChart
+                width={600}
+                height={300}
+                data={records}
+                margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="emotion"
+                  tick={{ fill: "#333" }}
+                  label={{
+                    value: "Emotions",
+                    position: "insideBottomRight",
+                    offset: -10,
+                  }}
+                />
+                <YAxis
+                  label={{
+                    value: "Percentage (%)",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
+                />
+                <Tooltip cursor={{ fill: "rgba(0, 0, 0, 0.1)" }} />
+                <Bar dataKey="percentage">
+                  {records.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={colorMapping[entry.emotion]}
+                    />
+                  ))}
+                  <LabelList dataKey="percentage" position="top" />
+                </Bar>
+              </BarChart>
+            </Paper>
+          )}
+        </Box>
+
+        <Box sx={{ margin: "20px" }}>
+          {loading ? (
+            <CircularProgress style={{ margin: "20px auto" }} />
+          ) : (
+            <Paper
+              elevation={3}
+              style={{
+                padding: "16px",
+                borderRadius: "8px",
+                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
+              }}
+            >
+              <LineChart
+                width={600}
+                height={300}
+                data={records}
+                margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="emotion"
+                  tick={{ fill: "#333" }}
+                  label={{
+                    value: "Emotions",
+                    position: "insideBottomRight",
+                    offset: -10,
+                  }}
+                />
+                <YAxis
+                  label={{
+                    value: "Percentage (%)",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
+                />
+                <Tooltip cursor={{ fill: "rgba(0, 0, 0, 0.1)" }} />
+                <Line
+                  type="monotone"
+                  dataKey="percentage"
+                  stroke="#ae83eb"
+                  activeDot={{ r: 8 }}
+                />
+              </LineChart>
+            </Paper>
+          )}
+        </Box>
+      </Box>
+
+      {/* feedback */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "50px",
+        }}
+      >
+        <Typography
+          variant="h3"
+          component="h1"
+          gutterBottom
+          sx={{ color: neonBlue[700], fontStyle: "bold" }}
+        >
+          Your Feedback is Valuable :)
+        </Typography>
+        <Box
+          sx={{
+            margin: "20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: { xs: "column", md: "row" }, 
+            gap: 4, 
+          }}
+        >
+          <PieChart width={400} height={400}>
+            <Pie
+              data={sentimentData}
+              cx="50%" 
+              cy="50%" 
+              innerRadius={60}
+              outerRadius={120}
+              paddingAngle={5} 
+              dataKey="value"
+            >
+              {sentimentData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                  stroke="white" 
+                  strokeWidth={2}
+                />
+              ))}
+            </Pie>
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#f0f0f0",
+                border: "1px solid #ddd",
+              }} 
+            />
+            <Legend
+              layout="vertical"
+              align="right"
+              verticalAlign="middle"
+              iconSize={12} 
+            />
+          </PieChart>
+
+          <Box
+            sx={{
+              width: "100%",
+              maxWidth: 400, 
+            }}
+          >
+            <Typography
+              variant="h5" 
+              gutterBottom
+              sx={{ color: "#333", fontWeight: 600 }} 
+            >
+              Some Reviews
+            </Typography>
+            <List>
+              {feedbackData.map((feedback) => (
+                <ListItem key={feedback.id}>
+                  <ListItemText
+                    primary={feedback.comment}
+                    secondary={feedback.sentiment}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Box>
+      </Box>
+      
+      <Container maxWidth="md">
+      <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
+          <Typography
+            variant="h3"
+            component="h1"
+            gutterBottom
+            sx={{ color: neonBlue[700], fontStyle: "bold", p: 4 }}
+          >
+            How Feelify Works?
+          </Typography>
+          <Grid container spacing={3} justifyContent="center">
+            <Grid item xs={12} md={4}>
+              <img
+                style={{ width: 380, height: 320, marginRight: "20px", marginTop:"10px" }}
+                src="/assets/emo_book_video.jpg"
+                alt="Step 1"
+              />
+            </Grid>
+            <Grid item xs={12} md={8} container spacing={3} >
+            <Grid
+              item
+              xs={12}
+              style={{ display: "flex", alignItems: "center", }}
+            >
+              <img
+                style={{ width: 100, height: 100, marginRight: "20px", marginLeft: "100px" }}
+                src="/assets/emotion_detection.avif"
+                alt="Step 1"
+              />
+              <div>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  align="justify"
+                  sx={{
+                    color: neonBlue[900],
+                    lineHeight: "1",
+                    fontWeight: "bold",
+                    fontSize: "1.2em",
+                    margin: "10px 0",
+                  }}
+                >
+                  Emotion Detection
+                </Typography>
+                <Typography
+                  variant="body2"
+                  align="justify"
+                  paragraph
+                  sx={{
+                    color: neonBlue[700],
+                    lineHeight: "1.2",
+                    fontSize: "1em",
+                    margin: "10px 0",
+                    textAlign: "justify",
+                  }}
+                >
+                  Capture your live photo <br />
+                  to detect your emotions.
+                </Typography>
+              </div>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <img
+                style={{ width: 100, height: 100, marginRight: "20px", marginLeft: "100px" }}
+                src="/assets/pick_emotion.png"
+                alt="Step 1"
+              />
+              <div>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  align="justify"
+                  sx={{
+                    color: neonBlue[900],
+                    lineHeight: "1",
+                    fontWeight: "bold",
+                    fontSize: "1.2em",
+                    margin: "10px 0",
+                  }}
+                >
+                  Pick your Mood
+                </Typography>
+                <Typography
+                  variant="body2"
+                  align="justify"
+                  paragraph
+                  sx={{
+                    color: neonBlue[700],
+                    lineHeight: "1.2",
+                    fontSize: "1em",
+                    margin: "10px 0",
+                    textAlign: "justify",
+                  }}
+                >
+                  Choose your mood and <br />
+                  get personalized book and <br />
+                  video recommendations.
+                </Typography>
+              </div>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <img
+                style={{ width: 100, height: 100, marginRight: "20px", marginLeft: "100px" }}
+                src="/assets/recommendation.webp"
+                alt="Step 1"
+              />
+              <div>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  align="justify"
+                  sx={{
+                    color: neonBlue[900],
+                    lineHeight: "1",
+                    fontWeight: "bold",
+                    fontSize: "1.2em",
+                    margin: "10px 0",
+                  }}
+                >
+                  Recommendations
+                </Typography>
+                <Typography
+                  variant="body2"
+                  align="justify"
+                  paragraph
+                  sx={{
+                    color: neonBlue[700],
+                    lineHeight: "1.2",
+                    fontSize: "1em",
+                    margin: "10px 0",
+                    textAlign: "justify",
+                  }}
+                >
+                  After analyzing your emotions,
+                  <br />
+                  we recommend books and videos
+                  <br />
+                  that match your mood.
+                </Typography>
+              </div>
+            </Grid>
+            </Grid>
+          </Grid>
+
+          <Box sx={{ textAlign: "center", marginTop: "50px" }}>
+            <Button
+              variant="contained"
+              size="large"
+              sx={{ borderRadius: 2 }}
+              onClick={() => router.push(paths.dashboard.overview)}
+            >
+              Start Your Emotional Journey
+            </Button>
+          </Box>
+        </Box>
+        </Container>
     </>
   );
 }
