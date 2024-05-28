@@ -20,10 +20,81 @@ import InfoIcon from "@mui/icons-material/Info";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { neonBlue } from "@/styles/theme/colors";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import Cookies from "js-cookie";
+
+interface Feedback {
+  id: number;
+  content: string;
+  sentiment: string;
+}
+
+const COLORS = ['#0088FE', '#FF8042'];
 
 export default function Overview(): React.JSX.Element {
   const router = useRouter();
+  const [feedbackData, setFeedbackData] = useState<Feedback[]>([]);
+  const [sentimentData, setSentimentData] = useState([
+    { name: 'Positive', value: 0 },
+    { name: 'Negative', value: 0 },
+  ]);
+
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        const token = Cookies.get("auth_token");
+        const response = await axios.get<Feedback[]>(`${process.env.NEXT_PUBLIC_HOST}/api/feedback/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        );
+        setFeedbackData(response.data);
+        calculateSentiment(response.data);
+      } catch (error) {
+        console.error('Error fetching feedback data', error);
+      }
+    };
+
+    fetchFeedback();
+  }, []);
+
+  const calculateSentiment = (data: Feedback[]) => {
+    const positiveCount = data.filter(fb => fb.sentiment === 'Positive').length;
+    const negativeCount = data.filter(fb => fb.sentiment === 'Negative').length;
+    setSentimentData([
+      { name: 'Positive', value: positiveCount },
+      { name: 'Negative', value: negativeCount },
+    ]);
+  };
+
+
   return (
+    <>
+    <div>
+      <h1>Feedback Sentiment Dashboard</h1>
+      <PieChart width={400} height={400}>
+        <Pie
+          data={sentimentData}
+          cx={200}
+          cy={200}
+          labelLine={false}
+          label={({ name, percent = 10 }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+          outerRadius={80}
+          fill="#8884d8"
+          dataKey="value"
+        >
+          {sentimentData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip />
+        <Legend />
+      </PieChart>
+    </div>
     <Box
       sx={{
         display: "flex",
@@ -380,5 +451,6 @@ export default function Overview(): React.JSX.Element {
         </Grid>
       </Grid>
     </Box>
+    </>
   );
 }

@@ -43,5 +43,8 @@ env
 .next
 
 pretrained2.ipynb
-
 p2.h5
+
+main.py
+trained_model.sav
+vectorizer.pickle

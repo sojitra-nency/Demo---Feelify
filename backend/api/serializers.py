@@ -3,8 +3,8 @@ from .models import Feedback, Contact, Upgrade
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
-        fields = ['id', 'user', 'emotion', 'rating', 'comment', 'timestamp']
-        read_only_fields = ['user', 'timestamp']
+        fields = ['id', 'user', 'emotion', 'rating', 'comment', 'sentiment', 'timestamp']
+        read_only_fields = ['user', 'sentiment', 'timestamp']
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact

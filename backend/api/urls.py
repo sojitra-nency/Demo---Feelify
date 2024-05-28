@@ -2,7 +2,7 @@ from django.urls import path
 from .views import FeedbackViewSet, ContactView, UpgradeCreateView, SuccessView, BookSearchAPIView, VideoSearchAPIView, RecordingView, EmotionAnalysisView, UpgradeDetailsView
 
 urlpatterns = [
-    path('feedback/', FeedbackViewSet.as_view({'post': 'create'}), name='book_search_api'),
+    path('feedback/', FeedbackViewSet.as_view({'post': 'create', 'get': 'list' }), name='feedback'),
     path('contact/', ContactView.as_view(), name='contact_api'),
     path('upgrades/', UpgradeCreateView.as_view(), name="upgrade-create"),
     path('upgrades/<str:user_email>/', UpgradeDetailsView.as_view(), name="upgrade-details"),

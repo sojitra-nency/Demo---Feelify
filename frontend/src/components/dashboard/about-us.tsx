@@ -199,7 +199,7 @@ export function AboutUs(): React.JSX.Element {
           <Grid container spacing={3} justifyContent="center">
             <Grid item xs={12} md={4}>
               <img
-                style={{ width: 300, height: 300, marginRight: "20px" }}
+                style={{ width: 380, height: 320, marginRight: "20px", marginTop:"10px" }}
                 src="/assets/emo_book_video.jpg"
                 alt="Step 1"
               />
@@ -211,7 +211,7 @@ export function AboutUs(): React.JSX.Element {
               style={{ display: "flex", alignItems: "center", }}
             >
               <img
-                style={{ width: 100, height: 100, marginRight: "20px" }}
+                style={{ width: 100, height: 100, marginRight: "20px", marginLeft: "100px" }}
                 src="/assets/emotion_detection.avif"
                 alt="Step 1"
               />
@@ -253,7 +253,7 @@ export function AboutUs(): React.JSX.Element {
               style={{ display: "flex", alignItems: "center" }}
             >
               <img
-                style={{ width: 100, height: 100, marginRight: "20px" }}
+                style={{ width: 100, height: 100, marginRight: "20px", marginLeft: "100px" }}
                 src="/assets/pick_emotion.png"
                 alt="Step 1"
               />
@@ -296,7 +296,7 @@ export function AboutUs(): React.JSX.Element {
               style={{ display: "flex", alignItems: "center" }}
             >
               <img
-                style={{ width: 100, height: 100, marginRight: "20px" }}
+                style={{ width: 100, height: 100, marginRight: "20px", marginLeft: "100px" }}
                 src="/assets/recommendation.webp"
                 alt="Step 1"
               />

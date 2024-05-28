@@ -10,14 +10,42 @@ import cv2
 import numpy as np
 from keras.models import load_model # type: ignore
 from collections import Counter
+import pickle
+from nltk.stem.porter import PorterStemmer
+import re
+from nltk.corpus import stopwords
+import nltk
 
-class FeedbackViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+nltk.download('stopwords')
+
+with open("api/trained_model.sav", "rb") as f:
+    model = pickle.load(f)
+
+with open("api/vectorizer.pickle", "rb") as f:
+    vectorizer = pickle.load(f)
+
+class FeedbackViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        feedback_content = serializer.validated_data['comment']
+
+        stemmed_content = self.stem_content(feedback_content)
+        transformed_content = vectorizer.transform([stemmed_content])
+        prediction = model.predict(transformed_content)[0]
+        sentiment = 'Positive' if prediction == 1 else 'Negative'
+
+        serializer.save(user=self.request.user, sentiment=sentiment)
+
+    def stem_content(self, content):
+        port_stem = PorterStemmer()
+        stemmed_content = re.sub('[^a-zA-Z]', ' ', content)
+        stemmed_content = stemmed_content.lower().split()
+        stemmed_content = [port_stem.stem(word) for word in stemmed_content if word not in stopwords.words('english')]
+        return ' '.join(stemmed_content)
+
 class ContactView(generics.CreateAPIView):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer

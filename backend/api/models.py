@@ -12,6 +12,7 @@ class Feedback(models.Model):
     ])  
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField()
+    sentiment = models.CharField(max_length=10, default='neutral')
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

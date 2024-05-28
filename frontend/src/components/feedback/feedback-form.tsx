@@ -15,7 +15,6 @@ import {
 import { toast } from "react-toastify";
 import axios from "axios";
 import Card from "@mui/material/Card";
-import Paper from "@mui/material/Paper";
 import Cookies from "js-cookie";
 import { neonBlue } from "@/styles/theme/colors";
 
