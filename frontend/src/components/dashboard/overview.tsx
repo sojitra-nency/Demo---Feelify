@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -11,6 +12,7 @@ import {
   Grid,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemText,
   Paper,
   Typography,
@@ -43,9 +45,12 @@ import {
   LabelList,
   Line,
   LineChart,
+  ResponsiveContainer,
+  TooltipProps,
 } from "recharts";
 import Cookies from "js-cookie";
 import {} from "recharts";
+import { SentimentDissatisfied, SentimentSatisfied } from "@mui/icons-material";
 
 interface Feedback {
   id: number;
@@ -59,15 +64,81 @@ interface EmotionRecord {
   recorded_at: string;
 }
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const getSentimentIcon = (sentiment: string) => {
+  switch (sentiment) {
+    case 'Positive':
+      return <SentimentSatisfied style={{ color: 'green' , fontSize:"2rem"}} />;
+    case 'Negative':
+      return <SentimentDissatisfied style={{ color: 'red',  fontSize:"2rem" }} />;
+    default:
+      return null;
+  }
+};
 
 const colorMapping: { [key: string]: string } = {
   happy: neonBlue[600],
-  // happy: "#4f2b78",
   sad: neonBlue[500],
   fear: neonBlue[400],
   surprise: neonBlue[300],
   neutral: neonBlue[200],
+};
+
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#ae83eb"];
+
+const RADIAN = Math.PI / 180;
+
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+}: {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  percent: number;
+  index: number;
+}) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor="middle"
+      dominantBaseline="middle"
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
+const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
+  if (active && payload && payload.length) {
+    const { emotion, percentage } = payload[0].payload as Record<
+      string,
+      number
+    >;
+    return (
+      <div
+        style={{
+          backgroundColor: "white",
+          padding: "5px",
+          border: "1px solid #ccc",
+        }}
+      >
+        <p>{`${emotion} : ${percentage}%`}</p>
+      </div>
+    );
+  }
+  return null;
 };
 
 export default function Overview(): React.JSX.Element {
@@ -79,6 +150,40 @@ export default function Overview(): React.JSX.Element {
   ]);
   const [records, setRecords] = useState<EmotionRecord[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const CustomLegend = ({ payload }: { payload: any[] }) => {
+    console.log(payload);
+    return (
+      <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
+        {payload.map((entry, index) => (
+          <div
+            key={`item-${index}`}
+            style={{
+              color: entry.color,
+              margin: "10px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <span
+              style={{
+                display: "inline-block",
+                width: "10px",
+                height: "10px",
+                backgroundColor: entry.color,
+                marginRight: "5px",
+              }}
+            ></span>
+            {entry.value === 0
+              ? "Neutral"
+              : entry.value === 1
+              ? "Happy"
+              : entry.value}
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   useEffect(() => {
     const fetchFeedback = async () => {
@@ -353,7 +458,11 @@ export default function Overview(): React.JSX.Element {
           </Grid>
         </Grid>
       </Box>
-
+      <Divider
+        orientation="horizontal"
+        flexItem
+        sx={{ margin: "100px", borderWidth: 2 }}
+      />
       {/* Emotion Detection */}
       <Box
         sx={{
@@ -371,9 +480,8 @@ export default function Overview(): React.JSX.Element {
           gutterBottom
           sx={{ color: neonBlue[700], fontStyle: "bold" }}
         >
-          Your Emotion Dashboard
+          Your Emotional Journey So Far
         </Typography>
-
         <Box sx={{ margin: "20px" }}>
           {loading ? (
             <CircularProgress style={{ margin: "20px auto" }} />
@@ -386,8 +494,16 @@ export default function Overview(): React.JSX.Element {
                 boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
               }}
             >
+              <Typography
+                variant="h6"
+                component="div"
+                gutterBottom
+                align="center"
+              >
+                Emotion Distribution
+              </Typography>
               <BarChart
-                width={600}
+                width={870}
                 height={300}
                 data={records}
                 margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
@@ -423,55 +539,121 @@ export default function Overview(): React.JSX.Element {
             </Paper>
           )}
         </Box>
-
-        <Box sx={{ margin: "20px" }}>
-          {loading ? (
-            <CircularProgress style={{ margin: "20px auto" }} />
-          ) : (
-            <Paper
-              elevation={3}
-              style={{
-                padding: "16px",
-                borderRadius: "8px",
-                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
-              }}
-            >
-              <LineChart
-                width={600}
-                height={300}
-                data={records}
-                margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <Box sx={{ margin: "20px" }}>
+            {loading ? (
+              <CircularProgress style={{ margin: "20px auto" }} />
+            ) : (
+              <Paper
+                elevation={3}
+                style={{
+                  padding: "16px",
+                  borderRadius: "8px",
+                  boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
+                }}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="emotion"
-                  tick={{ fill: "#333" }}
-                  label={{
-                    value: "Emotions",
-                    position: "insideBottomRight",
-                    offset: -10,
-                  }}
-                />
-                <YAxis
-                  label={{
-                    value: "Percentage (%)",
-                    angle: -90,
-                    position: "insideLeft",
-                  }}
-                />
-                <Tooltip cursor={{ fill: "rgba(0, 0, 0, 0.1)" }} />
-                <Line
-                  type="monotone"
-                  dataKey="percentage"
-                  stroke="#ae83eb"
-                  activeDot={{ r: 8 }}
-                />
-              </LineChart>
-            </Paper>
-          )}
+                <Typography
+                  variant="h6"
+                  component="div"
+                  gutterBottom
+                  align="center"
+                >
+                  Emotion Distribution
+                </Typography>
+                <LineChart
+                  width={400}
+                  height={300}
+                  data={records}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="emotion"
+                    tick={{ fill: "#333" }}
+                    label={{
+                      value: "Emotions",
+                      position: "insideBottomRight",
+                      offset: -10,
+                    }}
+                  />
+                  <YAxis
+                    label={{
+                      value: "Percentage (%)",
+                      angle: -90,
+                      position: "insideLeft",
+                    }}
+                  />
+                  <Tooltip cursor={{ fill: "rgba(0, 0, 0, 0.1)" }} />
+                  <Line
+                    type="monotone"
+                    dataKey="percentage"
+                    stroke="#ae83eb"
+                    activeDot={{ r: 8 }}
+                  />
+                </LineChart>
+              </Paper>
+            )}
+          </Box>
+          <Box sx={{ margin: "20px" }}>
+            {loading ? (
+              <CircularProgress style={{ margin: "20px auto" }} />
+            ) : (
+              <Paper
+                elevation={3}
+                style={{
+                  padding: "16px",
+                  borderRadius: "8px",
+                  boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="div"
+                  gutterBottom
+                  align="center"
+                >
+                  Emotion Distribution
+                </Typography>
+                <ResponsiveContainer width={400} height={300}>
+                  <PieChart>
+                    <Pie
+                      data={records}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={120}
+                      fill="#8884d8"
+                      paddingAngle={5}
+                      dataKey="percentage"
+                      labelLine={false}
+                      label={renderCustomizedLabel}
+                    >
+                      {records.map((entry, index) => (
+                        <Cell
+                          key={`cell-${entry.emotion}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend content={<CustomLegend payload={[]} />} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </Paper>
+            )}
+          </Box>
         </Box>
       </Box>
-
+      <Divider
+        orientation="horizontal"
+        flexItem
+        sx={{ margin: "100px", borderWidth: 2 }}
+      />
       {/* feedback */}
       <Box
         sx={{
@@ -479,7 +661,7 @@ export default function Overview(): React.JSX.Element {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          margin: "50px",
+          marginTop: "50px",
         }}
       >
         <Typography
@@ -488,7 +670,7 @@ export default function Overview(): React.JSX.Element {
           gutterBottom
           sx={{ color: neonBlue[700], fontStyle: "bold" }}
         >
-          Your Feedback is Valuable :)
+          What Our Customers Are Saying?
         </Typography>
         <Box
           sx={{
@@ -496,25 +678,25 @@ export default function Overview(): React.JSX.Element {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            flexDirection: { xs: "column", md: "row" }, 
-            gap: 4, 
+            flexDirection: { xs: "column", md: "row" },
+            gap: 4,
           }}
         >
           <PieChart width={400} height={400}>
             <Pie
               data={sentimentData}
-              cx="50%" 
-              cy="50%" 
+              cx="50%"
+              cy="50%"
               innerRadius={60}
               outerRadius={120}
-              paddingAngle={5} 
+              paddingAngle={5}
               dataKey="value"
             >
               {sentimentData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}
-                  stroke="white" 
+                  stroke="white"
                   strokeWidth={2}
                 />
               ))}
@@ -523,45 +705,63 @@ export default function Overview(): React.JSX.Element {
               contentStyle={{
                 backgroundColor: "#f0f0f0",
                 border: "1px solid #ddd",
-              }} 
+              }}
             />
             <Legend
               layout="vertical"
               align="right"
               verticalAlign="middle"
-              iconSize={12} 
+              iconSize={12}
             />
           </PieChart>
 
           <Box
             sx={{
               width: "100%",
-              maxWidth: 400, 
+              maxWidth: 400,
             }}
           >
             <Typography
-              variant="h5" 
+              variant="h5"
               gutterBottom
-              sx={{ color: "#333", fontWeight: 600 }} 
+              sx={{ color: neonBlue[900], fontWeight: 600 }}
             >
-              Some Reviews
+              Some Honest Reviews, Real Results
             </Typography>
             <List>
-              {feedbackData.map((feedback) => (
-                <ListItem key={feedback.id}>
-                  <ListItemText
-                    primary={feedback.comment}
-                    secondary={feedback.sentiment}
-                  />
-                </ListItem>
-              ))}
-            </List>
+        {feedbackData.slice(0, 3).map((feedback) => (
+          <ListItem key={feedback.id} alignItems="flex-start" sx={{ marginBottom: '10px' }}>
+            
+              <Avatar sx={{backgroundColor: "white", display: "flex", mr:"10px"}}>
+                {getSentimentIcon(feedback.sentiment)}
+              </Avatar>
+            
+            <ListItemText
+              primary={
+                <Typography variant="body1" sx={{ fontWeight: 'bold',  color: neonBlue[800]}}>
+                  {feedback.comment}
+                </Typography>
+              }
+              secondary={
+                <Typography variant="body2" sx={{ fontWeight: 'bold', color: neonBlue[400] }}>
+                  {feedback.sentiment.charAt(0).toUpperCase() + feedback.sentiment.slice(1)}
+                </Typography>
+              }
+            />
+          </ListItem>
+        ))}
+      </List>
           </Box>
         </Box>
       </Box>
-      
+      <Divider
+        orientation="horizontal"
+        flexItem
+        sx={{ margin: "100px", borderWidth: 2 }}
+      />
+      {/* How Feelify Works? */}
       <Container maxWidth="md">
-      <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
+        <Box sx={{ textAlign: "center", marginBottom: "50px" }}>
           <Typography
             variant="h3"
             component="h1"
@@ -573,142 +773,162 @@ export default function Overview(): React.JSX.Element {
           <Grid container spacing={3} justifyContent="center">
             <Grid item xs={12} md={4}>
               <img
-                style={{ width: 380, height: 320, marginRight: "20px", marginTop:"10px" }}
+                style={{
+                  width: 380,
+                  height: 320,
+                  marginRight: "20px",
+                  marginTop: "10px",
+                }}
                 src="/assets/emo_book_video.jpg"
                 alt="Step 1"
               />
             </Grid>
-            <Grid item xs={12} md={8} container spacing={3} >
-            <Grid
-              item
-              xs={12}
-              style={{ display: "flex", alignItems: "center", }}
-            >
-              <img
-                style={{ width: 100, height: 100, marginRight: "20px", marginLeft: "100px" }}
-                src="/assets/emotion_detection.avif"
-                alt="Step 1"
-              />
-              <div>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  align="justify"
-                  sx={{
-                    color: neonBlue[900],
-                    lineHeight: "1",
-                    fontWeight: "bold",
-                    fontSize: "1.2em",
-                    margin: "10px 0",
+            <Grid item xs={12} md={8} container spacing={3}>
+              <Grid
+                item
+                xs={12}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <img
+                  style={{
+                    width: 100,
+                    height: 100,
+                    marginRight: "20px",
+                    marginLeft: "100px",
                   }}
-                >
-                  Emotion Detection
-                </Typography>
-                <Typography
-                  variant="body2"
-                  align="justify"
-                  paragraph
-                  sx={{
-                    color: neonBlue[700],
-                    lineHeight: "1.2",
-                    fontSize: "1em",
-                    margin: "10px 0",
-                    textAlign: "justify",
+                  src="/assets/emotion_detection.avif"
+                  alt="Step 1"
+                />
+                <div>
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    align="justify"
+                    sx={{
+                      color: neonBlue[900],
+                      lineHeight: "1",
+                      fontWeight: "bold",
+                      fontSize: "1.2em",
+                      margin: "10px 0",
+                    }}
+                  >
+                    Emotion Detection
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    align="justify"
+                    paragraph
+                    sx={{
+                      color: neonBlue[700],
+                      lineHeight: "1.2",
+                      fontSize: "1em",
+                      margin: "10px 0",
+                      textAlign: "justify",
+                    }}
+                  >
+                    Capture your live photo <br />
+                    to detect your emotions.
+                  </Typography>
+                </div>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <img
+                  style={{
+                    width: 100,
+                    height: 100,
+                    marginRight: "20px",
+                    marginLeft: "100px",
                   }}
-                >
-                  Capture your live photo <br />
-                  to detect your emotions.
-                </Typography>
-              </div>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              style={{ display: "flex", alignItems: "center" }}
-            >
-              <img
-                style={{ width: 100, height: 100, marginRight: "20px", marginLeft: "100px" }}
-                src="/assets/pick_emotion.png"
-                alt="Step 1"
-              />
-              <div>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  align="justify"
-                  sx={{
-                    color: neonBlue[900],
-                    lineHeight: "1",
-                    fontWeight: "bold",
-                    fontSize: "1.2em",
-                    margin: "10px 0",
+                  src="/assets/pick_emotion.png"
+                  alt="Step 1"
+                />
+                <div>
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    align="justify"
+                    sx={{
+                      color: neonBlue[900],
+                      lineHeight: "1",
+                      fontWeight: "bold",
+                      fontSize: "1.2em",
+                      margin: "10px 0",
+                    }}
+                  >
+                    Pick your Mood
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    align="justify"
+                    paragraph
+                    sx={{
+                      color: neonBlue[700],
+                      lineHeight: "1.2",
+                      fontSize: "1em",
+                      margin: "10px 0",
+                      textAlign: "justify",
+                    }}
+                  >
+                    Choose your mood and <br />
+                    get personalized book and <br />
+                    video recommendations.
+                  </Typography>
+                </div>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <img
+                  style={{
+                    width: 100,
+                    height: 100,
+                    marginRight: "20px",
+                    marginLeft: "100px",
                   }}
-                >
-                  Pick your Mood
-                </Typography>
-                <Typography
-                  variant="body2"
-                  align="justify"
-                  paragraph
-                  sx={{
-                    color: neonBlue[700],
-                    lineHeight: "1.2",
-                    fontSize: "1em",
-                    margin: "10px 0",
-                    textAlign: "justify",
-                  }}
-                >
-                  Choose your mood and <br />
-                  get personalized book and <br />
-                  video recommendations.
-                </Typography>
-              </div>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              style={{ display: "flex", alignItems: "center" }}
-            >
-              <img
-                style={{ width: 100, height: 100, marginRight: "20px", marginLeft: "100px" }}
-                src="/assets/recommendation.webp"
-                alt="Step 1"
-              />
-              <div>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  align="justify"
-                  sx={{
-                    color: neonBlue[900],
-                    lineHeight: "1",
-                    fontWeight: "bold",
-                    fontSize: "1.2em",
-                    margin: "10px 0",
-                  }}
-                >
-                  Recommendations
-                </Typography>
-                <Typography
-                  variant="body2"
-                  align="justify"
-                  paragraph
-                  sx={{
-                    color: neonBlue[700],
-                    lineHeight: "1.2",
-                    fontSize: "1em",
-                    margin: "10px 0",
-                    textAlign: "justify",
-                  }}
-                >
-                  After analyzing your emotions,
-                  <br />
-                  we recommend books and videos
-                  <br />
-                  that match your mood.
-                </Typography>
-              </div>
-            </Grid>
+                  src="/assets/recommendation.webp"
+                  alt="Step 1"
+                />
+                <div>
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    align="justify"
+                    sx={{
+                      color: neonBlue[900],
+                      lineHeight: "1",
+                      fontWeight: "bold",
+                      fontSize: "1.2em",
+                      margin: "10px 0",
+                    }}
+                  >
+                    Recommendations
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    align="justify"
+                    paragraph
+                    sx={{
+                      color: neonBlue[700],
+                      lineHeight: "1.2",
+                      fontSize: "1em",
+                      margin: "10px 0",
+                      textAlign: "justify",
+                    }}
+                  >
+                    After analyzing your emotions,
+                    <br />
+                    we recommend books and videos
+                    <br />
+                    that match your mood.
+                  </Typography>
+                </div>
+              </Grid>
             </Grid>
           </Grid>
 
@@ -723,7 +943,7 @@ export default function Overview(): React.JSX.Element {
             </Button>
           </Box>
         </Box>
-        </Container>
+      </Container>
     </>
   );
 }

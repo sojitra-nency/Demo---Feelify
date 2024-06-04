@@ -9,7 +9,6 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from login.models import User
 from login.serializers import UserProfileSerializer
-from django.conf import settings
 
 class CustomProviderAuthView(ProviderAuthView):
     def post(self, request, *args, **kwargs):
