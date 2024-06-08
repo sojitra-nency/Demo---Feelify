@@ -103,57 +103,57 @@ NEXT_PUBLIC_HOST=http://localhost:8000
 Here are some screenshots of the Feelify application:
 
 ### Sign Up Page
-![Sign Up Page](frontend\public\assets\Screenshots\Sign_Up_Page.PNG)
+![Sign Up Page](frontend/public/assets/Screenshots/Sign_Up_Page.PNG)
 
 ### Sign In Page
-![Sign In Page](frontend\public\assets\Screenshots\Sign_In_Page.PNG)
+![Sign In Page](frontend/public/assets/Screenshots/Sign_In_Page.PNG)
 
 ### Forgot Password Page
-![Forgot Password Page](frontend\public\assets\Screenshots\Forgot_Password.PNG)
+![Forgot Password Page](frontend/public/assets/Screenshots/Forgot_Password.PNG)
 
 ### User Profile
-![User Profile](frontend\public\assets\Screenshots\User_Profile_Page.PNG)
+![User Profile](frontend/public/assets/Screenshots/User_Profile_Page.PNG)
 
 ### Dashboard Page
-![Dashboard Page](frontend\public\assets\Screenshots\Dashboard_page.PNG)
+![Dashboard Page](frontend/public/assets/Screenshots/Dashboard_page.PNG)
 
 ### Video Search
-![Video Search](frontend\public\assets\Screenshots\Video_Search_Page.PNG)
-![Video Search](frontend\public\assets\Screenshots\Video_Search_Page(1).PNG)
+![Video Search](frontend/public/assets/Screenshots/Video_Search_Page.PNG)
+![Video Search](frontend/public/assets/Screenshots/Video_Search_Page(1).PNG)
 
 ### Book Search
-![Book Search](frontend\public\assets\Screenshots\Book_Search_Page.PNG)
-![Book Search](frontend\public\assets\Screenshots\Book_Search_Page(1).PNG)
+![Book Search](frontend/public/assets/Screenshots/Book_Search_Page.PNG)
+![Book Search](frontend/public/assets/Screenshots/Book_Search_Page(1).PNG)
 
 ### Upgrade
-![Upgrade](frontend\public\assets\Screenshots\Upgrade_Page.PNG)
+![Upgrade](frontend/public/assets/Screenshots/Upgrade_Page.PNG)
 
 ### Emotion based Video and Book Recommendation 
-![Emotion based Video and Book Recommendation](frontend\public\assets\Screenshots\Emotion_Detection_Page.PNG)
-![Emotion based Video and Book Recommendation](frontend\public\assets\Screenshots\Emotion_Analysis.PNG)
+![Emotion based Video and Book Recommendation](frontend/public/assets/Screenshots/Emotion_Detection_Page.PNG)
+![Emotion based Video and Book Recommendation](frontend/public/assets/Screenshots/Emotion_Analysis.PNG)
 
 ### Video Recommendation
-![Video Recommendation](frontend\public\assets\Screenshots\Video_Recommendation_Page.PNG)
-![Video Recommendation](frontend\public\assets\Screenshots\Video_Recommendation_Page(1).PNG)
-![Video Recommendation](frontend\public\assets\Screenshots\Video_Recommendation_Page(2).PNG)
+![Video Recommendation](frontend/public/assets/Screenshots/Video_Recommendation_Page.PNG)
+![Video Recommendation](frontend/public/assets/Screenshots/Video_Recommendation_Page(1).PNG)
+![Video Recommendation](frontend/public/assets/Screenshots/Video_Recommendation_Page(2).PNG)
 
 ### Book Recommendation
-![Book Recommendation](frontend\public\assets\Screenshots\Book_Recommendation_Page.PNG)
-![Book Recommendation](frontend\public\assets\Screenshots\Book_Recommendation_Page(1).PNG)
-![Book Recommendation](frontend\public\assets\Screenshots\Book_Recommendation_Page(2).PNG)
+![Book Recommendation](frontend/public/assets/Screenshots/Book_Recommendation_Page.PNG)
+![Book Recommendation](frontend/public/assets/Screenshots/Book_Recommendation_Page(1).PNG)
+![Book Recommendation](frontend/public/assets/Screenshots/Book_Recommendation_Page(2).PNG)
 
 ### Feedback
-![Feedback](frontend\public\assets\Screenshots\Feeback_Page.PNG)
-![Feedback](frontend\public\assets\Screenshots\Feedback_Sentiment_Analysis.PNG)
+![Feedback](frontend/public/assets/Screenshots/Feeback_Page.PNG)
+![Feedback](frontend/public/assets/Screenshots/Feedback_Sentiment_Analysis.PNG)
 
 ### Contact
-![Contact](frontend\public\assets\Screenshots\Contact_Page.PNG)
+![Contact](frontend/public/assets/Screenshots/Contact_Page.PNG)
 
 ### About Us
-![About Us](frontend\public\assets\Screenshots\About_Us_Page.PNG)
+![About Us](frontend/public/assets/Screenshots/About_Us_Page.PNG)
 
 ### 404 Not Found
-![404 Not Found](frontend\public\assets\Screenshots\404_Not_Found_Page.PNG)
+![404 Not Found](frontend/public/assets/Screenshots/404_Not_Found_Page.PNG)
 
 ## Contributing
 
