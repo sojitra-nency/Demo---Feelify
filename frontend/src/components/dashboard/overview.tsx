@@ -12,7 +12,6 @@ import {
   Grid,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
   Paper,
   Typography,
@@ -23,10 +22,6 @@ import MoodIcon from "@mui/icons-material/Mood";
 import SearchIcon from "@mui/icons-material/Search";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
-import RateReviewIcon from "@mui/icons-material/RateReview";
-import FeedbackIcon from "@mui/icons-material/Feedback";
-import InfoIcon from "@mui/icons-material/Info";
-import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { neonBlue } from "@/styles/theme/colors";
 import axios from "axios";
@@ -36,7 +31,6 @@ import {
   Pie,
   Cell,
   Tooltip,
-  Legend,
   BarChart,
   Bar,
   XAxis,
@@ -66,10 +60,14 @@ interface EmotionRecord {
 
 const getSentimentIcon = (sentiment: string) => {
   switch (sentiment) {
-    case 'Positive':
-      return <SentimentSatisfied style={{ color: 'green' , fontSize:"2rem"}} />;
-    case 'Negative':
-      return <SentimentDissatisfied style={{ color: 'red',  fontSize:"2rem" }} />;
+    case "Positive":
+      return (
+        <SentimentSatisfied style={{ color: "green", fontSize: "2rem" }} />
+      );
+    case "Negative":
+      return (
+        <SentimentDissatisfied style={{ color: "red", fontSize: "2rem" }} />
+      );
     default:
       return null;
   }
@@ -84,41 +82,6 @@ const colorMapping: { [key: string]: string } = {
 };
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#ae83eb"];
-
-const RADIAN = Math.PI / 180;
-
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-}: {
-  cx: number;
-  cy: number;
-  midAngle: number;
-  innerRadius: number;
-  outerRadius: number;
-  percent: number;
-  index: number;
-}) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="white"
-      textAnchor="middle"
-      dominantBaseline="middle"
-    >
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  );
-};
 
 const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
   if (active && payload && payload.length) {
@@ -150,6 +113,13 @@ export default function Overview(): React.JSX.Element {
   ]);
   const [records, setRecords] = useState<EmotionRecord[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const total = sentimentData.reduce((acc, curr) => acc + curr.value, 0);
+
+  const formatTooltipValue = (value: number, name: string) => {
+    const percentage = ((value / total) * 100).toFixed(2);
+    return `${percentage}%`;
+  };
 
   const CustomLegend = ({ payload }: { payload: any[] }) => {
     console.log(payload);
@@ -245,7 +215,7 @@ export default function Overview(): React.JSX.Element {
         }, [] as Array<EmotionRecord & { count: number }>);
 
         aggregatedRecords.forEach((record) => {
-          record.percentage /= record.count;
+          record.percentage = Number((record.percentage / record.count).toFixed(2));
         });
 
         setRecords(aggregatedRecords);
@@ -503,7 +473,7 @@ export default function Overview(): React.JSX.Element {
                 Emotion Distribution
               </Typography>
               <BarChart
-                width={870}
+                width={700}
                 height={300}
                 data={records}
                 margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
@@ -539,114 +509,109 @@ export default function Overview(): React.JSX.Element {
             </Paper>
           )}
         </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-          }}
-        >
-          <Box sx={{ margin: "20px" }}>
-            {loading ? (
-              <CircularProgress style={{ margin: "20px auto" }} />
-            ) : (
-              <Paper
-                elevation={3}
-                style={{
-                  padding: "16px",
-                  borderRadius: "8px",
-                  boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
-                }}
+
+        <Box sx={{ margin: "20px" }}>
+          {loading ? (
+            <CircularProgress style={{ margin: "20px auto" }} />
+          ) : (
+            <Paper
+              elevation={3}
+              style={{
+                padding: "16px",
+                borderRadius: "8px",
+                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="div"
+                gutterBottom
+                align="center"
               >
-                <Typography
-                  variant="h6"
-                  component="div"
-                  gutterBottom
-                  align="center"
-                >
-                  Emotion Distribution
-                </Typography>
-                <LineChart
-                  width={400}
-                  height={300}
-                  data={records}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="emotion"
-                    tick={{ fill: "#333" }}
-                    label={{
-                      value: "Emotions",
-                      position: "insideBottomRight",
-                      offset: -10,
-                    }}
-                  />
-                  <YAxis
-                    label={{
-                      value: "Percentage (%)",
-                      angle: -90,
-                      position: "insideLeft",
-                    }}
-                  />
-                  <Tooltip cursor={{ fill: "rgba(0, 0, 0, 0.1)" }} />
-                  <Line
-                    type="monotone"
+                Emotion Distribution
+              </Typography>
+              <LineChart
+                width={700}
+                height={300}
+                data={records}
+                margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="emotion"
+                  tick={{ fill: "#333" }}
+                  label={{
+                    value: "Emotions",
+                    position: "insideBottomRight",
+                    offset: -10,
+                  }}
+                />
+                <YAxis
+                  label={{
+                    value: "Percentage (%)",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
+                />
+                <Tooltip cursor={{ fill: "rgba(0, 0, 0, 0.1)" }} />
+                <Line
+                  type="monotone"
+                  dataKey="percentage"
+                  stroke="#ae83eb"
+                  activeDot={{ r: 8 }}
+                />
+              </LineChart>
+            </Paper>
+          )}
+        </Box>
+        <Box sx={{ margin: "20px" }}>
+          {loading ? (
+            <CircularProgress style={{ margin: "20px auto" }} />
+          ) : (
+            <Paper
+              elevation={3}
+              style={{
+                padding: "16px",
+                borderRadius: "8px",
+                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="div"
+                gutterBottom
+                align="center"
+              >
+                Emotion Distribution
+              </Typography>
+              <ResponsiveContainer width={700} height={300}>
+                <PieChart>
+                  <Pie
+                    data={records}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={120}
+                    fill="#8884d8"
+                    paddingAngle={5}
                     dataKey="percentage"
-                    stroke="#ae83eb"
-                    activeDot={{ r: 8 }}
-                  />
-                </LineChart>
-              </Paper>
-            )}
-          </Box>
-          <Box sx={{ margin: "20px" }}>
-            {loading ? (
-              <CircularProgress style={{ margin: "20px auto" }} />
-            ) : (
-              <Paper
-                elevation={3}
-                style={{
-                  padding: "16px",
-                  borderRadius: "8px",
-                  boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.4)",
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  component="div"
-                  gutterBottom
-                  align="center"
-                >
-                  Emotion Distribution
-                </Typography>
-                <ResponsiveContainer width={400} height={300}>
-                  <PieChart>
-                    <Pie
-                      data={records}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={120}
-                      fill="#8884d8"
-                      paddingAngle={5}
-                      dataKey="percentage"
-                      labelLine={false}
-                      label={renderCustomizedLabel}
-                    >
-                      {records.map((entry, index) => (
-                        <Cell
-                          key={`cell-${entry.emotion}`}
-                          fill={COLORS[index % COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip content={<CustomTooltip />} />
-                    <Legend content={<CustomLegend payload={[]} />} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </Paper>
-            )}
-          </Box>
+                    labelLine={false}
+                    label={({ emotion, percentage }) =>
+                      `${emotion}: ${percentage.toFixed(2)}%`
+                    }
+                  >
+                    {records.map((entry, index) => (
+                      <Cell
+                        key={`cell-${entry.emotion}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />
+                </PieChart>
+              </ResponsiveContainer>
+            </Paper>
+          )}
         </Box>
       </Box>
       <Divider
@@ -691,6 +656,10 @@ export default function Overview(): React.JSX.Element {
               outerRadius={120}
               paddingAngle={5}
               dataKey="value"
+              label={({ name, percent }) =>
+                `${name}: ${(percent * 100).toFixed(0)}%`
+              }
+              labelLine={false}
             >
               {sentimentData.map((entry, index) => (
                 <Cell
@@ -706,12 +675,7 @@ export default function Overview(): React.JSX.Element {
                 backgroundColor: "#f0f0f0",
                 border: "1px solid #ddd",
               }}
-            />
-            <Legend
-              layout="vertical"
-              align="right"
-              verticalAlign="middle"
-              iconSize={12}
+              formatter={formatTooltipValue}
             />
           </PieChart>
 
@@ -721,36 +685,45 @@ export default function Overview(): React.JSX.Element {
               maxWidth: 400,
             }}
           >
-            <Typography
-              variant="h5"
-              gutterBottom
-              sx={{ color: neonBlue[900], fontWeight: 600 }}
-            >
-              Some Honest Reviews, Real Results
-            </Typography>
             <List>
-        {feedbackData.slice(0, 3).map((feedback) => (
-          <ListItem key={feedback.id} alignItems="flex-start" sx={{ marginBottom: '10px' }}>
-            
-              <Avatar sx={{backgroundColor: "white", display: "flex", mr:"10px"}}>
-                {getSentimentIcon(feedback.sentiment)}
-              </Avatar>
-            
-            <ListItemText
-              primary={
-                <Typography variant="body1" sx={{ fontWeight: 'bold',  color: neonBlue[800]}}>
-                  {feedback.comment}
-                </Typography>
-              }
-              secondary={
-                <Typography variant="body2" sx={{ fontWeight: 'bold', color: neonBlue[400] }}>
-                  {feedback.sentiment.charAt(0).toUpperCase() + feedback.sentiment.slice(1)}
-                </Typography>
-              }
-            />
-          </ListItem>
-        ))}
-      </List>
+              {feedbackData.slice(0, 3).map((feedback) => (
+                <ListItem
+                  key={feedback.id}
+                  alignItems="flex-start"
+                  sx={{ marginBottom: "10px" }}
+                >
+                  <Avatar
+                    sx={{
+                      backgroundColor: "white",
+                      display: "flex",
+                      mr: "10px",
+                    }}
+                  >
+                    {getSentimentIcon(feedback.sentiment)}
+                  </Avatar>
+
+                  <ListItemText
+                    primary={
+                      <Typography
+                        variant="body1"
+                        sx={{ fontWeight: "bold", color: neonBlue[800] }}
+                      >
+                        {feedback.comment}
+                      </Typography>
+                    }
+                    secondary={
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: "bold", color: neonBlue[400] }}
+                      >
+                        {feedback.sentiment.charAt(0).toUpperCase() +
+                          feedback.sentiment.slice(1)}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              ))}
+            </List>
           </Box>
         </Box>
       </Box>

@@ -215,7 +215,7 @@ export default function PremiumUpgrade() {
                 </Typography>
               }
               sx={{
-                backgroundColor: neonBlue[400],
+                backgroundColor: neonBlue[500],
                 color: "#fff",
                 textAlign: "center",
               }}
@@ -266,7 +266,7 @@ export default function PremiumUpgrade() {
                   </Button>
               }
               sx={{
-                backgroundColor: neonBlue[400],
+                backgroundColor: neonBlue[500],
                 color: "#fff",
                 textAlign: "center",
               }}

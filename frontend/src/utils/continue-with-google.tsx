@@ -12,6 +12,7 @@ export default async function continueWithGoogle(redirect: string) {
     });
 
     if (response.status === 200 && typeof window !== "undefined") {
+      console.log(window.location.replace(response.data.authorization_url))
       window.location.replace(response.data.authorization_url); 
     } else {
       toast.error("Something went wrong.");
