@@ -88,7 +88,7 @@ export default function EmotionBooks({
     fetchUpgradeDetails();
   }, [userData?.email]);
 
-  const isAllowed =
+  const isAllowed = 
     upgradeData?.access_level === "premium" ||
     upgradeData?.access_level === "basic";
 
@@ -443,6 +443,6 @@ export default function EmotionBooks({
       </div>
     );
   } else {
-    return null;
+    <></>;
   }
 }

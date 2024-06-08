@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
 import { paths } from "@/paths";
 import Cookies from "js-cookie";
 import { neonBlue } from "@/styles/theme/colors";
 import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
+
 
 export default function Recording(): React.JSX.Element {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function Recording(): React.JSX.Element {
   const { data: userData, isLoading: isLoadingUser } = useRetrieveUserQuery();
   const [upgradeData, setUpgradeData] = useState<any>(null);
   const [isLoadingUpgrade, setIsLoadingUpgrade] = useState(true);
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   useEffect(() => {
     const fetchUpgradeDetails = async () => {
@@ -49,13 +49,19 @@ export default function Recording(): React.JSX.Element {
     fetchUpgradeDetails();
   }, [userData?.email]);
 
-  const isAllowed = upgradeData?.access_level === "premium";
+  const isAllowed = upgradeData?.access_level === "basic";
 
   useEffect(() => {
     if (!isAllowed && !isLoadingUpgrade) {
-      setShowUpgradeModal(true);
+      setShouldRedirect(true);
     }
   }, [isAllowed, isLoadingUpgrade]);
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      router.push(paths.upgrade);
+    }
+  }, [shouldRedirect]);
 
   const handleCapturePhoto = async () => {
     setIsRecording(true);
@@ -118,111 +124,57 @@ export default function Recording(): React.JSX.Element {
       console.error("Error uploading video:", error);
     }
   };
-
-  const handleCloseModal = () => {
-    setShowUpgradeModal(false);
-    router.push(paths.dashboard.overview); 
-  };
-
+  if (isAllowed) {
   return (
     <div>
-      {isAllowed ? (
-        <>
-          <Typography
-            variant="h3"
-            component="h2"
-            gutterBottom
-            sx={{
-              color: neonBlue[700],
-              fontStyle: "bold",
-              textAlign: "center",
-              mb: 5,
-            }}
-          >
-            Capture Your Emotions :)
-          </Typography>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ mb: 3 }}
-          >
-            <video
-              ref={videoRef}
-              autoPlay
-              style={{
-                width: 700,
-                height: 370,
-                borderRadius: 50,
-                boxShadow: "0px 2px 4px -1px rgba(0, 0, 0, 0.5)",
-                backgroundColor: "#eaebfe",
-              }}
-            />
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ mb: 8 }}
-          >
-            <Button
-              variant="contained"
-              onClick={handleCapturePhoto}
-              disabled={isRecording}
-            >
-              Capture Photo
-            </Button>
-          </Box>
-        </>
-      ) : (
-        <Modal
-          open={showUpgradeModal}
-          onClose={handleCloseModal}
-          aria-labelledby="upgrade-modal-title"
-          aria-describedby="upgrade-modal-description"
+      <Typography
+        variant="h3"
+        component="h2"
+        gutterBottom
+        sx={{
+          color: neonBlue[700],
+          fontStyle: "bold",
+          textAlign: "center",
+          mb: 5,
+        }}
+      >
+        Capture Your Emotions :)
+      </Typography>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ mb: 3 }}
+      >
+        <video
+          ref={videoRef}
+          autoPlay
+          style={{
+            width: 700,
+            height: 370,
+            borderRadius: 50,
+            boxShadow: "0px 2px 4px -1px rgba(0, 0, 0, 0.5)",
+            backgroundColor: "#eaebfe",
+          }}
+        />
+      </Box>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ mb: 8 }}
+      >
+        <Button
+          variant="contained"
+          onClick={handleCapturePhoto}
+          disabled={isRecording}
         >
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="100vh"
-            sx={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-          >
-            <Box
-              sx={{
-                width: 400,
-                bgcolor: "background.paper",
-                borderRadius: 2,
-                p: 4,
-                boxShadow: 24,
-                textAlign: "center",
-              }}
-            >
-              <Typography variant="h6" id="upgrade-modal-title" gutterBottom>
-                Upgrade Required
-              </Typography>
-              <Typography variant="body1" id="upgrade-modal-description" sx={{ mb: 2 }}>
-                Upgrade your package to access this functionality.
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => router.push(paths.dashboard.overview)}
-                sx={{ mr: 2 }}
-              >
-                Go to Dashboard
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => router.push(paths.upgrade)}
-              >
-                Upgrade Now
-              </Button>
-            </Box>
-          </Box>
-        </Modal>
-      )}
+          Capture Photo
+        </Button>
+      </Box>
     </div>
   );
+} else {
+  return <></>;
+}
 }

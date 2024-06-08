@@ -222,7 +222,7 @@ export function SignUpForm(): React.JSX.Element {
           </Button>
         </Stack>
       </form>
-      <GoogleButton />
+      {/* <GoogleButton /> */}
     </Stack>
   );
 }

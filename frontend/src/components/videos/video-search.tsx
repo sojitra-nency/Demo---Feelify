@@ -33,7 +33,7 @@ export default function VideoSearch() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const videosPerPage = 2;
+  const videosPerPage = 6;
 
   useEffect(() => {
     const fetchVideos = async () => {
