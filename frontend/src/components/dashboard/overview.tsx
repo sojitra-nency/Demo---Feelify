@@ -686,7 +686,7 @@ export default function Overview(): React.JSX.Element {
             }}
           >
             <List>
-              {feedbackData.slice(0, 3).map((feedback) => (
+              {feedbackData.slice(-3).map((feedback) => (
                 <ListItem
                   key={feedback.id}
                   alignItems="flex-start"

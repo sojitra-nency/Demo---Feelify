@@ -95,12 +95,11 @@ class SuccessView(APIView):
     
 
 def fetch_books(query):
-    # url = "https://www.googleapis.com/books/v1/volumes?q=happy&key=AIzaSyDUKCLVwPSQSex72ShbZeDWMp9srfDTNyQ"
     search_url = "https://www.googleapis.com/books/v1/volumes"
 
     search_params = {
         'filter': 'full',
-        'maxResults': 10,
+        'maxResults': 25,
         'key': settings.BOOKS_API_KEY,
         'q': query,
     }
@@ -145,7 +144,7 @@ def fetch_videos(query):
         'part': 'snippet',
         'q': query,
         'key': settings.YOUTUBE_DATA_API_KEY,
-        'maxResults': 10,
+        'maxResults': 20,
         'type': 'video'
     }
 
@@ -157,7 +156,7 @@ def fetch_videos(query):
     video_params = {
         'key': settings.YOUTUBE_DATA_API_KEY,
         'part': 'snippet',
-        'maxResults': 10,
+        'maxResults': 20,
         'id': ','.join(video_ids),
     }
 

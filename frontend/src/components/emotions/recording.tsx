@@ -49,7 +49,7 @@ export default function Recording(): React.JSX.Element {
     fetchUpgradeDetails();
   }, [userData?.email]);
 
-  const isAllowed = upgradeData?.access_level === "basic";
+  const isAllowed = upgradeData?.access_level === "premium";
 
   useEffect(() => {
     if (!isAllowed && !isLoadingUpgrade) {
